@@ -1,8 +1,6 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_BOOKING_LINK?: string;
-  readonly VITE_REVENUE_AUDIT_LINK?: string;
   readonly VITE_SITE_URL?: string;
 }
 

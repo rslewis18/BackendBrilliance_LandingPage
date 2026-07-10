@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
+import { LINKS } from "./config/links";
 import {
   ArrowRight,
   BarChart3,
@@ -22,8 +23,6 @@ import {
   Zap,
 } from "lucide-react";
 
-const bookingLink = import.meta.env.VITE_BOOKING_LINK || "#booking";
-const auditLink = import.meta.env.VITE_REVENUE_AUDIT_LINK || "#revenue-audit";
 const siteUrl = import.meta.env.VITE_SITE_URL || "https://backendbrilliance.com";
 
 const navItems = [
@@ -324,7 +323,12 @@ function App() {
           ))}
         </nav>
 
-        <a className="button button-primary header-button" href={auditLink}>
+        <a
+          className="button button-primary header-button"
+          href={LINKS.revenueAudit}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Take Your Audit
         </a>
       </header>
@@ -349,11 +353,21 @@ function App() {
               response before the opportunity goes cold.
             </p>
             <div className="hero-actions">
-              <a className="button button-primary" href={auditLink}>
+              <a
+                className="button button-primary"
+                href={LINKS.revenueAudit}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Take Your Revenue Leak Audit
                 <ArrowRight size={18} />
               </a>
-              <a className="button button-secondary" href={bookingLink}>
+              <a
+                className="button button-secondary"
+                href={LINKS.booking}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Book a Free Strategy Call
               </a>
             </div>
@@ -432,7 +446,13 @@ function App() {
               and what needs to be fixed next.
             </p>
           </motion.div>
-          <motion.a className="button button-primary" href={auditLink} {...reveal}>
+          <motion.a
+            className="button button-primary"
+            href={LINKS.revenueAudit}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...reveal}
+          >
             Take Your Audit Now
             <ArrowRight size={18} />
           </motion.a>
@@ -515,7 +535,13 @@ function App() {
               may be slipping through your system.
             </p>
           </motion.div>
-          <motion.a className="button button-primary" href={auditLink} {...reveal}>
+          <motion.a
+            className="button button-primary"
+            href={LINKS.revenueAudit}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...reveal}
+          >
             Take Your Audit Now
             <ArrowRight size={18} />
           </motion.a>
@@ -556,7 +582,12 @@ function App() {
                       </li>
                     ))}
                   </ul>
-                  <a className="button button-primary" href={bookingLink}>
+                  <a
+                    className="button button-primary"
+                    href={LINKS.booking}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Get Started
                     <ArrowRight size={18} />
                   </a>
@@ -597,7 +628,12 @@ function App() {
               Take the Revenue Leak Audit to get a custom report on what’s
               working, what’s leaking, and what to fix next.
             </p>
-            <a className="button button-primary" href={auditLink}>
+            <a
+              className="button button-primary"
+              href={LINKS.revenueAudit}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Take Your Audit Now
               <ArrowRight size={18} />
             </a>

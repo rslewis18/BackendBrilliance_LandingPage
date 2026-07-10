@@ -18,24 +18,28 @@ Framer Motion, and Lucide icons. It deploys cleanly to Cloudflare Pages.
    npm install
    ```
 
-2. Copy `.env.example` to `.env.local` and add your live links:
+2. Add your live CTA links in `src/config/links.ts`:
+
+   ```ts
+   export const LINKS = {
+     booking: "https://your-cal-link.example",
+     revenueAudit: "https://your-typeform-link.example",
+   };
+   ```
+
+3. Copy `.env.example` to `.env.local` and set the production site URL:
 
    ```env
-   VITE_BOOKING_LINK=https://your-cal-link.example
-   VITE_REVENUE_AUDIT_LINK=https://your-audit-link.example
    VITE_SITE_URL=https://backendbrilliance.com
    ```
 
-   If a link is empty at build time, the site falls back to the matching
-   in-page placeholder section.
-
-3. Start the local development server:
+4. Start the local development server:
 
    ```bash
    npm run dev
    ```
 
-4. Open `http://localhost:3000`.
+5. Open `http://localhost:3000`.
 
 ## Verification
 
@@ -58,8 +62,6 @@ settings:
 - Build output directory: `dist`
 - Environment variables:
   - `NODE_VERSION=22`
-  - `VITE_BOOKING_LINK`
-  - `VITE_REVENUE_AUDIT_LINK`
   - `VITE_SITE_URL`
 
 SPA routing is handled by `public/_redirects`:
@@ -68,8 +70,8 @@ SPA routing is handled by `public/_redirects`:
 /* /index.html 200
 ```
 
-Because these are public build-time variables, trigger a new deployment after
-changing them.
+Because the CTA links are configured in `src/config/links.ts`, commit and push
+that file after updating the Cal.com and Typeform URLs.
 
 ## SEO
 
