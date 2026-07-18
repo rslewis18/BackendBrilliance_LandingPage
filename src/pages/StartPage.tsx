@@ -47,16 +47,16 @@ export function StartPage() {
             ) : (
               <p className="welcome-line">Thanks for reviewing your personalized website audit.</p>
             )}
-            <h1>Turn More Website Visitors Into Real Business Opportunities.</h1>
+            <h1>Turn More Visitors Into Leads With a Website, Chatbot, Scheduling, and Follow-Up.</h1>
             <p className="hero-lead">
-              Your website should clearly explain what you offer, build trust
-              quickly, and make it easy for potential customers to contact or
-              book with you.
+              Your system should clearly explain what you offer, answer common
+              questions, make it easy to take action, and follow up before
+              interested leads go cold.
             </p>
             <p className="hero-text">
               {businessName
                 ? `Thanks for reviewing your personalized website audit. Based on the opportunities we identified, here is the ${offer.name} we recommend.`
-                : `Here is the ${offer.name} we recommend to help turn more of your existing website traffic into inquiries and opportunities.`}
+                : `Here is the ${offer.name} we recommend to help turn more of your existing website traffic into leads and opportunities.`}
             </p>
 
             {checkoutCancelled && (
@@ -73,12 +73,12 @@ export function StartPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Start My Project — {offer.price}/month
+                Start My Project - {offer.price}/month
                 <ArrowRight size={18} />
               </a>
             </div>
             <p className="secondary-link-line">
-              Need a more advanced capture or automation system?{" "}
+              Need deeper lead management, reviews, or local growth?{" "}
               <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">
                 Book a strategy call.
               </a>
@@ -110,11 +110,11 @@ export function StartPage() {
             <p className="eyebrow">Audit to Action</p>
             <h2>We Found the Opportunities. Now Let&apos;s Fix Them.</h2>
             <p>
-              Your personalized audit identified areas where your website could
-              communicate more clearly, build more trust, and make it easier for
-              potential customers to take action. The Website Conversion System
-              is the foundational service Backend Brilliance uses to implement
-              those improvements.
+              Your personalized audit identified where your current online
+              presence could communicate more clearly, answer questions faster,
+              capture more interest, and follow up more consistently. The
+              Website Conversion System is the foundation Backend Brilliance
+              uses to implement those improvements.
             </p>
           </div>
         </section>
@@ -122,7 +122,7 @@ export function StartPage() {
         <section className="flow-section section-shell">
           <div className="section-heading centered">
             <p className="eyebrow">What is included</p>
-            <h2>Website Improvements That Support Real Inquiries.</h2>
+            <h2>The Four Pieces That Help Visitors Take Action.</h2>
           </div>
           <div className="compact-card-grid">
             {OFFER_CONFIG.websiteConversionDetails.included.map((item) => (
@@ -134,10 +134,11 @@ export function StartPage() {
             ))}
           </div>
           <div className="upgrade-note">
-            <h3>Need AI response, automated follow-up, CRM pipelines, or review automation?</h3>
+            <h3>Need a lead dashboard, review requests, missed-call response, or growth campaigns?</h3>
             <p>
-              Those capabilities are available through the Client Capture System
-              and can be discussed on a strategy call.
+              Those advanced capabilities are available through the Client
+              Capture System or Complete Local Growth System and can be
+              discussed on a strategy call.
             </p>
             <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">
               Book a strategy call
@@ -209,10 +210,11 @@ export function StartPage() {
 
         <section className="final-cta section-shell">
           <div>
-            <h2>Ready to Put Your Website to Work?</h2>
+            <h2>Ready to Put Your Client System to Work?</h2>
             <p>
               Start the Website Conversion System and complete onboarding so we
-              can begin preparing your project.
+              can begin preparing your website, chatbot, scheduling, and
+              follow-up foundation.
             </p>
             <a
               className="button button-primary"
@@ -220,7 +222,7 @@ export function StartPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Start My Project — {offer.price}/month
+              Start My Project - {offer.price}/month
               <ArrowRight size={18} />
             </a>
           </div>
@@ -242,8 +244,16 @@ export function StartPage() {
         <nav aria-label="Start page footer links">
           <Link to={OFFER_CONFIG.routes.home}>Main website</Link>
           <a href={LINKS.supportEmail}>{OFFER_CONFIG.site.supportEmail}</a>
-          <a href="#privacy">Privacy</a>
-          <a href="#terms">Terms</a>
+          <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">
+            Strategy call
+          </a>
+          <a
+            href={LINKS.revenueAudit}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Revenue Leak Audit
+          </a>
         </nav>
       </footer>
     </>

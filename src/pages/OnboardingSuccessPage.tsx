@@ -27,7 +27,11 @@ export function OnboardingSuccessPage() {
             We&apos;ve received your onboarding information and now have what we
             need to begin reviewing your Website Conversion System project.
           </p>
-          <p>Backend Brilliance will contact you with the next steps.</p>
+          <p>
+            Backend Brilliance will use your answers to prepare the website,
+            chatbot, scheduling, and follow-up foundation, then contact you with
+            next steps.
+          </p>
           <div className="mini-panel">
             <strong>Response expectation</strong>
             <span>{OFFER_CONFIG.policies.responseTime}</span>

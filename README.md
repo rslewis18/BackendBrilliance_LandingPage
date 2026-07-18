@@ -6,7 +6,9 @@ Lucide site for Backend Brilliance.
 The site now supports:
 
 - Public homepage and three-offer pricing ladder
+- On-page personalized audit request popup
 - Personalized `/start` path for prospects who received an audit
+- `/api/audit-request` email notification endpoint
 - Hosted Stripe Checkout handoff for Website Conversion System
 - `/thank-you` checkout next-step page
 - `/onboarding` multi-step client onboarding form
@@ -56,6 +58,10 @@ src/config/links.ts
 
 The homepage pricing cards and `/start` page both read from the same offer
 configuration.
+
+The Revenue Leak Audit CTA still uses `VITE_REVENUE_AUDIT_URL`. The
+personalized audit popup submits to `/api/audit-request` and sends an email
+notification server-side.
 
 ## Routes
 
@@ -172,6 +178,12 @@ EMAIL_NOTIFICATION_TO=
 EMAIL_FROM=
 ```
 
+Personalized audit requests are sent to:
+
+```txt
+backendbrilliance@gmail.com
+```
+
 If Google Sheets succeeds and email fails, the submission is still treated as
 successful and the email failure is logged server-side.
 
@@ -182,7 +194,8 @@ Before production launch:
 1. Replace the Stripe checkout placeholder with the real Payment Link.
 2. Confirm the Cal.com URL.
 3. Configure Google Sheets Apps Script and test a real submission.
-4. Configure email notification credentials and test delivery.
+4. Configure email notification credentials and test delivery for both
+   `/api/audit-request` and `/api/onboarding`.
 5. Configure Stripe success/cancellation URLs.
 6. Confirm Preview and Production environment variables in Cloudflare Pages.
 7. Run `npm run lint` and `npm run build`.

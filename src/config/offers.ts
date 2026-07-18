@@ -23,9 +23,9 @@ const siteUrl = import.meta.env.VITE_SITE_URL || "https://backendbrilliance.com"
 const calendarUrl =
   import.meta.env.VITE_CALENDAR_URL || "https://cal.com/backendbrilliance/15min";
 const stripeCheckoutUrl =
-  import.meta.env.VITE_STRIPE_CHECKOUT_URL || "PASTE_STRIPE_CHECKOUT_URL_HERE";
+  import.meta.env.VITE_STRIPE_CHECKOUT_URL || "https://buy.stripe.com/3cI8wOeJd5XdexF7gA8AE01";
 const supportEmail =
-  import.meta.env.VITE_SUPPORT_EMAIL || "support@backendbrilliance.com";
+  import.meta.env.VITE_SUPPORT_EMAIL || "backendbrilliance@gmail.com";
 const revenueAuditUrl =
   import.meta.env.VITE_REVENUE_AUDIT_URL || "https://form.typeform.com/to/bpgvWxsk";
 
@@ -60,7 +60,7 @@ export const OFFER_CONFIG = {
     responseTime:
       "Backend Brilliance typically responds within 1-2 business days.",
     typicalBuildTimeline:
-      "Most initial website builds or improvements are completed within 7-14 business days after onboarding details and assets are received.",
+      "Most initial website, chatbot, scheduling, and follow-up foundations are prepared within 7-14 business days after onboarding details and assets are received.",
     ongoingEditsScope:
       "Ongoing website edits cover reasonable content, copy, image, and page updates within the agreed website scope. New complex functionality or major rebuilds may require a separate quote.",
   },
@@ -72,25 +72,16 @@ export const OFFER_CONFIG = {
       priceQualifier: "/month",
       setupFee: "Setup confirmed before work begins",
       shortDescription:
-        "A professionally built or improved website designed to turn more visitors into inquiries.",
+        "A website and automated response foundation that helps turn visitors into leads.",
       positioning:
-        "A professionally built or improved website designed to explain the business clearly, establish trust, and turn more visitors into inquiries.",
+        "A website, chatbot, scheduling, and follow-up foundation that helps local businesses turn more visitors into leads.",
       ctaLabel: "Start My Project",
       ctaBehavior: "stripe",
       features: [
-        "Conversion-focused website build or redesign",
-        "Clear service messaging and page structure",
-        "Mobile-responsive experience",
-        "Lead inquiry or contact forms",
-        "Existing booking-link integration",
-        "Calls-to-action throughout the website",
-        "Basic search and local SEO foundation",
-        "Analytics and conversion tracking foundation",
-        "Website hosting and platform management",
-        "Deployment and technical maintenance",
-        "Website maintenance and security updates",
-        "Ongoing website content edits",
-        "Monthly website performance review",
+        "A website built to turn visitors into leads",
+        "An AI chatbot that answers questions and encourages bookings",
+        "Simple forms and scheduling that make it easy to take action",
+        "Automated follow-up so interested leads don't go cold",
       ],
     },
     clientCapture: {
@@ -100,24 +91,18 @@ export const OFFER_CONFIG = {
       priceQualifier: "/month",
       setupFee: "One-time setup from $750",
       shortDescription:
-        "A connected lead-capture and response system for businesses that need more than a website.",
+        "A more complete system for managing leads, bookings, follow-up, and reviews.",
       positioning:
-        "Everything in Website Conversion System plus lead-response, booking, CRM, follow-up, and review workflows selected during strategy and onboarding.",
+        "Everything in Website Conversion System, plus a more complete lead-management, booking, CRM, review, and customer follow-up system.",
       ctaLabel: "Book a Strategy Call",
       ctaBehavior: "calendar",
       features: [
         "Everything in Website Conversion System",
-        "AI receptionist or automated first-response system",
-        "Lead-management dashboard",
-        "CRM pipeline setup",
-        "Advanced online booking workflow",
-        "Automated lead follow-up",
-        "Email follow-up sequences",
-        "SMS follow-up sequences",
-        "Missed-call response workflow",
-        "Appointment and customer reminders",
-        "Google review-request automation",
-        "Lead-source and pipeline tracking",
+        "A clearer dashboard for tracking leads and booked jobs",
+        "Stronger booking and customer follow-up systems",
+        "Review requests that help build trust",
+        "Missed-call and lead-response improvements",
+        "A smoother path from inquiry to booked appointment",
       ],
     },
     completeLocalGrowth: {
@@ -127,25 +112,19 @@ export const OFFER_CONFIG = {
       priceQualifier: "/month",
       setupFee: "One-time setup from $750",
       shortDescription:
-        "The complete capture, follow-up, visibility, and ongoing growth system.",
+        "The full system for visibility, capture, follow-up, reviews, and monthly growth.",
       positioning:
-        "Everything in Client Capture System plus local visibility, campaigns, optimization, performance analysis, and strategic growth support.",
+        "Everything in Client Capture System, plus ongoing local visibility, campaigns, optimization, and growth strategy.",
       ctaLabel: "Book a Strategy Call",
       ctaBehavior: "calendar",
       popular: true,
       features: [
         "Everything in Client Capture System",
-        "Local visibility strategy",
-        "Google Business Profile content",
-        "Local service-area content",
-        "Neighborhood or community-focused content",
-        "Seasonal campaigns",
-        "Local offers and announcements",
-        "Monthly conversion optimization",
-        "Monthly visibility planning",
-        "Performance analysis",
-        "Growth recommendations",
-        "Priority support",
+        "Local visibility and Google Business Profile support",
+        "Campaigns that promote services and seasonal offers",
+        "Monthly optimization based on performance",
+        "Growth recommendations for what to improve next",
+        "Priority support as your system expands",
       ],
     },
   } satisfies Record<OfferKey, Offer>,
@@ -157,48 +136,20 @@ export const OFFER_CONFIG = {
   websiteConversionDetails: {
     included: [
       {
-        title: "Conversion-focused website build or redesign",
-        copy: "We build or improve the website foundation so visitors understand what you do and how to take the next step.",
+        title: "A website built to turn visitors into leads",
+        copy: "Your website explains what you do, builds trust quickly, and guides visitors toward the next step.",
       },
       {
-        title: "Clear service messaging",
-        copy: "Your pages explain services, service areas, and trust factors in plain language.",
+        title: "An AI chatbot that encourages bookings",
+        copy: "Visitors can ask questions, get guidance, and move closer to booking even when you are busy.",
       },
       {
-        title: "Mobile-responsive experience",
-        copy: "Your site is structured for people browsing from phones, tablets, and desktops.",
+        title: "Simple forms and scheduling",
+        copy: "Customers can request help, share details, or schedule a time without unnecessary friction.",
       },
       {
-        title: "Lead inquiry forms",
-        copy: "Basic inquiry forms help interested visitors contact your business without friction.",
-      },
-      {
-        title: "Existing booking-link integration",
-        copy: "If you already use a booking platform, we can connect your existing booking link into the website flow.",
-      },
-      {
-        title: "Calls-to-action throughout the website",
-        copy: "Key pages guide visitors toward calling, requesting service, or booking through your existing process.",
-      },
-      {
-        title: "Basic search and local SEO foundation",
-        copy: "We organize core pages and metadata so your site has a cleaner local foundation.",
-      },
-      {
-        title: "Analytics and tracking foundation",
-        copy: "Basic performance and conversion tracking can be added so the website is easier to review.",
-      },
-      {
-        title: "Website maintenance",
-        copy: "The plan includes ongoing platform support, maintenance, and technical updates within scope.",
-      },
-      {
-        title: "Ongoing website content edits",
-        copy: "Reasonable content, copy, image, and page edits are included within the agreed website scope.",
-      },
-      {
-        title: "Monthly website performance review",
-        copy: "We review the website foundation monthly and identify practical improvements.",
+        title: "Automated follow-up",
+        copy: "Interested leads receive follow-up so fewer opportunities disappear after the first visit.",
       },
     ],
     howItWorks: [
@@ -211,12 +162,12 @@ export const OFFER_CONFIG = {
         copy: "Tell us about your business, services, branding, current website, and goals.",
       },
       {
-        title: "We Build or Improve Your Website",
-        copy: "Backend Brilliance creates the conversion-focused foundation.",
+        title: "We Build the Foundation",
+        copy: "Backend Brilliance prepares the website, chatbot, forms, scheduling, and follow-up flow.",
       },
       {
-        title: "Launch and Maintain",
-        copy: "The website launches and receives ongoing technical support, content updates, and performance review.",
+        title: "Launch and Improve",
+        copy: "The system goes live and can be improved as your business grows.",
       },
     ],
     faqs: [
@@ -226,9 +177,9 @@ export const OFFER_CONFIG = {
           "You will be sent to the onboarding questionnaire so Backend Brilliance can collect the information needed to begin your Website Conversion System project.",
       },
       {
-        question: "How long does the initial website build take?",
+        question: "How long does the initial setup take?",
         answer:
-          "Most initial website builds or improvements are completed within 7-14 business days after onboarding details and assets are received.",
+          "Most initial website, chatbot, scheduling, and follow-up foundations are prepared within 7-14 business days after onboarding details and assets are received.",
       },
       {
         question: "Can you improve my current website?",
@@ -253,12 +204,12 @@ export const OFFER_CONFIG = {
       {
         question: "Can you connect my current booking platform?",
         answer:
-          "Yes. This package can integrate an existing booking link into the website. Advanced automated booking workflows are part of higher-tier systems.",
+          "Yes. The Website Conversion System includes simple scheduling or existing booking-link integration so customers can take action more easily.",
       },
       {
-        question: "What is included in ongoing website edits?",
+        question: "What happens to leads after they reach out?",
         answer:
-          "Reasonable content, copy, image, and page edits are included within the agreed website scope. Complex new functionality may require a separate quote.",
+          "The system is designed to capture the inquiry and support simple automated follow-up so interested leads don't go cold.",
       },
       {
         question: "Are third-party software or platform fees included?",
@@ -266,14 +217,14 @@ export const OFFER_CONFIG = {
           "No. Third-party subscriptions, domain fees, premium plugins, text-message usage, email usage, AI usage, booking-platform fees, and platform costs are not included unless specifically confirmed in writing.",
       },
       {
-        question: "Does this package include AI and automated follow-up?",
+        question: "Does this replace the Client Capture System?",
         answer:
-          "The Website Conversion System provides the website foundation. AI reception, CRM pipelines, automated text and email follow-up, review automation, and other advanced workflows are available through the Client Capture System.",
+          "No. The Website Conversion System provides the foundation. The Client Capture System adds a more complete lead-management, booking, CRM, review, and customer follow-up system.",
       },
       {
         question: "Can I upgrade to the Client Capture System later?",
         answer:
-          "Yes. If you need AI response, CRM pipelines, automated follow-up, or review automation, those can be discussed on a strategy call.",
+          "Yes. If you need deeper lead management, review requests, missed-call improvements, or a more complete customer follow-up system, those can be discussed on a strategy call.",
       },
       {
         question: "How does cancellation work?",

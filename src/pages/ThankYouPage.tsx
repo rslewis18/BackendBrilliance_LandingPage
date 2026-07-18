@@ -23,7 +23,8 @@ export function ThankYouPage() {
           <p className="hero-lead">Your checkout has been completed.</p>
           <p>
             The final step is completing your onboarding questionnaire so we can
-            begin preparing your Website Conversion System.
+            begin preparing your website, AI chatbot, scheduling, and follow-up
+            foundation.
           </p>
           <div className="mini-panel">
             <strong>Estimated completion time</strong>

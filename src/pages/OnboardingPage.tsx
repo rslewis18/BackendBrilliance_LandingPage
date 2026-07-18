@@ -432,11 +432,12 @@ export function OnboardingPage() {
         <section className="section-shell onboarding-shell">
           <div className="section-heading narrow">
             <p className="eyebrow">Client onboarding</p>
-            <h1>Tell Us What We Need To Begin Your Website Conversion System.</h1>
+            <h1>Tell Us What We Need To Build Your Client System Foundation.</h1>
             <p>
-              This questionnaire collects the business, website, brand, and lead
-              handling details needed to start the project. Your answers stay in
-              place as you move between steps.
+              This questionnaire collects the business, website, brand, services,
+              scheduling, and lead-handling details needed to prepare your
+              website, chatbot, forms, and follow-up foundation. Your answers
+              stay in place as you move between steps.
             </p>
           </div>
 
