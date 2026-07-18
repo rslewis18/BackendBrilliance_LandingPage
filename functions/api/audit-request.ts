@@ -1,5 +1,9 @@
 type Env = {
+  RESEND_API_KEY?: string;
+  AUDIT_NOTIFICATION_TO?: string;
+  AUDIT_NOTIFICATION_FROM?: string;
   EMAIL_PROVIDER_API_KEY?: string;
+  EMAIL_NOTIFICATION_TO?: string;
   EMAIL_FROM?: string;
 };
 
@@ -14,6 +18,8 @@ type AuditRequestPayload = {
   phone?: unknown;
   email?: unknown;
   sourcePage?: unknown;
+  pageUrl?: unknown;
+  queryString?: unknown;
   companyWebsite?: unknown;
 };
 
@@ -23,10 +29,20 @@ type AuditRequest = {
   phone: string;
   email: string;
   sourcePage: string;
+  pageUrl: string;
+  queryString: string;
+  trackingDetails: string;
   submittedAt: string;
+  userAgent: string;
 };
 
-const auditRecipient = "backendbrilliance@gmail.com";
+type EmailConfig = {
+  apiKey: string;
+  to: string;
+  from: string;
+};
+
+const fallbackAuditRecipient = "backendbrilliance@gmail.com";
 const rateLimitWindowMs = 60_000;
 const maxRequestsPerWindow = 5;
 const requestLog = new Map<string, { count: number; resetAt: number }>();
@@ -57,10 +73,73 @@ const normalizeWebsiteUrl = (value: string) => {
     ? trimmed
     : `https://${trimmed}`;
   const url = new URL(withProtocol);
-  if (!url.hostname.includes(".")) {
-    throw new Error("invalid_website");
+
+  if (!["http:", "https:"].includes(url.protocol) || !url.hostname.includes(".")) {
+    throw new Error("INVALID_WEBSITE");
   }
+
   return url.toString();
+};
+
+const extractTrackingDetails = (pageUrl: string, queryString: string) => {
+  const params = new URLSearchParams();
+
+  const addParams = (value: string) => {
+    if (!value) {
+      return;
+    }
+
+    try {
+      const parsed = value.startsWith("?")
+        ? new URLSearchParams(value)
+        : new URL(value).searchParams;
+      parsed.forEach((paramValue, key) => params.set(key, paramValue));
+    } catch {
+      if (value.includes("=")) {
+        const parsed = new URLSearchParams(value.startsWith("?") ? value : `?${value}`);
+        parsed.forEach((paramValue, key) => params.set(key, paramValue));
+      }
+    }
+  };
+
+  addParams(pageUrl);
+  addParams(queryString);
+
+  const allowedKeys = [
+    "business",
+    "audit",
+    "source",
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_term",
+    "utm_content",
+    "gclid",
+    "fbclid",
+  ];
+
+  return allowedKeys
+    .map((key) => {
+      const value = sanitize(params.get(key), 160);
+      return value ? `${key}: ${value}` : "";
+    })
+    .filter(Boolean)
+    .join("\n");
+};
+
+const getEmailConfig = (env: Env): EmailConfig => {
+  const apiKey = env.RESEND_API_KEY || env.EMAIL_PROVIDER_API_KEY || "";
+  const to =
+    env.AUDIT_NOTIFICATION_TO ||
+    env.EMAIL_NOTIFICATION_TO ||
+    fallbackAuditRecipient;
+  const from = env.AUDIT_NOTIFICATION_FROM || env.EMAIL_FROM || "";
+
+  if (!apiKey || !from || !to) {
+    throw new Error("EMAIL_NOT_CONFIGURED");
+  }
+
+  return { apiKey, to, from };
 };
 
 const checkRateLimit = (request: Request) => {
@@ -85,31 +164,36 @@ const parsePayload = async (request: Request) => {
   try {
     return (await request.json()) as AuditRequestPayload;
   } catch {
-    throw new Error("invalid_json");
+    throw new Error("INVALID_JSON");
   }
 };
 
-const validatePayload = (payload: AuditRequestPayload): AuditRequest => {
+const validatePayload = (
+  payload: AuditRequestPayload,
+  request: Request,
+): AuditRequest => {
   if (sanitize(payload.companyWebsite)) {
-    throw new Error("spam_detected");
+    throw new Error("SPAM_DETECTED");
   }
 
   const businessName = sanitize(payload.businessName, 120);
   const phone = sanitize(payload.phone, 40);
   const email = sanitize(payload.email, 120).toLowerCase();
-  const sourcePage = sanitize(payload.sourcePage, 120) || "/";
+  const sourcePage = sanitize(payload.sourcePage, 200) || "/";
+  const pageUrl = sanitize(payload.pageUrl, 500);
+  const queryString = sanitize(payload.queryString, 500);
   const rawWebsiteUrl = sanitize(payload.websiteUrl, 240);
 
   if (!businessName || !rawWebsiteUrl || !phone || !email) {
-    throw new Error("validation_failed");
+    throw new Error("VALIDATION_FAILED");
   }
 
   if (!isValidEmail(email)) {
-    throw new Error("invalid_email");
+    throw new Error("INVALID_EMAIL");
   }
 
   if (!isValidPhone(phone)) {
-    throw new Error("invalid_phone");
+    throw new Error("INVALID_PHONE");
   }
 
   return {
@@ -118,42 +202,125 @@ const validatePayload = (payload: AuditRequestPayload): AuditRequest => {
     phone,
     email,
     sourcePage,
+    pageUrl,
+    queryString,
+    trackingDetails: extractTrackingDetails(pageUrl, queryString),
     submittedAt: new Date().toISOString(),
+    userAgent: sanitize(request.headers.get("user-agent"), 320),
   };
 };
 
-const sendAuditRequestEmail = async (env: Env, data: AuditRequest) => {
-  if (!env.EMAIL_PROVIDER_API_KEY || !env.EMAIL_FROM) {
-    throw new Error("email_not_configured");
-  }
-
-  const subject = `New Personalized Audit Request - ${data.businessName}`;
-  const text = [
+const createEmailBody = (data: AuditRequest) =>
+  [
+    "New personalized audit request",
+    "",
     `Business name: ${data.businessName}`,
     `Website URL: ${data.websiteUrl}`,
-    `Phone: ${data.phone}`,
-    `Email: ${data.email}`,
+    `Phone number: ${data.phone}`,
+    `Email address: ${data.email}`,
     `Submission timestamp: ${data.submittedAt}`,
     `Source page: ${data.sourcePage}`,
-  ].join("\n");
+    data.pageUrl ? `Full page URL: ${data.pageUrl}` : "",
+    data.userAgent ? `User agent: ${data.userAgent}` : "",
+    data.trackingDetails ? "" : "",
+    data.trackingDetails ? "Tracking / query parameters:" : "",
+    data.trackingDetails,
+  ]
+    .filter((line) => line !== "")
+    .join("\n");
+
+const sendAuditRequestEmail = async (env: Env, data: AuditRequest) => {
+  const emailConfig = getEmailConfig(env);
+  const subject = `New Personalized Audit Request — ${data.businessName}`;
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${env.EMAIL_PROVIDER_API_KEY}`,
+      Authorization: `Bearer ${emailConfig.apiKey}`,
     },
     body: JSON.stringify({
-      from: env.EMAIL_FROM,
-      to: auditRecipient,
+      from: emailConfig.from,
+      to: emailConfig.to,
       subject,
-      text,
+      text: createEmailBody(data),
     }),
   });
 
   if (!response.ok) {
-    throw new Error("email_send_failed");
+    let providerMessage = "";
+    try {
+      providerMessage = (await response.text()).slice(0, 300);
+    } catch {
+      providerMessage = "Could not read provider response.";
+    }
+
+    console.error("Audit email provider rejected request", {
+      status: response.status,
+      statusText: response.statusText,
+      providerMessage,
+    });
+
+    throw new Error("EMAIL_SEND_FAILED");
   }
+};
+
+const errorResponse = (error: unknown) => {
+  const code = error instanceof Error ? error.message : "UNKNOWN_ERROR";
+
+  if (code === "EMAIL_NOT_CONFIGURED") {
+    return json(
+      {
+        success: false,
+        ok: false,
+        code: "EMAIL_NOT_CONFIGURED",
+        message: "Audit notifications are temporarily unavailable.",
+      },
+      { status: 503 },
+    );
+  }
+
+  if (code === "SPAM_DETECTED") {
+    return json(
+      {
+        success: false,
+        ok: false,
+        code: "SPAM_DETECTED",
+        message: "We could not submit your request right now.",
+      },
+      { status: 400 },
+    );
+  }
+
+  const validationCodes = new Set([
+    "INVALID_JSON",
+    "VALIDATION_FAILED",
+    "INVALID_EMAIL",
+    "INVALID_PHONE",
+    "INVALID_WEBSITE",
+  ]);
+
+  if (validationCodes.has(code)) {
+    return json(
+      {
+        success: false,
+        ok: false,
+        code,
+        message: "Please check your information and try again.",
+      },
+      { status: 400 },
+    );
+  }
+
+  return json(
+    {
+      success: false,
+      ok: false,
+      code: "EMAIL_SEND_FAILED",
+      message: "Audit notifications are temporarily unavailable.",
+    },
+    { status: 502 },
+  );
 };
 
 export const onRequestOptions = () =>
@@ -170,7 +337,9 @@ export const onRequestPost = async ({ request, env }: PagesContext) => {
     if (!checkRateLimit(request)) {
       return json(
         {
+          success: false,
           ok: false,
+          code: "RATE_LIMITED",
           message: "Too many attempts. Please wait a moment and try again.",
         },
         { status: 429 },
@@ -178,27 +347,17 @@ export const onRequestPost = async ({ request, env }: PagesContext) => {
     }
 
     const payload = await parsePayload(request);
-    const auditRequest = validatePayload(payload);
+    const auditRequest = validatePayload(payload, request);
     await sendAuditRequestEmail(env, auditRequest);
 
     return json({
+      success: true,
       ok: true,
-      message: "Audit request received.",
+      message: "Your personalized audit request has been received.",
     });
   } catch (error) {
-    console.error("Personalized audit request failed", error);
-    const errorMessage = error instanceof Error ? error.message : "";
-    const isEmailConfigurationError = errorMessage === "email_not_configured";
-
-    return json(
-      {
-        ok: false,
-        message:
-          isEmailConfigurationError
-            ? "Audit request notifications are not configured yet. Please contact Backend Brilliance directly."
-            : "We could not submit your request right now. Please try again or contact Backend Brilliance directly.",
-      },
-      { status: isEmailConfigurationError ? 503 : 400 },
-    );
+    const code = error instanceof Error ? error.message : "UNKNOWN_ERROR";
+    console.error("Personalized audit request failed", { code });
+    return errorResponse(error);
   }
 };

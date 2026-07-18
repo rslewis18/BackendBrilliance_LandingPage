@@ -59,6 +59,7 @@ export function AuditRequestModal({
   const descriptionId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
+  const submitLockRef = useRef(false);
   const [formData, setFormData] = useState<AuditFormData>(initialFormData);
   const [errors, setErrors] = useState<AuditFieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -170,10 +171,15 @@ export function AuditRequestModal({
     setSuccessMessage("");
 
     const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0 || isSubmitting) {
+    if (
+      Object.keys(validationErrors).length > 0 ||
+      isSubmitting ||
+      submitLockRef.current
+    ) {
       return;
     }
 
+    submitLockRef.current = true;
     setIsSubmitting(true);
 
     try {
@@ -185,18 +191,24 @@ export function AuditRequestModal({
         body: JSON.stringify({
           ...formData,
           sourcePage: window.location.pathname,
+          pageUrl: window.location.href,
+          queryString: window.location.search,
         }),
       });
 
       const result = (await response.json()) as {
+        success?: boolean;
         ok?: boolean;
+        code?: string;
         message?: string;
       };
 
-      if (!response.ok || !result.ok) {
+      if (!response.ok || (!result.ok && !result.success)) {
         setErrors({
           form:
-            result.message ||
+            result.code === "EMAIL_NOT_CONFIGURED"
+              ? "Audit notifications are temporarily unavailable. Please email Backend Brilliance directly."
+              : result.message ||
             "We could not submit your request right now. Please try again or contact Backend Brilliance directly.",
         });
         return;
@@ -205,7 +217,7 @@ export function AuditRequestModal({
       setFormData(initialFormData);
       setErrors({});
       setSuccessMessage(
-        "Your request has been received. We'll review your website and prepare your personalized audit within approximately 24 hours.",
+        "Your request has been received. We’ll review your website and prepare your personalized audit within approximately 24 hours.",
       );
     } catch {
       setErrors({
@@ -213,6 +225,7 @@ export function AuditRequestModal({
           "We could not submit your request right now. Please try again or contact Backend Brilliance directly.",
       });
     } finally {
+      submitLockRef.current = false;
       setIsSubmitting(false);
     }
   };
@@ -278,6 +291,8 @@ export function AuditRequestModal({
                 autoComplete="organization"
                 aria-invalid={Boolean(errors.businessName)}
                 ref={firstFieldRef}
+                required
+                type="text"
                 value={formData.businessName}
                 onChange={(event) => updateField("businessName", event.target.value)}
               />
@@ -292,6 +307,8 @@ export function AuditRequestModal({
                 autoComplete="url"
                 aria-invalid={Boolean(errors.websiteUrl)}
                 inputMode="url"
+                required
+                type="url"
                 value={formData.websiteUrl}
                 onChange={(event) => updateField("websiteUrl", event.target.value)}
               />
@@ -306,6 +323,8 @@ export function AuditRequestModal({
                 autoComplete="tel"
                 aria-invalid={Boolean(errors.phone)}
                 inputMode="tel"
+                required
+                type="tel"
                 value={formData.phone}
                 onChange={(event) => updateField("phone", event.target.value)}
               />
@@ -318,6 +337,8 @@ export function AuditRequestModal({
                 autoComplete="email"
                 aria-invalid={Boolean(errors.email)}
                 inputMode="email"
+                required
+                type="email"
                 value={formData.email}
                 onChange={(event) => updateField("email", event.target.value)}
               />

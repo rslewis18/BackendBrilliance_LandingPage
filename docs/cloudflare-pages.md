@@ -38,7 +38,18 @@ VITE_SUPPORT_EMAIL=
 VITE_REVENUE_AUDIT_URL=
 ```
 
-Set private variables for Pages Functions:
+Set private variables for the personalized audit request notification:
+
+```env
+RESEND_API_KEY=
+AUDIT_NOTIFICATION_TO=backendbrilliance@gmail.com
+AUDIT_NOTIFICATION_FROM=
+```
+
+`AUDIT_NOTIFICATION_FROM` must be a sender address allowed by the configured
+Resend account. Use a verified sending domain for production.
+
+Set private variables for onboarding storage and notifications:
 
 ```env
 GOOGLE_SHEETS_WEBHOOK_URL=
@@ -51,8 +62,8 @@ TURNSTILE_ENABLED=false
 ```
 
 Only variables beginning with `VITE_` are available to browser code. Keep
-Google Sheets, email-provider, and Turnstile secrets in Cloudflare Pages
-environment variables only.
+Resend, Google Sheets, email-provider, and Turnstile secrets in Cloudflare
+Pages environment variables only.
 
 ## Functions
 
@@ -69,3 +80,18 @@ functions/api/onboarding.ts
 ```
 
 It does not use filesystem writes and does not store submissions locally.
+
+The personalized audit request popup posts to:
+
+```txt
+/api/audit-request
+```
+
+The function is implemented in:
+
+```txt
+functions/api/audit-request.ts
+```
+
+It sends the notification email server-side through Resend and does not expose
+the Resend API key to browser code.

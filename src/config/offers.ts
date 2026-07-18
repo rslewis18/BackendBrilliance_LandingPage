@@ -154,20 +154,20 @@ export const OFFER_CONFIG = {
     ],
     howItWorks: [
       {
-        title: "Start Your Project",
-        copy: "Complete secure hosted checkout through Stripe.",
+        title: "Start your project",
+        copy: "Complete secure checkout through Stripe.",
       },
       {
-        title: "Complete Onboarding",
-        copy: "Tell us about your business, services, branding, current website, and goals.",
+        title: "Tell us about your business",
+        copy: "Complete the onboarding form with your website, services, branding, and goals.",
       },
       {
-        title: "We Build the Foundation",
-        copy: "Backend Brilliance prepares the website, chatbot, forms, scheduling, and follow-up flow.",
+        title: "We build your system",
+        copy: "We create or improve the website, chatbot, lead capture, scheduling, and follow-up foundation.",
       },
       {
-        title: "Launch and Improve",
-        copy: "The system goes live and can be improved as your business grows.",
+        title: "Review and launch",
+        copy: "We confirm the setup with you and prepare it for launch.",
       },
     ],
     faqs: [

@@ -1329,6 +1329,309 @@ h1 {
   gap: 16px;
 }
 
+.start-page {
+  padding-top: clamp(34px, 5vw, 68px);
+  padding-bottom: clamp(60px, 8vw, 104px);
+}
+
+.start-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+  align-items: center;
+  gap: clamp(28px, 5vw, 64px);
+}
+
+.start-copy {
+  max-width: 720px;
+}
+
+.start-copy h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(2.25rem, 5.2vw, 4.35rem);
+  font-weight: 900;
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.start-subhead {
+  max-width: 620px;
+  margin: 18px 0 0;
+  color: var(--ink);
+  font-size: clamp(1.12rem, 2.2vw, 1.55rem);
+  font-weight: 820;
+  line-height: 1.35;
+}
+
+.start-intro,
+.start-personal-note,
+.start-summary-card p,
+.start-purchase-card p,
+.start-price-panel p,
+.start-support-card p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.start-intro {
+  max-width: 650px;
+  margin: 18px 0 0;
+  font-size: 1.02rem;
+}
+
+.start-personal-note {
+  max-width: 620px;
+  margin: 18px 0 0;
+  border-left: 3px solid var(--accent);
+  padding-left: 16px;
+  color: var(--ink);
+  font-weight: 720;
+}
+
+.start-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.start-purchase-card,
+.start-summary-card,
+.start-outcome-card,
+.start-step-card,
+.plan-details-card,
+.start-support-card {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: 0 16px 46px rgba(17, 17, 17, 0.07);
+}
+
+.start-purchase-card {
+  display: grid;
+  gap: 16px;
+  padding: clamp(24px, 4vw, 34px);
+}
+
+.start-purchase-card h2,
+.start-summary-card h2,
+.start-support-card h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.6rem, 3vw, 2.35rem);
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.start-price {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+}
+
+.start-price strong,
+.start-price-panel strong {
+  color: var(--ink);
+  font-size: clamp(3.4rem, 8vw, 5.1rem);
+  font-weight: 950;
+  letter-spacing: -0.08em;
+  line-height: 0.9;
+}
+
+.start-price span,
+.start-price-panel small {
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.start-purchase-card small,
+.start-price-panel small {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.start-section {
+  padding-top: clamp(46px, 7vw, 82px);
+}
+
+.compact-heading {
+  margin-bottom: clamp(20px, 4vw, 34px);
+}
+
+.compact-heading h2 {
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.start-outcome-grid,
+.start-step-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.start-outcome-card,
+.start-step-card {
+  padding: 22px;
+}
+
+.start-outcome-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+}
+
+.start-outcome-card svg,
+.start-step-card svg,
+.plan-details-card svg {
+  color: var(--accent);
+}
+
+.start-outcome-card p {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 780;
+  line-height: 1.45;
+}
+
+.start-step-card span {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: rgba(229, 57, 53, 0.1);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.start-step-card h3 {
+  margin: 14px 0 0;
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.start-step-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.start-summary-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 380px);
+  gap: clamp(24px, 4vw, 42px);
+  padding: clamp(24px, 5vw, 46px);
+}
+
+.summary-check-list {
+  display: grid;
+  gap: 12px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.summary-check-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--ink);
+  font-weight: 720;
+  line-height: 1.55;
+}
+
+.summary-check-list svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: var(--accent);
+}
+
+.start-price-panel {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  border-radius: 20px;
+  padding: 24px;
+  background: var(--paper);
+}
+
+.start-price-panel > span {
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.start-faq-list {
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.plan-details-card {
+  overflow: hidden;
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.plan-details-card > summary {
+  display: flex;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px 24px;
+}
+
+.plan-details-card > summary::-webkit-details-marker {
+  display: none;
+}
+
+.plan-details-card summary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+}
+
+.plan-details-card summary b {
+  color: var(--accent);
+  font-size: 1.5rem;
+}
+
+.plan-details-card[open] summary b {
+  transform: rotate(45deg);
+}
+
+.plan-details-list {
+  display: grid;
+  gap: 16px;
+  border-top: 1px solid var(--line);
+  padding: 22px 24px 26px;
+}
+
+.plan-details-list h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.96rem;
+}
+
+.plan-details-list p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.start-support-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: clamp(46px, 7vw, 82px);
+  padding: clamp(24px, 4vw, 36px);
+}
+
 .confirmation-page {
   min-height: calc(100vh - 82px);
   display: grid;
@@ -1354,8 +1657,15 @@ h1 {
   margin-inline: 0;
 }
 
+.onboarding-shell h1 {
+  font-size: clamp(2.15rem, 4.6vw, 3.8rem);
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+}
+
 .progress-wrap {
   margin: 24px 0;
+  scroll-margin-top: 96px;
 }
 
 .progress-label {
@@ -1843,7 +2153,9 @@ h1 {
   .flow-hero,
   .offer-detail-card,
   .step-grid.four,
-  .flow-footer {
+  .flow-footer,
+  .start-hero,
+  .start-summary-card {
     grid-template-columns: 1fr;
   }
 
@@ -1857,7 +2169,9 @@ h1 {
 
   .compact-card-grid,
   .compact-feature-grid,
-  .checkbox-grid {
+  .checkbox-grid,
+  .start-outcome-grid,
+  .start-step-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -1920,6 +2234,10 @@ h1 {
 
   .pricing-card.popular {
     grid-row: span 1;
+  }
+
+  .start-hero {
+    align-items: start;
   }
 
   .reference-header .header-button {
@@ -1994,11 +2312,13 @@ h1 {
   .pricing-grid,
   .compact-card-grid,
   .compact-feature-grid,
-  .checkbox-grid,
-  .form-grid,
-  .audit-cta-card,
-  .ready-card,
-  .final-cta,
+    .checkbox-grid,
+    .form-grid,
+    .start-outcome-grid,
+    .start-step-grid,
+    .audit-cta-card,
+    .ready-card,
+    .final-cta,
   .site-footer {
     grid-template-columns: 1fr;
   }
@@ -2031,6 +2351,38 @@ h1 {
 
   .simple-header .brand span {
     display: none;
+  }
+
+  .start-page {
+    padding-top: 30px;
+    padding-bottom: 88px;
+  }
+
+  .start-copy h1 {
+    font-size: clamp(2.05rem, 10vw, 3rem);
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+  }
+
+  .start-subhead {
+    font-size: 1.08rem;
+  }
+
+  .start-action-row,
+  .start-action-row .button,
+  .start-purchase-card .button,
+  .start-price-panel .button,
+  .start-support-card .button {
+    width: 100%;
+  }
+
+  .start-support-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .onboarding-shell h1 {
+    font-size: clamp(2rem, 9.6vw, 3rem);
   }
 
   .form-actions {
@@ -2101,6 +2453,25 @@ h1 {
 
   h1 {
     font-size: clamp(2.6rem, 13vw, 3.55rem);
+  }
+
+  .start-copy h1 {
+    font-size: clamp(1.95rem, 10.4vw, 2.75rem);
+  }
+
+  .start-purchase-card,
+  .start-summary-card,
+  .start-outcome-card,
+  .start-step-card,
+  .plan-details-card > summary,
+  .plan-details-list,
+  .start-support-card {
+    padding: 20px;
+  }
+
+  .start-price strong,
+  .start-price-panel strong {
+    font-size: clamp(3rem, 18vw, 4.25rem);
   }
 
   .dashboard-screen {

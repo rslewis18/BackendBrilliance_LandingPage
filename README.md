@@ -60,8 +60,8 @@ The homepage pricing cards and `/start` page both read from the same offer
 configuration.
 
 The Revenue Leak Audit CTA still uses `VITE_REVENUE_AUDIT_URL`. The
-personalized audit popup submits to `/api/audit-request` and sends an email
-notification server-side.
+personalized audit popup submits to `/api/audit-request` and sends a Resend
+email notification server-side.
 
 ## Routes
 
@@ -106,7 +106,7 @@ See [docs/cloudflare-pages.md](docs/cloudflare-pages.md).
 
 Copy `.env.example` to `.env.local` for local values.
 
-Public frontend variables:
+Public frontend/build variables:
 
 ```env
 VITE_SITE_URL=
@@ -116,7 +116,16 @@ VITE_SUPPORT_EMAIL=
 VITE_REVENUE_AUDIT_URL=
 ```
 
-Private Cloudflare Pages Function variables:
+Private Cloudflare Pages Function variables for personalized audit requests:
+
+```env
+RESEND_API_KEY=
+AUDIT_NOTIFICATION_TO=backendbrilliance@gmail.com
+AUDIT_NOTIFICATION_FROM=
+```
+
+Private Cloudflare Pages Function variables for onboarding storage and
+notifications:
 
 ```env
 GOOGLE_SHEETS_WEBHOOK_URL=
@@ -169,8 +178,22 @@ See [docs/google-sheets-apps-script.md](docs/google-sheets-apps-script.md).
 
 ## Email notification
 
-The notification service is modular and Cloudflare-compatible. The current
-implementation supports Resend-style API delivery when these are configured:
+Personalized audit requests use the Resend API from the Cloudflare Pages
+Function at `/api/audit-request`. Configure these private server-side variables:
+
+```env
+RESEND_API_KEY=
+AUDIT_NOTIFICATION_TO=backendbrilliance@gmail.com
+AUDIT_NOTIFICATION_FROM=
+```
+
+`AUDIT_NOTIFICATION_FROM` must be a sender address allowed by the configured
+Resend account. For production, verify the sending domain in Resend and use an
+address on that domain. For temporary Resend testing, use a sender allowed by
+your Resend account, such as the Resend-provided testing sender if available.
+
+The onboarding notification service remains separate and Cloudflare-compatible.
+It supports Resend-style API delivery when these are configured:
 
 ```env
 EMAIL_PROVIDER_API_KEY=
@@ -184,8 +207,15 @@ Personalized audit requests are sent to:
 backendbrilliance@gmail.com
 ```
 
-If Google Sheets succeeds and email fails, the submission is still treated as
-successful and the email failure is logged server-side.
+Audit requests are not marked successful in the browser unless the Resend API
+accepts the email request. If onboarding Google Sheets succeeds and onboarding
+email fails, the onboarding submission is still treated as successful and the
+email failure is logged server-side.
+
+Audit requests do not currently use backup storage. The existing Google Sheets
+Apps Script is shaped for onboarding rows; if backup storage is needed later,
+create a distinct audit-request sheet/webhook payload with submission type
+`personalized_audit_request` so audit fields are not mixed into onboarding rows.
 
 ## Notes before launch
 

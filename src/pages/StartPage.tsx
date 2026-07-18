@@ -1,6 +1,15 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  CheckCircle2,
+  CreditCard,
+  FileText,
+  HelpCircle,
+  MessageCircle,
+  Rocket,
+} from "lucide-react";
 import { PageMeta } from "../components/PageMeta";
 import { SimpleHeader } from "../components/SimpleHeader";
 import { LINKS } from "../config/links";
@@ -14,50 +23,91 @@ const sanitizeBusinessName = (value: string | null) => {
   return value.replace(/[<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 80);
 };
 
+const howItWorksIcons = [CreditCard, FileText, MessageCircle, Rocket];
+
 export function StartPage() {
   const [searchParams] = useSearchParams();
   const shouldReduceMotion = useReducedMotion();
   const businessName = sanitizeBusinessName(searchParams.get("business"));
+  const hasAuditContext =
+    Boolean(businessName) ||
+    searchParams.has("audit") ||
+    searchParams.get("source") === "audit";
   const checkoutCancelled = searchParams.get("checkout") === "cancelled";
   const offer = OFFER_CONFIG.offers.websiteConversion;
   const reveal = shouldReduceMotion
     ? {}
     : {
-        initial: { opacity: 0, y: 18 },
+        initial: { opacity: 0, y: 16 },
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+        transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] as const },
       };
+
+  const personalizedMessage = businessName
+    ? `Based on the opportunities identified for ${businessName}, this is the system we recommend.`
+    : hasAuditContext
+      ? "Based on the opportunities identified in your audit, this is the system we recommend."
+      : "A clear starting point for turning more website visitors into real business inquiries.";
+
+  const summaryDetails = [
+    `${offer.price} per month`,
+    "Month-to-month service",
+    "Most initial setups are completed within 7-14 business days after onboarding materials are received",
+    "Any one-time setup cost will be confirmed before work begins",
+  ];
+
+  const planDetails = [
+    {
+      title: "Cancellation policy",
+      copy: OFFER_CONFIG.policies.cancellation,
+    },
+    {
+      title: "Third-party software and usage costs",
+      copy: OFFER_CONFIG.policies.thirdPartyCosts,
+    },
+    {
+      title: "Ongoing edits",
+      copy: OFFER_CONFIG.policies.ongoingEditsScope,
+    },
+    {
+      title: "Setup-fee clarification",
+      copy: OFFER_CONFIG.policies.setupFeeLanguage,
+    },
+  ];
+
+  const conciseFaqs = [
+    OFFER_CONFIG.websiteConversionDetails.faqs[0],
+    OFFER_CONFIG.websiteConversionDetails.faqs[1],
+    OFFER_CONFIG.websiteConversionDetails.faqs[2],
+    OFFER_CONFIG.websiteConversionDetails.faqs[6],
+    OFFER_CONFIG.websiteConversionDetails.faqs[8],
+  ].filter(Boolean);
 
   return (
     <>
       <PageMeta
         title="Start Your Website Conversion System | Backend Brilliance"
-        description="Start the Backend Brilliance Website Conversion System after reviewing your personalized website audit."
+        description="Start the Backend Brilliance Website Conversion System: a website, chatbot, lead capture, scheduling, and follow-up foundation for local service businesses."
         path={OFFER_CONFIG.routes.start}
         noindex
       />
       <SimpleHeader />
 
-      <main className="flow-page">
-        <section className="flow-hero section-shell">
-          <motion.div className="flow-hero-copy" {...reveal}>
-            <p className="eyebrow">Personalized Website Audit</p>
-            {businessName ? (
-              <p className="welcome-line">Welcome, {businessName}.</p>
-            ) : (
-              <p className="welcome-line">Thanks for reviewing your personalized website audit.</p>
-            )}
-            <h1>Turn More Visitors Into Leads With a Website, Chatbot, Scheduling, and Follow-Up.</h1>
-            <p className="hero-lead">
-              Your system should clearly explain what you offer, answer common
-              questions, make it easy to take action, and follow up before
-              interested leads go cold.
+      <main className="flow-page start-page">
+        <section className="start-hero section-shell" aria-labelledby="start-title">
+          <motion.div className="start-copy" {...reveal}>
+            <p className="eyebrow">Website Conversion System</p>
+            {businessName && <p className="welcome-line">Welcome, {businessName}.</p>}
+            <h1 id="start-title">Your Website Conversion System</h1>
+            <p className="start-subhead">
+              A simpler way to turn website visitors into real business inquiries.
             </p>
-            <p className="hero-text">
-              {businessName
-                ? `Thanks for reviewing your personalized website audit. Based on the opportunities we identified, here is the ${offer.name} we recommend.`
-                : `Here is the ${offer.name} we recommend to help turn more of your existing website traffic into leads and opportunities.`}
+            <p className="start-intro">
+              We&apos;ll help you build a clear, professional website experience
+              that answers questions, makes it easy to take action, and follows
+              up with interested leads.
             </p>
+            <p className="start-personal-note">{personalizedMessage}</p>
 
             {checkoutCancelled && (
               <div className="notice-card" role="status">
@@ -66,137 +116,145 @@ export function StartPage() {
               </div>
             )}
 
-            <div className="hero-actions">
+            <div className="start-action-row">
               <a
                 className="button button-primary"
                 href={getOfferCtaUrl(offer)}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Start My Project - {offer.price}/month
+                Start My Project
                 <ArrowRight size={18} />
               </a>
-            </div>
-            <p className="secondary-link-line">
-              Need deeper lead management, reviews, or local growth?{" "}
-              <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">
-                Book a strategy call.
+              <a
+                className="button button-secondary"
+                href={LINKS.booking}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Book a Strategy Call
               </a>
-            </p>
+            </div>
           </motion.div>
 
-          <motion.aside className="offer-summary-card" {...reveal}>
-            <Sparkles size={26} />
+          <motion.aside className="start-purchase-card" {...reveal}>
+            <p className="eyebrow">Start here</p>
             <h2>{offer.name}</h2>
-            <div className="price">
-              <span>Recurring subscription</span>
+            <div className="start-price">
               <strong>{offer.price}</strong>
-              <small>{offer.priceQualifier}</small>
+              <span>{offer.priceQualifier}</span>
             </div>
-            <p>{offer.positioning}</p>
-            <ul>
-              {offer.features.slice(0, 7).map((feature) => (
-                <li key={feature}>
-                  <Check size={16} />
-                  {feature}
-                </li>
-              ))}
-            </ul>
+            <p>
+              A clear website and response system designed to help turn visitors
+              into inquiries.
+            </p>
+            <a
+              className="button button-primary"
+              href={getOfferCtaUrl(offer)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Start My Project
+              <ArrowRight size={18} />
+            </a>
+            <small>
+              Secure monthly checkout through Stripe. Any applicable setup fee
+              will be confirmed before work begins.
+            </small>
           </motion.aside>
         </section>
 
-        <section className="flow-section section-shell">
-          <div className="section-heading narrow">
-            <p className="eyebrow">Audit to Action</p>
-            <h2>We Found the Opportunities. Now Let&apos;s Fix Them.</h2>
-            <p>
-              Your personalized audit identified where your current online
-              presence could communicate more clearly, answer questions faster,
-              capture more interest, and follow up more consistently. The
-              Website Conversion System is the foundation Backend Brilliance
-              uses to implement those improvements.
-            </p>
-          </div>
-        </section>
-
-        <section className="flow-section section-shell">
-          <div className="section-heading centered">
+        <section className="start-section section-shell" aria-labelledby="included-title">
+          <div className="section-heading centered compact-heading">
             <p className="eyebrow">What is included</p>
-            <h2>The Four Pieces That Help Visitors Take Action.</h2>
+            <h2 id="included-title">Four pieces that help visitors take action.</h2>
           </div>
-          <div className="compact-card-grid">
-            {OFFER_CONFIG.websiteConversionDetails.included.map((item) => (
-              <article className="compact-card" key={item.title}>
-                <Check size={20} />
-                <h3>{item.title}</h3>
-                <p>{item.copy}</p>
+          <div className="start-outcome-grid">
+            {offer.features.map((feature) => (
+              <article className="start-outcome-card" key={feature}>
+                <CheckCircle2 size={20} />
+                <p>{feature}</p>
               </article>
             ))}
           </div>
-          <div className="upgrade-note">
-            <h3>Need a lead dashboard, review requests, missed-call response, or growth campaigns?</h3>
-            <p>
-              Those advanced capabilities are available through the Client
-              Capture System or Complete Local Growth System and can be
-              discussed on a strategy call.
-            </p>
-            <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">
-              Book a strategy call
-            </a>
-          </div>
         </section>
 
-        <section className="flow-section section-shell">
-          <div className="section-heading centered">
+        <section className="start-section section-shell" aria-labelledby="works-title">
+          <div className="section-heading centered compact-heading">
             <p className="eyebrow">How it works</p>
-            <h2>From Checkout to Launch.</h2>
+            <h2 id="works-title">From checkout to launch.</h2>
           </div>
-          <div className="step-grid four">
-            {OFFER_CONFIG.websiteConversionDetails.howItWorks.map((step, index) => (
-              <article className="step-card" key={step.title}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <h3>{step.title}</h3>
-                <p>{step.copy}</p>
-              </article>
-            ))}
+          <div className="start-step-grid">
+            {OFFER_CONFIG.websiteConversionDetails.howItWorks.map((step, index) => {
+              const Icon = howItWorksIcons[index] || Check;
+              return (
+                <article className="start-step-card" key={step.title}>
+                  <span>0{index + 1}</span>
+                  <Icon size={22} />
+                  <h3>{step.title}</h3>
+                  <p>{step.copy}</p>
+                </article>
+              );
+            })}
           </div>
         </section>
 
-        <section className="flow-section section-shell">
-          <div className="offer-detail-card">
+        <section
+          className="start-section section-shell"
+          id="purchase"
+          aria-labelledby="summary-title"
+        >
+          <div className="start-summary-card">
             <div>
               <p className="eyebrow">Offer summary</p>
-              <h2>{offer.name}</h2>
-              <p>{OFFER_CONFIG.policies.billingNote}</p>
-              <p>{OFFER_CONFIG.policies.setupFeeLanguage}</p>
-              <p>{OFFER_CONFIG.policies.typicalBuildTimeline}</p>
-              <p>{OFFER_CONFIG.policies.ongoingEditsScope}</p>
-              <p>{OFFER_CONFIG.policies.thirdPartyCosts}</p>
-              <p>{OFFER_CONFIG.policies.cancellation}</p>
+              <h2 id="summary-title">{offer.name}</h2>
+              <p>
+                Your website, chatbot, lead capture, scheduling, and basic
+                follow-up system - set up to help turn more visitors into
+                inquiries.
+              </p>
+              <ul className="summary-check-list">
+                {summaryDetails.map((detail) => (
+                  <li key={detail}>
+                    <Check size={16} />
+                    {detail}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="offer-price-panel">
+
+            <div className="start-price-panel">
+              <span>Website Conversion System</span>
               <strong>{offer.price}</strong>
-              <span>{offer.priceQualifier}</span>
+              <small>{offer.priceQualifier}</small>
+              <p>
+                A clear website and response system designed to help turn
+                visitors into inquiries.
+              </p>
               <a
                 className="button button-primary"
                 href={getOfferCtaUrl(offer)}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {offer.ctaLabel}
+                Start My Project
                 <ArrowRight size={18} />
               </a>
+              <small>
+                Secure monthly checkout through Stripe. Any applicable setup fee
+                will be confirmed before work begins.
+              </small>
             </div>
           </div>
         </section>
 
-        <section className="flow-section section-shell">
-          <div className="section-heading centered">
+        <section className="start-section section-shell" aria-labelledby="faq-title">
+          <div className="section-heading centered compact-heading">
             <p className="eyebrow">FAQs</p>
-            <h2>Questions Before You Start?</h2>
+            <h2 id="faq-title">Quick questions before you start.</h2>
           </div>
-          <div className="faq-list">
-            {OFFER_CONFIG.websiteConversionDetails.faqs.map((faq) => (
+          <div className="faq-list start-faq-list">
+            {conciseFaqs.map((faq) => (
               <details key={faq.question}>
                 <summary>
                   {faq.question}
@@ -208,38 +266,48 @@ export function StartPage() {
           </div>
         </section>
 
-        <section className="final-cta section-shell">
+        <section
+          className="start-section section-shell"
+          id="plan-details"
+          aria-labelledby="details-title"
+        >
+          <details className="plan-details-card">
+            <summary>
+              <span>
+                <HelpCircle size={20} />
+                <strong id="details-title">Important plan details</strong>
+              </span>
+              <b>+</b>
+            </summary>
+            <div className="plan-details-list">
+              {planDetails.map((detail) => (
+                <article key={detail.title}>
+                  <h3>{detail.title}</h3>
+                  <p>{detail.copy}</p>
+                </article>
+              ))}
+            </div>
+          </details>
+        </section>
+
+        <section className="start-support-card section-shell">
           <div>
-            <h2>Ready to Put Your Client System to Work?</h2>
+            <h2>Need help before starting?</h2>
             <p>
-              Start the Website Conversion System and complete onboarding so we
-              can begin preparing your website, chatbot, scheduling, and
-              follow-up foundation.
+              Send a quick note and Backend Brilliance will help you choose the
+              cleanest next step.
             </p>
-            <a
-              className="button button-primary"
-              href={getOfferCtaUrl(offer)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Start My Project - {offer.price}/month
-              <ArrowRight size={18} />
-            </a>
           </div>
-          <div className="secondary-cta-panel">
-            <p>Prefer to talk first?</p>
-            <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">
-              Book a Strategy Call
-            </a>
-          </div>
+          <a className="button button-secondary" href={LINKS.supportEmail}>
+            {OFFER_CONFIG.site.supportEmail}
+          </a>
         </section>
       </main>
 
       <footer className="flow-footer section-shell">
         <div>
           <strong>Backend Brilliance</strong>
-          <p>{OFFER_CONFIG.policies.billingNote}</p>
-          <p>{OFFER_CONFIG.policies.thirdPartyCosts}</p>
+          <p>Client acquisition systems for local service businesses.</p>
         </div>
         <nav aria-label="Start page footer links">
           <Link to={OFFER_CONFIG.routes.home}>Main website</Link>
