@@ -1,4 +1,8 @@
+import { OFFER_CONFIG } from "./offers";
+
 export const LINKS = {
-  booking: "https://cal.com/backendbrilliance/15min",
-  revenueAudit: "https://form.typeform.com/to/bpgvWxsk",
+  booking: OFFER_CONFIG.external.calendarUrl,
+  revenueAudit: OFFER_CONFIG.external.revenueAuditUrl,
+  stripeCheckout: OFFER_CONFIG.external.stripeCheckoutUrl,
+  supportEmail: `mailto:${OFFER_CONFIG.site.supportEmail}`,
 };

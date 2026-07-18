@@ -1,45 +1,30 @@
-# Backend Brilliance Website v1.0
+# Backend Brilliance Website
 
-A premium one-page foundation for Backend Brilliance, an AI-powered business
-systems company.
+Production-ready Vite, React, TypeScript, Tailwind CSS, Framer Motion, and
+Lucide site for Backend Brilliance.
 
-Core message:
+The site now supports:
 
-> We don't build websites. We build business systems.
-
-The site is built with Vite, React, TypeScript, Tailwind CSS, React Router,
-Framer Motion, and Lucide icons. It deploys cleanly to Cloudflare Pages.
+- Public homepage and three-offer pricing ladder
+- Personalized `/start` path for prospects who received an audit
+- Hosted Stripe Checkout handoff for Website Conversion System
+- `/thank-you` checkout next-step page
+- `/onboarding` multi-step client onboarding form
+- `/onboarding-success` confirmation page
+- Cloudflare Pages Functions submission endpoint
 
 ## Local setup
 
-1. Install dependencies:
+```bash
+npm install
+npm run dev
+```
 
-   ```bash
-   npm install
-   ```
+Open:
 
-2. Add your live CTA links in `src/config/links.ts`:
-
-   ```ts
-   export const LINKS = {
-     booking: "https://your-cal-link.example",
-     revenueAudit: "https://your-typeform-link.example",
-   };
-   ```
-
-3. Copy `.env.example` to `.env.local` and set the production site URL:
-
-   ```env
-   VITE_SITE_URL=https://backendbrilliance.com
-   ```
-
-4. Start the local development server:
-
-   ```bash
-   npm run dev
-   ```
-
-5. Open `http://localhost:3000`.
+```txt
+http://localhost:3000
+```
 
 ## Verification
 
@@ -48,55 +33,159 @@ npm run lint
 npm run build
 ```
 
-The production build is written to `dist/`.
+The production build is written to:
+
+```txt
+dist
+```
+
+## Central configuration
+
+Editable offer, pricing, policy, route, Stripe, calendar, support, and site URL
+configuration lives in:
+
+```txt
+src/config/offers.ts
+```
+
+Legacy CTA aliases are kept in:
+
+```txt
+src/config/links.ts
+```
+
+The homepage pricing cards and `/start` page both read from the same offer
+configuration.
+
+## Routes
+
+- `/`
+- `/start`
+- `/thank-you`
+- `/onboarding`
+- `/onboarding-success`
+
+The following private/conversion pages are noindexed by route-level metadata:
+
+- `/start`
+- `/thank-you`
+- `/onboarding`
+- `/onboarding-success`
 
 ## Cloudflare Pages
 
-Create a Cloudflare Pages project from the GitHub repository with these exact
-settings:
+Use these settings:
 
 - Framework preset: **Vite**
-- Root directory: leave blank unless the repository is inside a subfolder
 - Install command: `npm install`
 - Build command: `npm run build`
 - Build output directory: `dist`
-- Environment variables:
-  - `NODE_VERSION=22`
-  - `VITE_SITE_URL`
+- Node version environment variable: `NODE_VERSION=22`
 
-SPA routing is handled by `public/_redirects`:
+SPA routing is handled by:
+
+```txt
+public/_redirects
+```
+
+with:
 
 ```txt
 /* /index.html 200
 ```
 
-Because the CTA links are configured in `src/config/links.ts`, commit and push
-that file after updating the Cal.com and Typeform URLs.
+See [docs/cloudflare-pages.md](docs/cloudflare-pages.md).
 
-## SEO
+## Environment variables
 
-Static SEO assets are generated in `public/`:
+Copy `.env.example` to `.env.local` for local values.
 
-- `robots.txt`
-- `sitemap.xml`
-- Open Graph and Twitter Card tags in `index.html`
-- Organization and ProfessionalService schema in `src/App.tsx`
+Public frontend variables:
 
-Update `VITE_SITE_URL`, `public/sitemap.xml`, and the canonical URL in
-`index.html` if the production domain changes.
+```env
+VITE_SITE_URL=
+VITE_CALENDAR_URL=
+VITE_STRIPE_CHECKOUT_URL=
+VITE_SUPPORT_EMAIL=
+VITE_REVENUE_AUDIT_URL=
+```
 
-## Page navigation
+Private Cloudflare Pages Function variables:
 
-Primary section IDs:
+```env
+GOOGLE_SHEETS_WEBHOOK_URL=
+GOOGLE_SHEETS_WEBHOOK_SECRET=
+EMAIL_PROVIDER_API_KEY=
+EMAIL_NOTIFICATION_TO=
+EMAIL_FROM=
+TURNSTILE_SECRET_KEY=
+TURNSTILE_ENABLED=false
+```
 
-- `#home`
-- `#about`
-- `#included`
-- `#revenue-audit`
-- `#how-it-works`
-- `#benefits`
-- `#testimonials`
-- `#pricing`
-- `#faq`
-- `#booking`
-- `#contact`
+Only `VITE_` variables are exposed to frontend browser code.
+
+## Stripe Checkout
+
+Use hosted Stripe Checkout / Payment Links. Do not build a custom payment form.
+
+Website Conversion System checkout URL is configured through:
+
+```env
+VITE_STRIPE_CHECKOUT_URL=
+```
+
+Stripe success URL:
+
+```txt
+https://YOUR-DOMAIN.com/thank-you
+```
+
+Stripe cancellation URL:
+
+```txt
+https://YOUR-DOMAIN.com/start?checkout=cancelled
+```
+
+See [docs/stripe-checkout.md](docs/stripe-checkout.md).
+
+## Google Sheets onboarding storage
+
+The onboarding form posts to:
+
+```txt
+/api/onboarding
+```
+
+The Cloudflare Pages Function saves through a server-side Google Apps Script
+webhook. The browser never receives the webhook URL or secret.
+
+See [docs/google-sheets-apps-script.md](docs/google-sheets-apps-script.md).
+
+## Email notification
+
+The notification service is modular and Cloudflare-compatible. The current
+implementation supports Resend-style API delivery when these are configured:
+
+```env
+EMAIL_PROVIDER_API_KEY=
+EMAIL_NOTIFICATION_TO=
+EMAIL_FROM=
+```
+
+If Google Sheets succeeds and email fails, the submission is still treated as
+successful and the email failure is logged server-side.
+
+## Notes before launch
+
+Before production launch:
+
+1. Replace the Stripe checkout placeholder with the real Payment Link.
+2. Confirm the Cal.com URL.
+3. Configure Google Sheets Apps Script and test a real submission.
+4. Configure email notification credentials and test delivery.
+5. Configure Stripe success/cancellation URLs.
+6. Confirm Preview and Production environment variables in Cloudflare Pages.
+7. Run `npm run lint` and `npm run build`.
+
+Do not report Stripe, Google Sheets, email, or Turnstile as fully verified until
+real credentials are configured and a real test succeeds.

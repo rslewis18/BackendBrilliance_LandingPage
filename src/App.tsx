@@ -1,7 +1,13 @@
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
+import { Route, Routes } from "react-router-dom";
 import { LINKS } from "./config/links";
+import { type Offer, getOfferCtaUrl, OFFER_CONFIG } from "./config/offers";
+import { OnboardingPage } from "./pages/OnboardingPage";
+import { OnboardingSuccessPage } from "./pages/OnboardingSuccessPage";
+import { StartPage } from "./pages/StartPage";
+import { ThankYouPage } from "./pages/ThankYouPage";
 import {
   ArrowRight,
   BarChart3,
@@ -23,7 +29,7 @@ import {
   Zap,
 } from "lucide-react";
 
-const siteUrl = import.meta.env.VITE_SITE_URL || "https://backendbrilliance.com";
+const siteUrl = OFFER_CONFIG.site.siteUrl;
 
 const navItems = [
   ["About", "#about"],
@@ -174,55 +180,9 @@ const testimonials = [
   },
 ] as const;
 
-const pricingPlans = [
-  {
-    title: "Client Capture System",
-    price: "$499",
-    note: "Turn inquiries into booked jobs.",
-    setup: "One-time setup from $750",
-    popular: false,
-    features: [
-      "AI-optimized website",
-      "AI receptionist",
-      "Lead dashboard",
-      "Follow-up automations",
-      "Customer reminders",
-      "Google review requests",
-      "Online booking",
-    ],
-  },
-  {
-    title: "Complete Local Growth System",
-    price: "$699",
-    note: "Capture more leads and stay visible in your area.",
-    setup: "One-time setup from $750",
-    popular: true,
-    features: [
-      "Everything in Client Capture",
-      "Local visibility foundation",
-      "Neighborhood content",
-      "Google Business posts",
-      "Monthly optimization",
-      "Priority support",
-      "Growth recommendations",
-    ],
-  },
-  {
-    title: "Local Visibility & Outreach",
-    price: "$299",
-    note: "Stay visible in the communities you serve.",
-    setup: "One-time setup from $500",
-    popular: false,
-    features: [
-      "Google Business posts",
-      "Local service-area content",
-      "Seasonal campaigns",
-      "Local offers & announcements",
-      "Monthly visibility planning",
-      "Reporting",
-    ],
-  },
-] as const;
+const pricingOffers: Offer[] = OFFER_CONFIG.pricingOrder.map(
+  (offerKey) => OFFER_CONFIG.offers[offerKey],
+);
 
 const faqs = [
   {
@@ -253,8 +213,8 @@ const faqs = [
 ] as const;
 
 const footerServices = [
+  "Website Conversion System",
   "Client Capture System",
-  "Local Visibility",
   "Complete Growth System",
   "Revenue Leak Audit",
   "Strategy Call",
@@ -289,6 +249,21 @@ const schema = {
 };
 
 function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path={OFFER_CONFIG.routes.start} element={<StartPage />} />
+      <Route path={OFFER_CONFIG.routes.thankYou} element={<ThankYouPage />} />
+      <Route path={OFFER_CONFIG.routes.onboarding} element={<OnboardingPage />} />
+      <Route
+        path={OFFER_CONFIG.routes.onboardingSuccess}
+        element={<OnboardingSuccessPage />}
+      />
+    </Routes>
+  );
+}
+
+function HomePage() {
   const shouldReduceMotion = useReducedMotion();
   const reveal = shouldReduceMotion
     ? {}
@@ -559,21 +534,22 @@ function App() {
             </motion.div>
 
             <div className="pricing-grid">
-              {pricingPlans.map((plan) => (
+              {pricingOffers.map((plan) => (
                 <motion.article
                   className={`pricing-card ${plan.popular ? "popular" : ""}`}
-                  key={plan.title}
+                  key={plan.key}
                   {...reveal}
                 >
                   {plan.popular && <div className="popular-badge">Most Popular</div>}
-                  <h3>{plan.title}</h3>
-                  <p>{plan.note}</p>
+                  <h3>{plan.name}</h3>
+                  <p>{plan.shortDescription}</p>
                   <div className="price">
                     <span>From</span>
                     <strong>{plan.price}</strong>
-                    <small>/month</small>
+                    <small>{plan.priceQualifier}</small>
                   </div>
-                  <p className="setup-note">{plan.setup}</p>
+                  <p className="setup-note">{plan.setupFee}</p>
+                  <p>{plan.positioning}</p>
                   <ul>
                     {plan.features.map((feature) => (
                       <li key={feature}>
@@ -584,11 +560,11 @@ function App() {
                   </ul>
                   <a
                     className="button button-primary"
-                    href={LINKS.booking}
+                    href={getOfferCtaUrl(plan)}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Get Started
+                    {plan.ctaLabel}
                     <ArrowRight size={18} />
                   </a>
                 </motion.article>
@@ -596,9 +572,8 @@ function App() {
             </div>
 
             <p className="pricing-note">
-              Plans include setup, system access, support, and ongoing
-              optimization. AI voice and messaging usage may have additional
-              costs based on volume.
+              {OFFER_CONFIG.policies.thirdPartyCosts} We do not guarantee local
+              rankings, lead volume, appointments, or revenue.
             </p>
           </div>
         </section>
