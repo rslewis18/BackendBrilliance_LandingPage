@@ -4,17 +4,14 @@ import {
   saveOnboardingSubmission,
   sendOnboardingNotification,
   validateOnboardingPayload,
-  verifyTurnstileIfEnabled,
 } from "../_shared/onboarding";
 
 type Env = {
   GOOGLE_SHEETS_WEBHOOK_URL?: string;
   GOOGLE_SHEETS_WEBHOOK_SECRET?: string;
-  EMAIL_PROVIDER_API_KEY?: string;
-  EMAIL_NOTIFICATION_TO?: string;
-  EMAIL_FROM?: string;
-  TURNSTILE_SECRET_KEY?: string;
-  TURNSTILE_ENABLED?: string;
+  RESEND_API_KEY?: string;
+  ONBOARDING_NOTIFICATION_TO?: string;
+  ONBOARDING_NOTIFICATION_FROM?: string;
 };
 
 type PagesContext = {
@@ -75,27 +72,35 @@ export const onRequestPost = async ({ request, env }: PagesContext) => {
     }
 
     const payload = await parseOnboardingRequest(request);
-    validateOnboardingPayload(payload);
-    await verifyTurnstileIfEnabled(env, payload.turnstileToken, request);
-
-    const submission = createSubmission(payload);
+    const onboardingData = validateOnboardingPayload(payload);
+    const submission = createSubmission(onboardingData);
     await saveOnboardingSubmission(env, submission);
 
+    let emailNotificationSent = true;
     try {
       await sendOnboardingNotification(env, submission);
     } catch (error) {
+      emailNotificationSent = false;
       console.error("Onboarding email notification failed", error);
     }
 
     return json({
+      success: true,
       ok: true,
+      saved: true,
+      emailNotificationSent,
       submissionId: submission.submissionId,
+      message: emailNotificationSent
+        ? "Onboarding information submitted successfully."
+        : "Onboarding information was saved, but the internal email notification was not sent.",
     });
   } catch (error) {
     console.error("Onboarding submission failed", error);
     return json(
       {
+        success: false,
         ok: false,
+        saved: false,
         message:
           "We could not submit your onboarding information right now. Please try again or contact Backend Brilliance directly.",
       },

@@ -1,245 +1,130 @@
 type Env = {
   GOOGLE_SHEETS_WEBHOOK_URL?: string;
   GOOGLE_SHEETS_WEBHOOK_SECRET?: string;
-  EMAIL_PROVIDER_API_KEY?: string;
-  EMAIL_NOTIFICATION_TO?: string;
-  EMAIL_FROM?: string;
-  TURNSTILE_SECRET_KEY?: string;
-  TURNSTILE_ENABLED?: string;
+  RESEND_API_KEY?: string;
+  ONBOARDING_NOTIFICATION_TO?: string;
+  ONBOARDING_NOTIFICATION_FROM?: string;
 };
 
-type OnboardingPayload = {
-  selectedOffer?: string;
-  formData?: Record<string, unknown>;
-  honeypot?: string;
-  turnstileToken?: string;
+export type OnboardingPayload = {
+  businessName: string;
+  contactName: string;
+  email: string;
+  phone: string;
+  currentWebsite: string;
+  services: string;
+  serviceArea: string;
+  primaryGoal: string;
+  preferredContactMethod: string;
+  brandAssetsLink: string;
+  additionalNotes: string;
+  source: "Backend Brilliance Onboarding";
 };
 
 type SavedSubmission = {
   submissionId: string;
   submittedAt: string;
-  selectedOffer: string;
-  data: Record<string, unknown>;
+  status: "New";
+  data: OnboardingPayload;
 };
 
-const sheetHeaders = [
-  "Submission ID",
-  "Timestamp",
-  "Status",
-  "Selected Offer",
-  "Business Name",
-  "Contact Name",
-  "Email",
-  "Phone",
-  "Preferred Contact Method",
-  "Industry",
-  "Website",
-  "Domain",
-  "Current Website Platform",
-  "Business Address",
-  "Service Area",
-  "Business Description",
-  "Primary Services",
-  "Priority Service",
-  "Highest-Revenue Service",
-  "Promotions",
-  "Pricing Information",
-  "Financing Information",
-  "Brand Colors",
-  "Brand Style",
-  "Brand Asset Link",
-  "Booking Platform",
-  "Booking URL",
-  "Current CRM",
-  "Lead Notification Email",
-  "Lead Notification Phone",
-  "Facebook",
-  "Instagram",
-  "TikTok",
-  "LinkedIn",
-  "YouTube",
-  "Google Business Profile",
-  "Goals",
-  "Primary Goal",
-  "Competitors",
-  "Deadline",
-  "Additional Notes",
-];
-
-const requiredFields = [
-  "contactName",
+const requiredFields: Array<keyof OnboardingPayload> = [
   "businessName",
+  "contactName",
   "email",
   "phone",
-  "preferredContactMethod",
-  "industry",
-  "primaryServiceArea",
-  "businessDescription",
-  "primaryServices",
-  "highestPriorityService",
-  "desiredStyle",
-  "currentPlatform",
-  "currentBookingPlatform",
-  "leadNotificationEmail",
+  "services",
+  "serviceArea",
   "primaryGoal",
-  "confirmation",
 ];
 
-const asString = (value: unknown) => {
-  if (Array.isArray(value)) {
-    return value.join(", ");
-  }
-  if (typeof value === "boolean") {
-    return value ? "Yes" : "No";
-  }
-  return typeof value === "string" ? value.trim() : "";
-};
+const asString = (value: unknown, maxLength = 1600) =>
+  typeof value === "string"
+    ? value.replace(/[<>]/g, "").replace(/\s+/g, " ").trim().slice(0, maxLength)
+    : "";
 
 const isValidEmail = (value: unknown) =>
   typeof value === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 
+const isValidPhone = (value: string) =>
+  value.replace(/[^\d]/g, "").length >= 10;
+
 export async function parseOnboardingRequest(request: Request) {
   try {
-    return (await request.json()) as OnboardingPayload;
+    return (await request.json()) as Record<string, unknown>;
   } catch {
     throw new Error("invalid_json");
   }
 }
 
-export function validateOnboardingPayload(payload: OnboardingPayload) {
-  if (payload.honeypot) {
-    throw new Error("spam_detected");
-  }
-
-  if (!payload.formData || typeof payload.formData !== "object") {
+export function validateOnboardingPayload(
+  payload: Record<string, unknown>,
+): OnboardingPayload {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
     throw new Error("missing_form_data");
   }
 
-  const missing = requiredFields.filter((field) => {
-    const value = payload.formData?.[field];
-    if (typeof value === "boolean") {
-      return value !== true;
-    }
-    if (Array.isArray(value)) {
-      return value.length === 0;
-    }
-    return !asString(value);
-  });
+  const normalized: OnboardingPayload = {
+    businessName: asString(payload.businessName, 160),
+    contactName: asString(payload.contactName, 160),
+    email: asString(payload.email, 180).toLowerCase(),
+    phone: asString(payload.phone, 80),
+    currentWebsite: asString(payload.currentWebsite, 320),
+    services: asString(payload.services, 1600),
+    serviceArea: asString(payload.serviceArea, 700),
+    primaryGoal: asString(payload.primaryGoal, 200),
+    preferredContactMethod: asString(payload.preferredContactMethod, 80),
+    brandAssetsLink: asString(payload.brandAssetsLink, 500),
+    additionalNotes: asString(payload.additionalNotes, 2000),
+    source: "Backend Brilliance Onboarding",
+  };
+
+  const missing = requiredFields.filter((field) => !normalized[field]);
 
   if (missing.length > 0) {
     throw new Error("validation_failed");
   }
 
-  if (!isValidEmail(payload.formData.email)) {
+  if (!isValidEmail(normalized.email)) {
     throw new Error("invalid_email");
   }
 
-  if (!isValidEmail(payload.formData.leadNotificationEmail)) {
-    throw new Error("invalid_lead_email");
+  if (!isValidPhone(normalized.phone)) {
+    throw new Error("invalid_phone");
   }
+
+  return normalized;
 }
 
-export async function verifyTurnstileIfEnabled(
-  env: Env,
-  token: string | undefined,
-  request: Request,
-) {
-  if (env.TURNSTILE_ENABLED !== "true") {
-    return;
-  }
-
-  if (!env.TURNSTILE_SECRET_KEY || !token) {
-    throw new Error("turnstile_missing");
-  }
-
-  const ip = request.headers.get("CF-Connecting-IP") || "";
-  const body = new FormData();
-  body.append("secret", env.TURNSTILE_SECRET_KEY);
-  body.append("response", token);
-  if (ip) {
-    body.append("remoteip", ip);
-  }
-
-  const response = await fetch(
-    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-    {
-      method: "POST",
-      body,
-    },
-  );
-  const result = (await response.json()) as { success?: boolean };
-  if (!result.success) {
-    throw new Error("turnstile_failed");
-  }
-}
-
-export function createSubmission(payload: OnboardingPayload): SavedSubmission {
+export function createSubmission(data: OnboardingPayload): SavedSubmission {
   return {
     submissionId: `BB-${crypto.randomUUID().slice(0, 8).toUpperCase()}`,
     submittedAt: new Date().toISOString(),
-    selectedOffer: payload.selectedOffer || "Website Conversion System",
-    data: payload.formData || {},
+    status: "New",
+    data,
   };
 }
 
-export function mapToSheetRow(submission: SavedSubmission) {
-  const data = submission.data;
-  const competitors = [data.competitor1, data.competitor2, data.competitor3]
-    .map(asString)
-    .filter(Boolean)
-    .join(" | ");
-
+export function mapToWebhookPayload(
+  env: Env,
+  submission: SavedSubmission,
+) {
   return {
-    headers: sheetHeaders,
-    row: {
-      "Submission ID": submission.submissionId,
-      Timestamp: submission.submittedAt,
-      Status: "New Client",
-      "Selected Offer": submission.selectedOffer,
-      "Business Name": asString(data.businessName),
-      "Contact Name": asString(data.contactName),
-      Email: asString(data.email),
-      Phone: asString(data.phone),
-      "Preferred Contact Method": asString(data.preferredContactMethod),
-      Industry: asString(data.industry),
-      Website: asString(data.currentWebsiteUrl),
-      Domain: asString(data.domain),
-      "Current Website Platform":
-        asString(data.currentPlatform) === "Other"
-          ? asString(data.currentPlatformOther)
-          : asString(data.currentPlatform),
-      "Business Address": asString(data.businessAddress),
-      "Service Area": asString(data.primaryServiceArea),
-      "Business Description": asString(data.businessDescription),
-      "Primary Services": asString(data.primaryServices),
-      "Priority Service": asString(data.highestPriorityService),
-      "Highest-Revenue Service": asString(data.highestRevenueService),
-      Promotions: asString(data.currentPromotions),
-      "Pricing Information": asString(data.pricingInformation),
-      "Financing Information": asString(data.financingInformation),
-      "Brand Colors": asString(data.brandColors),
-      "Brand Style": asString(data.visualDirections),
-      "Brand Asset Link": asString(data.assetFolderLink),
-      "Booking Platform":
-        asString(data.currentBookingPlatform) === "Other"
-          ? asString(data.currentBookingPlatformOther)
-          : asString(data.currentBookingPlatform),
-      "Booking URL": asString(data.bookingUrl),
-      "Current CRM": asString(data.currentCrm),
-      "Lead Notification Email": asString(data.leadNotificationEmail),
-      "Lead Notification Phone": asString(data.leadNotificationPhone),
-      Facebook: asString(data.facebook),
-      Instagram: asString(data.instagram),
-      TikTok: asString(data.tiktok),
-      LinkedIn: asString(data.linkedin),
-      YouTube: asString(data.youtube),
-      "Google Business Profile": asString(data.googleBusinessProfile),
-      Goals: asString(data.goals),
-      "Primary Goal": asString(data.primaryGoal),
-      Competitors: competitors,
-      Deadline: asString(data.importantDeadlines),
-      "Additional Notes": asString(data.additionalInformation),
-    },
+    secret: env.GOOGLE_SHEETS_WEBHOOK_SECRET,
+    timestamp: submission.submittedAt,
+    status: submission.status,
+    businessName: submission.data.businessName,
+    contactName: submission.data.contactName,
+    email: submission.data.email,
+    phone: submission.data.phone,
+    currentWebsite: submission.data.currentWebsite,
+    services: submission.data.services,
+    serviceArea: submission.data.serviceArea,
+    primaryGoal: submission.data.primaryGoal,
+    preferredContactMethod: submission.data.preferredContactMethod,
+    brandAssetsLink: submission.data.brandAssetsLink,
+    additionalNotes: submission.data.additionalNotes,
+    source: submission.data.source,
   };
 }
 
@@ -257,13 +142,23 @@ export async function saveOnboardingSubmission(
       "Content-Type": "application/json",
       Authorization: `Bearer ${env.GOOGLE_SHEETS_WEBHOOK_SECRET}`,
     },
-    body: JSON.stringify({
-      ...mapToSheetRow(submission),
-      secret: env.GOOGLE_SHEETS_WEBHOOK_SECRET,
-    }),
+    body: JSON.stringify(mapToWebhookPayload(env, submission)),
   });
 
-  if (!response.ok) {
+  let result: { success?: boolean; error?: string } = {};
+  try {
+    result = (await response.json()) as { success?: boolean; error?: string };
+  } catch {
+    result = {};
+  }
+
+  if (!response.ok || result.success !== true) {
+    console.error("Google Sheets onboarding webhook failed", {
+      status: response.status,
+      statusText: response.statusText,
+      webhookSuccess: result.success,
+      webhookError: result.error,
+    });
     throw new Error("google_sheets_save_failed");
   }
 }
@@ -272,44 +167,62 @@ export async function sendOnboardingNotification(
   env: Env,
   submission: SavedSubmission,
 ) {
-  if (!env.EMAIL_PROVIDER_API_KEY || !env.EMAIL_NOTIFICATION_TO || !env.EMAIL_FROM) {
-    console.warn("Email notification skipped: provider is not configured.");
-    return;
+  if (
+    !env.RESEND_API_KEY ||
+    !env.ONBOARDING_NOTIFICATION_TO ||
+    !env.ONBOARDING_NOTIFICATION_FROM
+  ) {
+    throw new Error("onboarding_email_not_configured");
   }
 
   const data = submission.data;
-  const subject = `New Website Conversion System Client — ${asString(data.businessName)}`;
+  const subject = `New Backend Brilliance Onboarding Submission — ${data.businessName}`;
   const text = [
-    `Submission ID: ${submission.submissionId}`,
-    `Submission time: ${submission.submittedAt}`,
-    `Business name: ${asString(data.businessName)}`,
-    `Contact name: ${asString(data.contactName)}`,
-    `Email: ${asString(data.email)}`,
-    `Phone: ${asString(data.phone)}`,
-    `Website: ${asString(data.currentWebsiteUrl)}`,
-    `Current platform: ${asString(data.currentPlatform)}`,
-    `Booking platform: ${asString(data.currentBookingPlatform)}`,
-    `Primary service: ${asString(data.highestPriorityService)}`,
-    `Main goal: ${asString(data.primaryGoal)}`,
-    `Asset-folder link: ${asString(data.assetFolderLink)}`,
-    `Additional notes: ${asString(data.additionalInformation)}`,
+    "A new onboarding form has been submitted.",
+    "",
+    `Business: ${data.businessName}`,
+    `Contact: ${data.contactName}`,
+    `Email: ${data.email}`,
+    `Phone: ${data.phone}`,
+    `Website: ${data.currentWebsite || "Not provided"}`,
+    `Services: ${data.services}`,
+    `Service area: ${data.serviceArea}`,
+    `Primary goal: ${data.primaryGoal}`,
+    `Preferred contact method: ${data.preferredContactMethod || "Not provided"}`,
+    `Brand assets: ${data.brandAssetsLink || "Not provided"}`,
+    `Additional notes: ${data.additionalNotes || "Not provided"}`,
+    "",
+    "Review the full submission in the Backend Brilliance onboarding Google Sheet.",
   ].join("\n");
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${env.EMAIL_PROVIDER_API_KEY}`,
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: env.EMAIL_FROM,
-      to: env.EMAIL_NOTIFICATION_TO,
+      from: env.ONBOARDING_NOTIFICATION_FROM,
+      to: env.ONBOARDING_NOTIFICATION_TO,
       subject,
       text,
     }),
   });
 
   if (!response.ok) {
-    throw new Error("email_notification_failed");
+    let providerMessage = "";
+    try {
+      providerMessage = (await response.text()).slice(0, 300);
+    } catch {
+      providerMessage = "Could not read provider response.";
+    }
+
+    console.error("Onboarding email provider rejected request", {
+      status: response.status,
+      statusText: response.statusText,
+      providerMessage,
+    });
+
+    throw new Error("onboarding_email_notification_failed");
   }
 }

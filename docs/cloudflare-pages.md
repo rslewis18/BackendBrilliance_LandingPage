@@ -54,16 +54,18 @@ Set private variables for onboarding storage and notifications:
 ```env
 GOOGLE_SHEETS_WEBHOOK_URL=
 GOOGLE_SHEETS_WEBHOOK_SECRET=
-EMAIL_PROVIDER_API_KEY=
-EMAIL_NOTIFICATION_TO=
-EMAIL_FROM=
-TURNSTILE_SECRET_KEY=
-TURNSTILE_ENABLED=false
+ONBOARDING_NOTIFICATION_TO=backendbrilliance@gmail.com
+ONBOARDING_NOTIFICATION_FROM=
+```
+
+Expected production value:
+
+```env
+ONBOARDING_NOTIFICATION_FROM=Backend Brilliance <onboarding@resend.dev>
 ```
 
 Only variables beginning with `VITE_` are available to browser code. Keep
-Resend, Google Sheets, email-provider, and Turnstile secrets in Cloudflare
-Pages environment variables only.
+Resend and Google Sheets secrets in Cloudflare Pages environment variables only.
 
 ## Functions
 
@@ -80,6 +82,25 @@ functions/api/onboarding.ts
 ```
 
 It does not use filesystem writes and does not store submissions locally.
+
+It forwards the Quick Start onboarding fields to the Google Sheets Apps Script
+webhook as top-level JSON properties. The Apps Script must map these exact
+property names:
+
+```txt
+businessName
+contactName
+email
+phone
+currentWebsite
+services
+serviceArea
+primaryGoal
+preferredContactMethod
+brandAssetsLink
+additionalNotes
+source
+```
 
 The personalized audit request popup posts to:
 

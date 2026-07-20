@@ -11,7 +11,7 @@ The site now supports:
 - `/api/audit-request` email notification endpoint
 - Hosted Stripe Checkout handoff for Website Conversion System
 - `/thank-you` checkout next-step page
-- `/onboarding` multi-step client onboarding form
+- `/onboarding` short Quick Start client onboarding form
 - `/onboarding-success` confirmation page
 - Cloudflare Pages Functions submission endpoint
 
@@ -130,11 +130,8 @@ notifications:
 ```env
 GOOGLE_SHEETS_WEBHOOK_URL=
 GOOGLE_SHEETS_WEBHOOK_SECRET=
-EMAIL_PROVIDER_API_KEY=
-EMAIL_NOTIFICATION_TO=
-EMAIL_FROM=
-TURNSTILE_SECRET_KEY=
-TURNSTILE_ENABLED=false
+ONBOARDING_NOTIFICATION_TO=backendbrilliance@gmail.com
+ONBOARDING_NOTIFICATION_FROM=
 ```
 
 Only `VITE_` variables are exposed to frontend browser code.
@@ -174,6 +171,25 @@ The onboarding form posts to:
 The Cloudflare Pages Function saves through a server-side Google Apps Script
 webhook. The browser never receives the webhook URL or secret.
 
+The browser submits this canonical top-level payload:
+
+```json
+{
+  "businessName": "",
+  "contactName": "",
+  "email": "",
+  "phone": "",
+  "currentWebsite": "",
+  "services": "",
+  "serviceArea": "",
+  "primaryGoal": "",
+  "preferredContactMethod": "",
+  "brandAssetsLink": "",
+  "additionalNotes": "",
+  "source": "Backend Brilliance Onboarding"
+}
+```
+
 See [docs/google-sheets-apps-script.md](docs/google-sheets-apps-script.md).
 
 ## Email notification
@@ -192,14 +208,23 @@ Resend account. For production, verify the sending domain in Resend and use an
 address on that domain. For temporary Resend testing, use a sender allowed by
 your Resend account, such as the Resend-provided testing sender if available.
 
-The onboarding notification service remains separate and Cloudflare-compatible.
-It supports Resend-style API delivery when these are configured:
+The onboarding internal notification is sent only after the Google Sheets
+webhook confirms the row was saved. It uses the same Resend API key with these
+onboarding-specific variables:
 
 ```env
-EMAIL_PROVIDER_API_KEY=
-EMAIL_NOTIFICATION_TO=
-EMAIL_FROM=
+RESEND_API_KEY=
+ONBOARDING_NOTIFICATION_TO=backendbrilliance@gmail.com
+ONBOARDING_NOTIFICATION_FROM=
 ```
+
+Expected production value:
+
+```env
+ONBOARDING_NOTIFICATION_FROM=Backend Brilliance <onboarding@resend.dev>
+```
+
+Use a sender address allowed by the configured Resend account.
 
 Personalized audit requests are sent to:
 
@@ -230,5 +255,5 @@ Before production launch:
 6. Confirm Preview and Production environment variables in Cloudflare Pages.
 7. Run `npm run lint` and `npm run build`.
 
-Do not report Stripe, Google Sheets, email, or Turnstile as fully verified until
-real credentials are configured and a real test succeeds.
+Do not report Stripe, Google Sheets, or email as fully verified until real
+credentials are configured and a real test succeeds.

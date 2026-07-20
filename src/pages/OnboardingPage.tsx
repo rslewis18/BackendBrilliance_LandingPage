@@ -1,252 +1,100 @@
-import { type FormEvent, type ReactNode, useMemo, useRef, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { PageMeta } from "../components/PageMeta";
 import { SimpleHeader } from "../components/SimpleHeader";
 import { OFFER_CONFIG } from "../config/offers";
 
-type OnboardingData = {
-  contactName: string;
+type QuickStartData = {
   businessName: string;
+  contactName: string;
   email: string;
   phone: string;
-  preferredContactMethod: string;
-  industry: string;
-  currentWebsiteUrl: string;
-  domain: string;
-  businessAddress: string;
-  primaryServiceArea: string;
-  businessDescription: string;
-  yearsInBusiness: string;
-  publicBusinessPhone: string;
-  publicBusinessEmail: string;
-  primaryServices: string;
-  highestPriorityService: string;
-  highestRevenueService: string;
-  currentPromotions: string;
-  pricingInformation: string;
-  financingInformation: string;
-  serviceAreas: string;
-  servicesNotPromoted: string;
-  brandColors: string;
-  fontPreferences: string;
-  brandGuidelines: string;
-  desiredStyle: string;
-  brandWords: string;
-  websitesTheyLike: string;
-  websitesTheyDislike: string;
-  visualDirections: string[];
-  assetFolderLink: string;
-  currentPlatform: string;
-  currentPlatformOther: string;
-  currentBookingPlatform: string;
-  currentBookingPlatformOther: string;
-  bookingUrl: string;
-  currentCrm: string;
-  contactFormDestination: string;
-  inquiryRecipients: string;
-  leadNotificationEmail: string;
-  leadNotificationPhone: string;
-  followUpProcess: string;
-  facebook: string;
-  instagram: string;
-  tiktok: string;
-  linkedin: string;
-  youtube: string;
-  googleBusinessProfile: string;
-  yelp: string;
-  otherProfiles: string;
-  goals: string[];
-  goalsOther: string;
+  currentWebsite: string;
+  services: string;
+  serviceArea: string;
   primaryGoal: string;
-  competitor1: string;
-  competitor2: string;
-  competitor3: string;
-  competitorLikes: string;
-  differentiator: string;
-  additionalInformation: string;
-  specialRequests: string;
-  importantDeadlines: string;
-  upcomingPromotions: string;
-  legalRequirements: string;
-  bestTimeToContact: string;
-  confirmation: boolean;
-  companyWebsite: string;
-  turnstileToken: string;
+  preferredContactMethod: string;
+  brandAssetsLink: string;
+  additionalNotes: string;
+  source: "Backend Brilliance Onboarding";
 };
 
-type FieldErrors = Partial<Record<keyof OnboardingData | "form", string>>;
+type QuickStartField = keyof QuickStartData;
+type FieldErrors = Partial<Record<QuickStartField | "form", string>>;
 
-type StringField = {
-  [Key in keyof OnboardingData]: OnboardingData[Key] extends string ? Key : never;
-}[keyof OnboardingData];
-
-type BooleanField = {
-  [Key in keyof OnboardingData]: OnboardingData[Key] extends boolean ? Key : never;
-}[keyof OnboardingData];
-
-type ArrayField = {
-  [Key in keyof OnboardingData]: OnboardingData[Key] extends string[] ? Key : never;
-}[keyof OnboardingData];
-
-type UpdateStringField = (field: StringField, value: string) => void;
-type UpdateBooleanField = (field: BooleanField, value: boolean) => void;
-type ToggleArrayValue = (field: ArrayField, value: string) => void;
-
-const initialData: OnboardingData = {
-  contactName: "",
+const initialData: QuickStartData = {
   businessName: "",
+  contactName: "",
   email: "",
   phone: "",
-  preferredContactMethod: "",
-  industry: "",
-  currentWebsiteUrl: "",
-  domain: "",
-  businessAddress: "",
-  primaryServiceArea: "",
-  businessDescription: "",
-  yearsInBusiness: "",
-  publicBusinessPhone: "",
-  publicBusinessEmail: "",
-  primaryServices: "",
-  highestPriorityService: "",
-  highestRevenueService: "",
-  currentPromotions: "",
-  pricingInformation: "",
-  financingInformation: "",
-  serviceAreas: "",
-  servicesNotPromoted: "",
-  brandColors: "",
-  fontPreferences: "",
-  brandGuidelines: "",
-  desiredStyle: "",
-  brandWords: "",
-  websitesTheyLike: "",
-  websitesTheyDislike: "",
-  visualDirections: [],
-  assetFolderLink: "",
-  currentPlatform: "",
-  currentPlatformOther: "",
-  currentBookingPlatform: "",
-  currentBookingPlatformOther: "",
-  bookingUrl: "",
-  currentCrm: "",
-  contactFormDestination: "",
-  inquiryRecipients: "",
-  leadNotificationEmail: "",
-  leadNotificationPhone: "",
-  followUpProcess: "",
-  facebook: "",
-  instagram: "",
-  tiktok: "",
-  linkedin: "",
-  youtube: "",
-  googleBusinessProfile: "",
-  yelp: "",
-  otherProfiles: "",
-  goals: [],
-  goalsOther: "",
+  currentWebsite: "",
+  services: "",
+  serviceArea: "",
   primaryGoal: "",
-  competitor1: "",
-  competitor2: "",
-  competitor3: "",
-  competitorLikes: "",
-  differentiator: "",
-  additionalInformation: "",
-  specialRequests: "",
-  importantDeadlines: "",
-  upcomingPromotions: "",
-  legalRequirements: "",
-  bestTimeToContact: "",
-  confirmation: false,
-  companyWebsite: "",
-  turnstileToken: "",
+  preferredContactMethod: "",
+  brandAssetsLink: "",
+  additionalNotes: "",
+  source: "Backend Brilliance Onboarding",
 };
 
-const steps = [
-  "Contact Information",
-  "Business Information",
-  "Services and Offers",
-  "Branding and Style",
-  "Brand Files and Images",
-  "Website, Booking, and Lead Handling",
-  "Social and Business Profiles",
-  "Goals",
-  "Competitors and Inspiration",
-  "Final Notes",
-] as const;
-
-const visualOptions = [
-  "Modern",
-  "Luxury",
-  "Minimal",
-  "Bold",
-  "Friendly",
-  "Clinical",
-  "Corporate",
-  "Local and approachable",
-];
-
-const goalOptions = [
-  "Generate more website inquiries",
-  "Increase calls",
-  "Increase booking requests",
-  "Improve brand credibility",
-  "Explain services more clearly",
-  "Improve mobile experience",
-  "Promote a specific service",
-  "Replace the current website",
-  "Improve website performance",
-  "Prepare for future automation",
+const primaryGoalOptions = [
+  "Get more phone calls",
+  "Generate more leads",
+  "Increase online bookings",
+  "Improve credibility",
+  "Replace an outdated website",
   "Other",
 ];
 
-const platformOptions = [
-  "WordPress",
-  "Wix",
-  "Squarespace",
-  "Shopify",
-  "GoHighLevel",
-  "Webflow",
-  "Cloudflare-based site",
-  "Custom website",
-  "Not sure",
-  "Other",
+const preferredContactOptions = ["Email", "Phone", "Text"];
+
+const requiredFields: QuickStartField[] = [
+  "businessName",
+  "contactName",
+  "email",
+  "phone",
+  "services",
+  "serviceArea",
+  "primaryGoal",
 ];
 
-const bookingOptions = [
-  "None",
-  "Calendly",
-  "Square",
-  "Vagaro",
-  "GlossGenius",
-  "Boulevard",
-  "Mindbody",
-  "Acuity",
-  "GoHighLevel",
-  "Other",
-];
-
-const requiredByStep: Partial<Record<number, (keyof OnboardingData)[]>> = {
-  0: ["contactName", "businessName", "email", "phone", "preferredContactMethod"],
-  1: ["industry", "primaryServiceArea", "businessDescription"],
-  2: ["primaryServices", "highestPriorityService"],
-  3: ["desiredStyle"],
-  5: ["currentPlatform", "currentBookingPlatform", "leadNotificationEmail"],
-  7: ["primaryGoal"],
-  9: ["confirmation"],
+const fieldLabels: Record<QuickStartField, string> = {
+  businessName: "Business name",
+  contactName: "Primary contact name",
+  email: "Email address",
+  phone: "Phone number",
+  currentWebsite: "Current website, if applicable",
+  services: "Main services offered",
+  serviceArea: "Cities or service areas",
+  primaryGoal: "What is the primary goal for your website?",
+  preferredContactMethod: "Preferred contact method",
+  brandAssetsLink: "Link to logo, photos, or brand assets",
+  additionalNotes: "Anything else we should know?",
+  source: "Source",
 };
 
 const isValidEmail = (value: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 
-const getFieldLabel = (field: keyof OnboardingData) =>
-  field
-    .replace(/([A-Z])/g, " $1")
-    .replace(/^./, (value) => value.toUpperCase());
+const isValidPhone = (value: string) =>
+  value.replace(/[^\d]/g, "").length >= 10;
 
-function FormGrid({ children }: { children: ReactNode }) {
-  return <div className="form-grid">{children}</div>;
+function normalizeData(data: QuickStartData): QuickStartData {
+  return {
+    businessName: data.businessName.trim(),
+    contactName: data.contactName.trim(),
+    email: data.email.trim().toLowerCase(),
+    phone: data.phone.trim(),
+    currentWebsite: data.currentWebsite.trim(),
+    services: data.services.trim(),
+    serviceArea: data.serviceArea.trim(),
+    primaryGoal: data.primaryGoal.trim(),
+    preferredContactMethod: data.preferredContactMethod.trim(),
+    brandAssetsLink: data.brandAssetsLink.trim(),
+    additionalNotes: data.additionalNotes.trim(),
+    source: "Backend Brilliance Onboarding",
+  };
 }
 
 function TextField({
@@ -258,15 +106,17 @@ function TextField({
   type = "text",
   required = false,
   autoComplete,
+  inputMode,
 }: {
   label: string;
-  field: StringField;
+  field: QuickStartField;
   value: string;
   error?: string;
-  onChange: UpdateStringField;
+  onChange: (field: QuickStartField, value: string) => void;
   type?: string;
   required?: boolean;
   autoComplete?: string;
+  inputMode?: "email" | "tel" | "url";
 }) {
   return (
     <label className="form-field">
@@ -275,12 +125,13 @@ function TextField({
         {required && <b> *</b>}
       </span>
       <input
+        aria-invalid={Boolean(error)}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
+        onChange={(event) => onChange(field, event.target.value)}
+        required={required}
         type={type}
         value={value}
-        required={required}
-        autoComplete={autoComplete}
-        onChange={(event) => onChange(field, event.target.value)}
-        aria-invalid={Boolean(error)}
       />
       {error && <small className="field-error">{error}</small>}
     </label>
@@ -296,10 +147,10 @@ function TextAreaField({
   required = false,
 }: {
   label: string;
-  field: StringField;
+  field: QuickStartField;
   value: string;
   error?: string;
-  onChange: UpdateStringField;
+  onChange: (field: QuickStartField, value: string) => void;
   required?: boolean;
 }) {
   return (
@@ -309,10 +160,10 @@ function TextAreaField({
         {required && <b> *</b>}
       </span>
       <textarea
-        value={value}
-        required={required}
-        onChange={(event) => onChange(field, event.target.value)}
         aria-invalid={Boolean(error)}
+        onChange={(event) => onChange(field, event.target.value)}
+        required={required}
+        value={value}
       />
       {error && <small className="field-error">{error}</small>}
     </label>
@@ -329,11 +180,11 @@ function SelectField({
   required = false,
 }: {
   label: string;
-  field: StringField;
+  field: QuickStartField;
   value: string;
   error?: string;
   options: readonly string[];
-  onChange: UpdateStringField;
+  onChange: (field: QuickStartField, value: string) => void;
   required?: boolean;
 }) {
   return (
@@ -343,10 +194,10 @@ function SelectField({
         {required && <b> *</b>}
       </span>
       <select
-        value={value}
-        required={required}
-        onChange={(event) => onChange(field, event.target.value)}
         aria-invalid={Boolean(error)}
+        onChange={(event) => onChange(field, event.target.value)}
+        required={required}
+        value={value}
       >
         <option value="">Select one</option>
         {options.map((option) => (
@@ -360,529 +211,16 @@ function SelectField({
   );
 }
 
-function CheckboxGroup({
-  label,
-  field,
-  values,
-  error,
-  options,
-  onToggle,
-}: {
-  label: string;
-  field: ArrayField;
-  values: string[];
-  error?: string;
-  options: readonly string[];
-  onToggle: ToggleArrayValue;
-}) {
-  return (
-    <fieldset className="checkbox-group wide" aria-invalid={Boolean(error)}>
-      <legend>{label}</legend>
-      <div className="checkbox-grid">
-        {options.map((option) => (
-          <label className="checkbox-card" key={option}>
-            <input
-              type="checkbox"
-              checked={values.includes(option)}
-              onChange={() => onToggle(field, option)}
-            />
-            <span>{option}</span>
-          </label>
-        ))}
-      </div>
-      {error && <small className="field-error">{error}</small>}
-    </fieldset>
-  );
-}
-
-function StepContent({
-  currentStep,
-  data,
-  errors,
-  updateStringField,
-  updateBooleanField,
-  toggleArrayValue,
-}: {
-  currentStep: number;
-  data: OnboardingData;
-  errors: FieldErrors;
-  updateStringField: UpdateStringField;
-  updateBooleanField: UpdateBooleanField;
-  toggleArrayValue: ToggleArrayValue;
-}) {
-  switch (currentStep) {
-    case 0:
-      return (
-        <FormGrid>
-          <TextField
-            label="Contact name"
-            field="contactName"
-            value={data.contactName}
-            error={errors.contactName}
-            onChange={updateStringField}
-            autoComplete="name"
-            required
-          />
-          <TextField
-            label="Business name"
-            field="businessName"
-            value={data.businessName}
-            error={errors.businessName}
-            onChange={updateStringField}
-            autoComplete="organization"
-            required
-          />
-          <TextField
-            label="Email"
-            field="email"
-            value={data.email}
-            error={errors.email}
-            onChange={updateStringField}
-            type="email"
-            autoComplete="email"
-            required
-          />
-          <TextField
-            label="Phone"
-            field="phone"
-            value={data.phone}
-            error={errors.phone}
-            onChange={updateStringField}
-            type="tel"
-            autoComplete="tel"
-            required
-          />
-          <SelectField
-            label="Preferred contact method"
-            field="preferredContactMethod"
-            value={data.preferredContactMethod}
-            error={errors.preferredContactMethod}
-            onChange={updateStringField}
-            required
-            options={["Email", "Phone", "Text"]}
-          />
-        </FormGrid>
-      );
-    case 1:
-      return (
-        <FormGrid>
-          <TextField
-            label="Industry"
-            field="industry"
-            value={data.industry}
-            error={errors.industry}
-            onChange={updateStringField}
-            required
-          />
-          <TextField
-            label="Current website URL"
-            field="currentWebsiteUrl"
-            value={data.currentWebsiteUrl}
-            error={errors.currentWebsiteUrl}
-            onChange={updateStringField}
-            type="url"
-            autoComplete="url"
-          />
-          <TextField
-            label="Domain"
-            field="domain"
-            value={data.domain}
-            error={errors.domain}
-            onChange={updateStringField}
-            type="url"
-          />
-          <TextField
-            label="Business address"
-            field="businessAddress"
-            value={data.businessAddress}
-            error={errors.businessAddress}
-            onChange={updateStringField}
-            autoComplete="street-address"
-          />
-          <TextField
-            label="Primary service area"
-            field="primaryServiceArea"
-            value={data.primaryServiceArea}
-            error={errors.primaryServiceArea}
-            onChange={updateStringField}
-            required
-          />
-          <TextAreaField
-            label="Short business description"
-            field="businessDescription"
-            value={data.businessDescription}
-            error={errors.businessDescription}
-            onChange={updateStringField}
-            required
-          />
-          <TextField
-            label="Years in business"
-            field="yearsInBusiness"
-            value={data.yearsInBusiness}
-            error={errors.yearsInBusiness}
-            onChange={updateStringField}
-          />
-          <TextField
-            label="Public business phone"
-            field="publicBusinessPhone"
-            value={data.publicBusinessPhone}
-            error={errors.publicBusinessPhone}
-            onChange={updateStringField}
-            type="tel"
-            autoComplete="tel"
-          />
-          <TextField
-            label="Public business email"
-            field="publicBusinessEmail"
-            value={data.publicBusinessEmail}
-            error={errors.publicBusinessEmail}
-            onChange={updateStringField}
-            type="email"
-            autoComplete="email"
-          />
-        </FormGrid>
-      );
-    case 2:
-      return (
-        <FormGrid>
-          <TextAreaField
-            label="Primary services"
-            field="primaryServices"
-            value={data.primaryServices}
-            error={errors.primaryServices}
-            onChange={updateStringField}
-            required
-          />
-          <TextField
-            label="Highest-priority service"
-            field="highestPriorityService"
-            value={data.highestPriorityService}
-            error={errors.highestPriorityService}
-            onChange={updateStringField}
-            required
-          />
-          <TextField
-            label="Highest-revenue service"
-            field="highestRevenueService"
-            value={data.highestRevenueService}
-            error={errors.highestRevenueService}
-            onChange={updateStringField}
-          />
-          <TextAreaField
-            label="Current promotions"
-            field="currentPromotions"
-            value={data.currentPromotions}
-            error={errors.currentPromotions}
-            onChange={updateStringField}
-          />
-          <TextAreaField
-            label="Pricing information"
-            field="pricingInformation"
-            value={data.pricingInformation}
-            error={errors.pricingInformation}
-            onChange={updateStringField}
-          />
-          <TextAreaField
-            label="Financing information"
-            field="financingInformation"
-            value={data.financingInformation}
-            error={errors.financingInformation}
-            onChange={updateStringField}
-          />
-          <TextAreaField
-            label="Service areas"
-            field="serviceAreas"
-            value={data.serviceAreas}
-            error={errors.serviceAreas}
-            onChange={updateStringField}
-          />
-          <TextAreaField
-            label="Services that should not be promoted"
-            field="servicesNotPromoted"
-            value={data.servicesNotPromoted}
-            error={errors.servicesNotPromoted}
-            onChange={updateStringField}
-          />
-        </FormGrid>
-      );
-    case 3:
-      return (
-        <FormGrid>
-          <TextField
-            label="Brand colors"
-            field="brandColors"
-            value={data.brandColors}
-            error={errors.brandColors}
-            onChange={updateStringField}
-          />
-          <TextField
-            label="Font preferences"
-            field="fontPreferences"
-            value={data.fontPreferences}
-            error={errors.fontPreferences}
-            onChange={updateStringField}
-          />
-          <TextAreaField
-            label="Existing brand guidelines"
-            field="brandGuidelines"
-            value={data.brandGuidelines}
-            error={errors.brandGuidelines}
-            onChange={updateStringField}
-          />
-          <TextField
-            label="Desired style"
-            field="desiredStyle"
-            value={data.desiredStyle}
-            error={errors.desiredStyle}
-            onChange={updateStringField}
-            required
-          />
-          <TextAreaField
-            label="Words that describe the brand"
-            field="brandWords"
-            value={data.brandWords}
-            error={errors.brandWords}
-            onChange={updateStringField}
-          />
-          <TextAreaField
-            label="Websites they like"
-            field="websitesTheyLike"
-            value={data.websitesTheyLike}
-            error={errors.websitesTheyLike}
-            onChange={updateStringField}
-          />
-          <TextAreaField
-            label="Websites or styles they dislike"
-            field="websitesTheyDislike"
-            value={data.websitesTheyDislike}
-            error={errors.websitesTheyDislike}
-            onChange={updateStringField}
-          />
-          <CheckboxGroup
-            label="Visual direction"
-            field="visualDirections"
-            values={data.visualDirections}
-            error={errors.visualDirections}
-            options={visualOptions}
-            onToggle={toggleArrayValue}
-          />
-        </FormGrid>
-      );
-    case 4:
-      return (
-        <FormGrid>
-          <div className="form-guidance">
-            <h2>Share Brand Files and Images</h2>
-            <p>
-              Please add a Google Drive, Dropbox, OneDrive, or other shareable
-              asset-folder link. Include logos, team photos, location photos,
-              service photos, brand guidelines, brochures, and other helpful
-              materials.
-            </p>
-          </div>
-          <TextField
-            label="Shared asset-folder link"
-            field="assetFolderLink"
-            value={data.assetFolderLink}
-            error={errors.assetFolderLink}
-            onChange={updateStringField}
-            type="url"
-          />
-        </FormGrid>
-      );
-    case 5:
-      return (
-        <FormGrid>
-          <SelectField
-            label="Current hosting or website platform"
-            field="currentPlatform"
-            value={data.currentPlatform}
-            error={errors.currentPlatform}
-            onChange={updateStringField}
-            required
-            options={platformOptions}
-          />
-          {data.currentPlatform === "Other" && (
-            <TextField
-              label="Other website platform"
-              field="currentPlatformOther"
-              value={data.currentPlatformOther}
-              error={errors.currentPlatformOther}
-              onChange={updateStringField}
-              required
-            />
-          )}
-          <SelectField
-            label="Current booking platform"
-            field="currentBookingPlatform"
-            value={data.currentBookingPlatform}
-            error={errors.currentBookingPlatform}
-            onChange={updateStringField}
-            required
-            options={bookingOptions}
-          />
-          {data.currentBookingPlatform === "Other" && (
-            <TextField
-              label="Other booking platform"
-              field="currentBookingPlatformOther"
-              value={data.currentBookingPlatformOther}
-              error={errors.currentBookingPlatformOther}
-              onChange={updateStringField}
-              required
-            />
-          )}
-          <TextField
-            label="Booking URL"
-            field="bookingUrl"
-            value={data.bookingUrl}
-            error={errors.bookingUrl}
-            onChange={updateStringField}
-            type="url"
-          />
-          <TextField
-            label="Current CRM"
-            field="currentCrm"
-            value={data.currentCrm}
-            error={errors.currentCrm}
-            onChange={updateStringField}
-          />
-          <TextField
-            label="Current contact-form destination"
-            field="contactFormDestination"
-            value={data.contactFormDestination}
-            error={errors.contactFormDestination}
-            onChange={updateStringField}
-          />
-          <TextAreaField
-            label="Who receives website inquiries?"
-            field="inquiryRecipients"
-            value={data.inquiryRecipients}
-            error={errors.inquiryRecipients}
-            onChange={updateStringField}
-          />
-          <TextField
-            label="Preferred lead-notification email"
-            field="leadNotificationEmail"
-            value={data.leadNotificationEmail}
-            error={errors.leadNotificationEmail}
-            onChange={updateStringField}
-            type="email"
-            autoComplete="email"
-            required
-          />
-          <TextField
-            label="Preferred lead-notification phone"
-            field="leadNotificationPhone"
-            value={data.leadNotificationPhone}
-            error={errors.leadNotificationPhone}
-            onChange={updateStringField}
-            type="tel"
-            autoComplete="tel"
-          />
-          <TextAreaField
-            label="Current follow-up process"
-            field="followUpProcess"
-            value={data.followUpProcess}
-            error={errors.followUpProcess}
-            onChange={updateStringField}
-          />
-        </FormGrid>
-      );
-    case 6:
-      return (
-        <FormGrid>
-          <TextField label="Facebook" field="facebook" value={data.facebook} error={errors.facebook} onChange={updateStringField} type="url" />
-          <TextField label="Instagram" field="instagram" value={data.instagram} error={errors.instagram} onChange={updateStringField} type="url" />
-          <TextField label="TikTok" field="tiktok" value={data.tiktok} error={errors.tiktok} onChange={updateStringField} type="url" />
-          <TextField label="LinkedIn" field="linkedin" value={data.linkedin} error={errors.linkedin} onChange={updateStringField} type="url" />
-          <TextField label="YouTube" field="youtube" value={data.youtube} error={errors.youtube} onChange={updateStringField} type="url" />
-          <TextField label="Google Business Profile" field="googleBusinessProfile" value={data.googleBusinessProfile} error={errors.googleBusinessProfile} onChange={updateStringField} type="url" />
-          <TextField label="Yelp" field="yelp" value={data.yelp} error={errors.yelp} onChange={updateStringField} type="url" />
-          <TextAreaField label="Other important profile links" field="otherProfiles" value={data.otherProfiles} error={errors.otherProfiles} onChange={updateStringField} />
-        </FormGrid>
-      );
-    case 7:
-      return (
-        <FormGrid>
-          <CheckboxGroup
-            label="Goals"
-            field="goals"
-            values={data.goals}
-            error={errors.goals}
-            options={goalOptions}
-            onToggle={toggleArrayValue}
-          />
-          {data.goals.includes("Other") && (
-            <TextField
-              label="Other goal"
-              field="goalsOther"
-              value={data.goalsOther}
-              error={errors.goalsOther}
-              onChange={updateStringField}
-            />
-          )}
-          <TextAreaField
-            label="What is the most important result you want from your new or improved website?"
-            field="primaryGoal"
-            value={data.primaryGoal}
-            error={errors.primaryGoal}
-            onChange={updateStringField}
-            required
-          />
-        </FormGrid>
-      );
-    case 8:
-      return (
-        <FormGrid>
-          <TextField label="Competitor 1" field="competitor1" value={data.competitor1} error={errors.competitor1} onChange={updateStringField} type="url" />
-          <TextField label="Competitor 2" field="competitor2" value={data.competitor2} error={errors.competitor2} onChange={updateStringField} type="url" />
-          <TextField label="Competitor 3" field="competitor3" value={data.competitor3} error={errors.competitor3} onChange={updateStringField} type="url" />
-          <TextAreaField label="What do you like about their websites?" field="competitorLikes" value={data.competitorLikes} error={errors.competitorLikes} onChange={updateStringField} />
-          <TextAreaField label="What should make your business feel different?" field="differentiator" value={data.differentiator} error={errors.differentiator} onChange={updateStringField} />
-        </FormGrid>
-      );
-    default:
-      return (
-        <FormGrid>
-          <TextAreaField label="Additional information" field="additionalInformation" value={data.additionalInformation} error={errors.additionalInformation} onChange={updateStringField} />
-          <TextAreaField label="Special requests" field="specialRequests" value={data.specialRequests} error={errors.specialRequests} onChange={updateStringField} />
-          <TextField label="Important deadlines" field="importantDeadlines" value={data.importantDeadlines} error={errors.importantDeadlines} onChange={updateStringField} />
-          <TextAreaField label="Upcoming promotions" field="upcomingPromotions" value={data.upcomingPromotions} error={errors.upcomingPromotions} onChange={updateStringField} />
-          <TextAreaField label="Legal or compliance requirements" field="legalRequirements" value={data.legalRequirements} error={errors.legalRequirements} onChange={updateStringField} />
-          <TextField label="Best time to contact the client" field="bestTimeToContact" value={data.bestTimeToContact} error={errors.bestTimeToContact} onChange={updateStringField} />
-          <label className="checkbox-card confirm-card">
-            <input
-              type="checkbox"
-              checked={data.confirmation}
-              onChange={(event) => updateBooleanField("confirmation", event.target.checked)}
-              aria-invalid={Boolean(errors.confirmation)}
-            />
-            <span>
-              I confirm that the information provided is accurate and that I
-              have permission to provide the submitted business assets.
-            </span>
-          </label>
-          {errors.confirmation && <p className="field-error">{errors.confirmation}</p>}
-        </FormGrid>
-      );
-  }
-}
-
 export function OnboardingPage() {
   const navigate = useNavigate();
-  const formTopRef = useRef<HTMLDivElement>(null);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [data, setData] = useState<OnboardingData>(initialData);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [data, setData] = useState<QuickStartData>(initialData);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
 
-  const progress = useMemo(
-    () => Math.round(((currentStep + 1) / steps.length) * 100),
-    [currentStep],
-  );
-
-  const clearFieldError = (field: keyof OnboardingData) => {
+  const updateField = (field: QuickStartField, value: string) => {
+    setData((current) => ({ ...current, [field]: value }));
     setErrors((current) => {
       const next = { ...current };
       delete next[field];
@@ -891,151 +229,40 @@ export function OnboardingPage() {
     });
   };
 
-  const updateStringField: UpdateStringField = (field, value) => {
-    setData((current) => ({ ...current, [field]: value }));
-    clearFieldError(field);
-  };
-
-  const updateBooleanField: UpdateBooleanField = (field, value) => {
-    setData((current) => ({ ...current, [field]: value }));
-    clearFieldError(field);
-  };
-
-  const toggleArrayValue: ToggleArrayValue = (field, value) => {
-    setData((current) => {
-      const values = current[field];
-      return {
-        ...current,
-        [field]: values.includes(value)
-          ? values.filter((item) => item !== value)
-          : [...values, value],
-      };
-    });
-    clearFieldError(field);
-  };
-
-  const getStepErrors = (stepIndex: number, formData: OnboardingData) => {
+  const validate = (payload: QuickStartData) => {
     const nextErrors: FieldErrors = {};
-    const requiredFields = requiredByStep[stepIndex] || [];
 
     requiredFields.forEach((field) => {
-      const value = formData[field];
-      if (typeof value === "boolean") {
-        if (!value) {
-          nextErrors[field] = "Please confirm before submitting.";
-        }
-        return;
-      }
-
-      if (Array.isArray(value)) {
-        if (value.length === 0) {
-          nextErrors[field] = `${getFieldLabel(field)} is required.`;
-        }
-        return;
-      }
-
-      if (!String(value).trim()) {
-        nextErrors[field] = `${getFieldLabel(field)} is required.`;
+      if (!payload[field].trim()) {
+        nextErrors[field] = `${fieldLabels[field]} is required.`;
       }
     });
 
-    if (stepIndex === 0 && formData.email && !isValidEmail(formData.email)) {
+    if (payload.email && !isValidEmail(payload.email)) {
       nextErrors.email = "Enter a valid email address.";
     }
 
-    if (stepIndex === 3 && formData.visualDirections.length === 0) {
-      nextErrors.visualDirections = "Select at least one visual direction.";
+    if (payload.phone && !isValidPhone(payload.phone)) {
+      nextErrors.phone = "Enter a valid phone number.";
     }
 
-    if (
-      stepIndex === 5 &&
-      formData.leadNotificationEmail &&
-      !isValidEmail(formData.leadNotificationEmail)
-    ) {
-      nextErrors.leadNotificationEmail = "Enter a valid lead notification email.";
-    }
-
-    if (stepIndex === 7 && formData.goals.length === 0) {
-      nextErrors.goals = "Select at least one goal.";
-    }
-
-    if (
-      stepIndex === 5 &&
-      formData.currentPlatform === "Other" &&
-      !formData.currentPlatformOther.trim()
-    ) {
-      nextErrors.currentPlatformOther = "Tell us which website platform you use.";
-    }
-
-    if (
-      stepIndex === 5 &&
-      formData.currentBookingPlatform === "Other" &&
-      !formData.currentBookingPlatformOther.trim()
-    ) {
-      nextErrors.currentBookingPlatformOther =
-        "Tell us which booking platform you use.";
-    }
-
-    return nextErrors;
-  };
-
-  const validateStep = (stepIndex: number) => {
-    const nextErrors = getStepErrors(stepIndex, data);
     setErrors(nextErrors);
     return nextErrors;
-  };
-
-  const firstStepWithErrors = () => {
-    for (let stepIndex = 0; stepIndex < steps.length; stepIndex += 1) {
-      const stepErrors = getStepErrors(stepIndex, data);
-      if (Object.keys(stepErrors).length > 0) {
-        return { stepIndex, stepErrors };
-      }
-    }
-    return { stepIndex: -1, stepErrors: {} as FieldErrors };
-  };
-
-  const scrollToFormTop = () => {
-    window.requestAnimationFrame(() => {
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      formTopRef.current?.scrollIntoView({
-        behavior: prefersReducedMotion ? "auto" : "smooth",
-        block: "start",
-      });
-    });
-  };
-
-  const goNext = () => {
-    const stepErrors = validateStep(currentStep);
-    if (Object.keys(stepErrors).length === 0) {
-      setCurrentStep((step) => Math.min(step + 1, steps.length - 1));
-      scrollToFormTop();
-    }
-  };
-
-  const goBack = () => {
-    setCurrentStep((step) => Math.max(step - 1, 0));
-    scrollToFormTop();
   };
 
   const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitMessage("");
 
-    const invalid = firstStepWithErrors();
-    if (invalid.stepIndex >= 0) {
-      setCurrentStep(invalid.stepIndex);
-      setErrors({
-        ...invalid.stepErrors,
-        form: "Please fix the highlighted fields before submitting.",
-      });
-      scrollToFormTop();
+    if (isSubmitting) {
       return;
     }
 
-    if (isSubmitting) {
+    const payload = normalizeData(data);
+    const validationErrors = validate(payload);
+
+    if (Object.keys(validationErrors).length > 0) {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
 
@@ -1047,21 +274,17 @@ export function OnboardingPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          selectedOffer: OFFER_CONFIG.policies.selectedOffer,
-          formData: data,
-          honeypot: data.companyWebsite,
-          turnstileToken: data.turnstileToken,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const result = (await response.json()) as {
+        success?: boolean;
         ok?: boolean;
         submissionId?: string;
         message?: string;
       };
 
-      if (!response.ok || !result.ok) {
+      if (!response.ok || (!result.success && !result.ok)) {
         setSubmitMessage(
           result.message ||
             "Something went wrong while submitting your onboarding information. Please try again or contact Backend Brilliance.",
@@ -1083,82 +306,150 @@ export function OnboardingPage() {
     }
   };
 
-  const currentErrors = Object.entries(errors).filter(([field]) => field !== "form");
-
   return (
     <>
       <PageMeta
         title="Client Onboarding | Backend Brilliance"
-        description="Complete the Backend Brilliance Website Conversion System onboarding questionnaire."
+        description="Complete the Backend Brilliance quick start onboarding form."
         path={OFFER_CONFIG.routes.onboarding}
         noindex
       />
       <SimpleHeader />
 
       <main className="flow-page onboarding-page">
-        <section className="section-shell onboarding-shell">
+        <section className="section-shell onboarding-shell quick-onboarding-shell">
           <div className="section-heading narrow">
-            <p className="eyebrow">Client onboarding</p>
-            <h1>Tell Us What We Need To Build Your Client System Foundation.</h1>
+            <p className="eyebrow">Quick start onboarding</p>
+            <h1>Let&apos;s Get Your Website Conversion System Started.</h1>
             <p>
-              This questionnaire collects the business, website, brand, services,
-              scheduling, and lead-handling details needed to prepare your
-              website, chatbot, forms, and follow-up foundation. Your answers
-              stay in place as you move between steps.
+              This quick form gives us enough information to begin. We&apos;ll
+              contact you directly if we need additional details, photos, logins,
+              or brand assets.
             </p>
           </div>
 
-          <div
-            className="progress-wrap"
-            ref={formTopRef}
-            aria-label={`Step ${currentStep + 1} of ${steps.length}`}
+          <form
+            className="onboarding-form quick-onboarding-form"
+            onSubmit={submitForm}
+            noValidate
+            ref={formRef}
           >
-            <div className="progress-label">
-              <span>
-                Step {currentStep + 1} of {steps.length}
-              </span>
-              <strong>{steps[currentStep]}</strong>
-            </div>
-            <div className="progress-bar" aria-hidden="true">
-              <i style={{ width: `${progress}%` }} />
-            </div>
-          </div>
-
-          <form className="onboarding-form" onSubmit={submitForm} noValidate>
-            <input
-              className="hp-field"
-              type="text"
-              tabIndex={-1}
-              autoComplete="off"
-              value={data.companyWebsite}
-              onChange={(event) =>
-                updateStringField("companyWebsite", event.target.value)
-              }
-              aria-hidden="true"
-            />
-
             {errors.form && (
               <div className="error-summary" role="alert" aria-live="assertive">
-                <strong>{errors.form}</strong>
-                {currentErrors.length > 0 && (
-                  <ul>
-                    {currentErrors.map(([field, message]) => (
-                      <li key={field}>{message}</li>
-                    ))}
-                  </ul>
-                )}
+                {errors.form}
               </div>
             )}
 
             <div className="form-card">
-              <StepContent
-                currentStep={currentStep}
-                data={data}
-                errors={errors}
-                updateStringField={updateStringField}
-                updateBooleanField={updateBooleanField}
-                toggleArrayValue={toggleArrayValue}
-              />
+              <div className="form-guidance">
+                <h2>Project basics</h2>
+                <p>
+                  Keep this simple. A few clear answers are enough for Backend
+                  Brilliance to prepare the next step.
+                </p>
+              </div>
+
+              <div className="form-grid">
+                <TextField
+                  autoComplete="organization"
+                  error={errors.businessName}
+                  field="businessName"
+                  label="Business name"
+                  onChange={updateField}
+                  required
+                  value={data.businessName}
+                />
+                <TextField
+                  autoComplete="name"
+                  error={errors.contactName}
+                  field="contactName"
+                  label="Primary contact name"
+                  onChange={updateField}
+                  required
+                  value={data.contactName}
+                />
+                <TextField
+                  autoComplete="email"
+                  error={errors.email}
+                  field="email"
+                  inputMode="email"
+                  label="Email address"
+                  onChange={updateField}
+                  required
+                  type="email"
+                  value={data.email}
+                />
+                <TextField
+                  autoComplete="tel"
+                  error={errors.phone}
+                  field="phone"
+                  inputMode="tel"
+                  label="Phone number"
+                  onChange={updateField}
+                  required
+                  type="tel"
+                  value={data.phone}
+                />
+                <TextField
+                  autoComplete="url"
+                  error={errors.currentWebsite}
+                  field="currentWebsite"
+                  inputMode="url"
+                  label="Current website, if applicable"
+                  onChange={updateField}
+                  type="url"
+                  value={data.currentWebsite}
+                />
+                <SelectField
+                  error={errors.preferredContactMethod}
+                  field="preferredContactMethod"
+                  label="Preferred contact method"
+                  onChange={updateField}
+                  options={preferredContactOptions}
+                  value={data.preferredContactMethod}
+                />
+                <TextAreaField
+                  error={errors.services}
+                  field="services"
+                  label="Main services offered"
+                  onChange={updateField}
+                  required
+                  value={data.services}
+                />
+                <TextAreaField
+                  error={errors.serviceArea}
+                  field="serviceArea"
+                  label="Cities or service areas"
+                  onChange={updateField}
+                  required
+                  value={data.serviceArea}
+                />
+                <SelectField
+                  error={errors.primaryGoal}
+                  field="primaryGoal"
+                  label="What is the primary goal for your website?"
+                  onChange={updateField}
+                  options={primaryGoalOptions}
+                  required
+                  value={data.primaryGoal}
+                />
+                <TextField
+                  error={errors.brandAssetsLink}
+                  field="brandAssetsLink"
+                  inputMode="url"
+                  label="Link to logo, photos, or brand assets"
+                  onChange={updateField}
+                  type="url"
+                  value={data.brandAssetsLink}
+                />
+                <TextAreaField
+                  error={errors.additionalNotes}
+                  field="additionalNotes"
+                  label="Anything else we should know?"
+                  onChange={updateField}
+                  value={data.additionalNotes}
+                />
+              </div>
             </div>
 
             {submitMessage && (
@@ -1167,28 +458,22 @@ export function OnboardingPage() {
               </div>
             )}
 
-            <div className="form-actions">
+            <div className="quick-submit-card">
+              <div>
+                <strong>Ready when you are.</strong>
+                <p>
+                  We&apos;ll save this to the Backend Brilliance onboarding
+                  sheet and review it before following up.
+                </p>
+              </div>
               <button
-                className="button button-secondary"
-                type="button"
-                onClick={goBack}
-                disabled={currentStep === 0 || isSubmitting}
+                className="button button-primary"
+                type="submit"
+                disabled={isSubmitting}
               >
-                <ArrowLeft size={18} />
-                Back
+                {isSubmitting ? "Submitting..." : "Submit Quick Start Form"}
+                {isSubmitting ? <CheckCircle2 size={18} /> : <ArrowRight size={18} />}
               </button>
-
-              {currentStep < steps.length - 1 ? (
-                <button className="button button-primary" type="button" onClick={goNext}>
-                  Continue
-                  <ArrowRight size={18} />
-                </button>
-              ) : (
-                <button className="button button-primary" type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Submitting..." : "Submit Onboarding"}
-                  <Check size={18} />
-                </button>
-              )}
             </div>
           </form>
         </section>
