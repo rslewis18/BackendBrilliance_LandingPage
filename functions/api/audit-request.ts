@@ -212,7 +212,7 @@ const validatePayload = (
 
 const createEmailBody = (data: AuditRequest) =>
   [
-    "New personalized audit request",
+    "New personalized growth review request",
     "",
     `Business name: ${data.businessName}`,
     `Website URL: ${data.websiteUrl}`,
@@ -231,7 +231,7 @@ const createEmailBody = (data: AuditRequest) =>
 
 const sendAuditRequestEmail = async (env: Env, data: AuditRequest) => {
   const emailConfig = getEmailConfig(env);
-  const subject = `New Personalized Audit Request — ${data.businessName}`;
+  const subject = `New Personalized Growth Review Request - ${data.businessName}`;
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -274,7 +274,7 @@ const errorResponse = (error: unknown) => {
         success: false,
         ok: false,
         code: "EMAIL_NOT_CONFIGURED",
-        message: "Audit notifications are temporarily unavailable.",
+            message: "Growth review requests are temporarily unavailable.",
       },
       { status: 503 },
     );
@@ -317,7 +317,7 @@ const errorResponse = (error: unknown) => {
       success: false,
       ok: false,
       code: "EMAIL_SEND_FAILED",
-      message: "Audit notifications are temporarily unavailable.",
+      message: "Growth review requests are temporarily unavailable.",
     },
     { status: 502 },
   );
@@ -353,11 +353,11 @@ export const onRequestPost = async ({ request, env }: PagesContext) => {
     return json({
       success: true,
       ok: true,
-      message: "Your personalized audit request has been received.",
+      message: "Your personalized growth review request has been received.",
     });
   } catch (error) {
     const code = error instanceof Error ? error.message : "UNKNOWN_ERROR";
-    console.error("Personalized audit request failed", { code });
+    console.error("Personalized growth review request failed", { code });
     return errorResponse(error);
   }
 };

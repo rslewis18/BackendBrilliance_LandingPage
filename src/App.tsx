@@ -1,20 +1,18 @@
-import { type MouseEvent, type ReactNode, useRef, useState } from "react";
+import { type ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import { Route, Routes } from "react-router-dom";
-import { AuditRequestModal } from "./components/AuditRequestModal";
 import { LINKS } from "./config/links";
-import { type Offer, getOfferCtaUrl, OFFER_CONFIG } from "./config/offers";
+import { OFFER_CONFIG } from "./config/offers";
 import { OnboardingPage } from "./pages/OnboardingPage";
 import { OnboardingSuccessPage } from "./pages/OnboardingSuccessPage";
 import { StartPage } from "./pages/StartPage";
 import { ThankYouPage } from "./pages/ThankYouPage";
+import { trackEvent } from "./utils/tracking";
 import {
   ArrowRight,
   BarChart3,
   Bot,
-  CalendarCheck,
-  Check,
   Clock3,
   FileText,
   Globe2,
@@ -30,152 +28,199 @@ import {
 const siteUrl = OFFER_CONFIG.site.siteUrl;
 
 const navItems = [
-  ["How It Works", "#journey"],
-  ["What's Included", "#included"],
-  ["Pricing", "#pricing"],
+  ["Problems", "#journey"],
+  ["Solutions", "#solutions"],
+  ["How It Works", "#how-it-works"],
   ["FAQ", "#faq"],
 ] as const;
 
-type JourneyStep = {
-  step: string;
+type ProblemSolution = {
+  problem: string;
   icon: LucideIcon;
   title: string;
-  subtitle: string;
   copy: string;
   bullets: string[];
-  ctaLabel?: string;
-  ctaType?: "audit" | "booking";
 };
 
-const journeySteps: JourneyStep[] = [
+const problemSolutions: ProblemSolution[] = [
   {
-    step: "Step 1",
+    problem: "Need more opportunities?",
     icon: Search,
-    title: "Get Found",
-    subtitle: "Rank Higher on Google",
-    copy: "Help more local customers find your business before they find your competitors.",
-    bullets: ["Google Business Profile", "Local SEO", "Reviews", "Rankings"],
-    ctaLabel: "Get Your Free Personalized Audit",
-    ctaType: "audit",
+    title: "Generate them.",
+    copy: "Create more qualified chances to start conversations with the right local prospects.",
+    bullets: ["Lead Generation", "Paid Advertising", "Local Search / SEO", "Direct-to-home campaigns"],
   },
   {
-    step: "Step 2",
-    icon: Globe2,
-    title: "Get Them to Choose You",
-    subtitle: "Turn Visitors Into Leads",
-    copy: "When customers visit your website, do they trust you enough to contact you?",
-    bullets: [
-      "Website Design",
-      "Trust Signals",
-      "Calls-to-Action",
-      "Mobile Experience",
-      "Contact Forms",
-    ],
-    ctaLabel: "Book Your Strategy Call",
-    ctaType: "booking",
-  },
-  {
-    step: "Step 3",
+    problem: "Missing calls?",
     icon: PhoneCall,
-    title: "Capture Every Opportunity",
-    subtitle: "Never Miss Another Lead",
-    copy: "Make it easy for customers to contact you anytime.",
-    bullets: [
-      "AI Chatbot",
-      "Live Chat",
-      "Online Booking",
-      "Simple Forms",
-      "Lead Routing",
-    ],
+    title: "Capture them.",
+    copy: "Make it easier to answer demand, qualify inquiries, and route people to the next step.",
+    bullets: ["AI Receptionist", "Call capture", "Scheduling", "After-hours handling"],
   },
   {
-    step: "Step 4",
+    problem: "Slow follow-up?",
     icon: Zap,
-    title: "Respond Faster",
-    subtitle: "Speed Wins Customers",
-    copy: "The faster you respond, the more jobs you book.",
-    bullets: [
-      "Instant SMS",
-      "Email Follow-Up",
-      "Appointment Reminders",
-      "Lead Nurturing",
-    ],
+    title: "Respond faster.",
+    copy: "Reduce the time between interest and action with cleaner reminders and follow-up.",
+    bullets: ["Lead Follow-Up Automation", "SMS/email follow-up", "Appointment reminders", "Lead nurturing"],
   },
   {
-    step: "Step 5",
+    problem: "Leads aren't converting?",
+    icon: Globe2,
+    title: "Convert them.",
+    copy: "Turn more visits, calls, forms, and quote requests into real opportunities.",
+    bullets: ["Website Conversion Systems", "Landing pages", "Booking/quote flows", "Intake optimization"],
+  },
+  {
+    problem: "Hard to get found?",
     icon: BarChart3,
-    title: "Grow Smarter",
-    subtitle: "Improve Every Month",
-    copy: "Use AI insights and automation to keep growing.",
-    bullets: [
-      "Competitor Analysis",
-      "Review Growth",
-      "Monthly Reporting",
-      "AI Recommendations",
-    ],
+    title: "Improve visibility.",
+    copy: "Strengthen the places prospects check before they choose who to contact.",
+    bullets: ["Google Business Profile", "Local SEO", "Map visibility", "Website search visibility"],
+  },
+  {
+    problem: "Weak reviews?",
+    icon: Star,
+    title: "Build trust.",
+    copy: "Create more visible proof from happy customers and make trust easier to see.",
+    bullets: ["Review Growth", "Reputation systems", "Review-request automation"],
+  },
+  {
+    problem: "Old leads sitting untouched?",
+    icon: Clock3,
+    title: "Reactivate them.",
+    copy: "Follow up with past leads and customers who may still need help.",
+    bullets: ["Customer Reactivation", "Database campaigns", "Dormant lead follow-up", "Previous customer outreach"],
+  },
+  {
+    problem: "Too much manual work?",
+    icon: Bot,
+    title: "Automate it.",
+    copy: "Connect repetitive growth operations so staff can focus on higher-value work.",
+    bullets: ["AI workflows", "CRM automation", "Intake routing", "Lead handling"],
+  },
+  {
+    problem: "Inconsistent content?",
+    icon: FileText,
+    title: "Create consistently.",
+    copy: "Build repeatable content systems for campaigns, properties, services, and follow-up.",
+    bullets: ["Content Creation Systems", "Short-form content", "Property/listing content", "Campaign creative"],
   },
 ];
 
-const includedItems = [
-  {
-    icon: Globe2,
-    title: "Website That Converts",
-    copy: "Clear pages, strong trust signals, and calls-to-action that move visitors toward becoming leads.",
-  },
+const serviceCards = [
   {
     icon: Bot,
-    title: "AI Chatbot",
-    copy: "Answer common questions, collect details, and encourage visitors to book or request help.",
+    title: "AI Receptionist",
+    copy: "Capture calls, answer common questions, qualify inquiries, schedule appointments, and handle after-hours demand.",
   },
   {
-    icon: CalendarCheck,
-    title: "Forms and Scheduling",
-    copy: "Make it simple for interested customers to take action without extra back-and-forth.",
+    icon: FileText,
+    title: "AI Legal Intake",
+    copy: "Capture inquiries, gather initial case information, route prospects by firm-defined rules, schedule consultations, and follow up.",
   },
   {
     icon: MessageSquareText,
-    title: "Automated Follow-Up",
-    copy: "Send timely follow-up so interested leads are not forgotten after the first touch.",
+    title: "Lead Follow-Up Automation",
+    copy: "Send timely SMS and email follow-up so interested prospects do not disappear after the first touch.",
+  },
+  {
+    icon: Globe2,
+    title: "Website Conversion Systems",
+    copy: "Improve pages, landing experiences, quote flows, and booking paths so more visitors take action.",
+  },
+  {
+    icon: Search,
+    title: "Local Visibility / SEO",
+    copy: "Improve search, Google Business Profile, map visibility, and local trust signals.",
+  },
+  {
+    icon: Star,
+    title: "Review Growth",
+    copy: "Request, organize, and use reviews to build trust with prospects before they call.",
+  },
+  {
+    icon: Clock3,
+    title: "Customer Reactivation",
+    copy: "Reach dormant leads, previous customers, and old opportunities with focused campaigns.",
+  },
+  {
+    icon: BarChart3,
+    title: "Lead Generation & Paid Advertising",
+    copy: "Build campaigns designed to create more qualified opportunities for the right services and markets.",
+  },
+  {
+    icon: Sparkles,
+    title: "Content & Property Marketing",
+    copy: "Create repeatable content systems for local campaigns, property promotion, and consistent visibility.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Business Process Automation",
+    copy: "Automate intake, routing, CRM tasks, reporting, and repetitive growth operations.",
   },
 ] as const;
 
-const pricingOffers: Offer[] = OFFER_CONFIG.pricingOrder.map(
-  (offerKey) => OFFER_CONFIG.offers[offerKey],
-);
+const howItWorks = [
+  {
+    step: "01",
+    title: "We diagnose the bottleneck",
+    copy: "We look at where prospects are getting lost: visibility, calls, conversion, follow-up, reviews, content, or manual operations.",
+  },
+  {
+    step: "02",
+    title: "We recommend the right system",
+    copy: "You get a practical recommendation based on the actual revenue problem instead of a one-size-fits-all product.",
+  },
+  {
+    step: "03",
+    title: "We build and improve it",
+    copy: "Backend Brilliance configures the agreed solution, reviews it with you, and keeps the path clear for future improvements.",
+  },
+];
 
 const faqs = [
   {
-    question: "What is included in the Website Conversion System?",
+    question: "What does Backend Brilliance actually build?",
     answer:
-      "It includes a website built to turn visitors into leads, an AI chatbot, simple forms and scheduling, and automated follow-up so interested leads do not go cold.",
+      "We build growth and automation systems that help businesses get found, capture inquiries, respond faster, follow up, earn trust, reactivate customers, and reduce manual work.",
   },
   {
-    question: "Does the Revenue Leak Audit still use Typeform?",
+    question: "Do I need to know which service I need first?",
     answer:
-      "Yes. The Revenue Leak Audit button opens the configured Typeform link so you can identify where leads may be slipping through your current system.",
+      "No. The first step is a conversation about the bottleneck. From there, Backend Brilliance recommends the most practical solution.",
   },
   {
-    question: "When should I book a strategy call?",
+    question: "Is AI Receptionist still available?",
     answer:
-      "Book a strategy call if you want to discuss the Client Capture System, Complete Local Growth System, or the best system for your business.",
+      "Yes. AI Receptionist is one available solution when missed calls, after-hours demand, qualification, or scheduling are part of the problem.",
+  },
+  {
+    question: "Do you work with law firms?",
+    answer:
+      "Yes. AI Legal Intake can help law firms capture inquiries, gather initial information, route prospects by firm-defined rules, schedule consultations, and notify staff. It does not provide legal advice or replace attorney review.",
   },
   {
     question: "Do I have to sign a long-term contract?",
-    answer: "No. Plans are month-to-month unless a separate written agreement says otherwise.",
+    answer:
+      "Engagement structure depends on the recommended solution. Any pricing, scope, and terms are confirmed before work begins.",
   },
   {
-    question: "What happens after I start my project?",
+    question: "What happens after I book a growth review?",
     answer:
-      "You complete Stripe checkout, fill out the onboarding questionnaire, and Backend Brilliance uses your answers to prepare your system.",
+      "We review your current growth path, identify the biggest bottlenecks, and discuss the cleanest next step.",
   },
 ] as const;
 
 const footerServices = [
-  "Website Conversion System",
-  "Client Capture System",
-  "Complete Local Growth System",
-  "Revenue Leak Audit",
-  "Strategy Call",
+  "AI Receptionist",
+  "AI Legal Intake",
+  "Lead Follow-Up Automation",
+  "Website Conversion Systems",
+  "Local Visibility / SEO",
+  "Review Growth",
+  "Customer Reactivation",
+  "Business Process Automation",
 ] as const;
 
 const schema = {
@@ -188,7 +233,7 @@ const schema = {
       url: siteUrl,
       logo: `${siteUrl}/backend-brilliance-logo.png`,
       description:
-        "Backend Brilliance builds client acquisition systems for local service businesses.",
+        "Backend Brilliance identifies and fixes growth, revenue, and automation bottlenecks for local businesses.",
     },
     {
       "@type": "ProfessionalService",
@@ -197,7 +242,7 @@ const schema = {
       url: siteUrl,
       image: `${siteUrl}/backend-brilliance-logo.png`,
       description:
-        "Client acquisition systems for local service businesses, including websites, AI chat, scheduling, follow-up, reviews, and growth strategy.",
+        "Growth and automation systems for local businesses, including lead generation, intake, websites, follow-up, visibility, reviews, reactivation, content, and operations.",
       areaServed: "United States",
       parentOrganization: {
         "@id": `${siteUrl}/#organization`,
@@ -223,8 +268,6 @@ function App() {
 
 function HomePage() {
   const shouldReduceMotion = useReducedMotion();
-  const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
-  const auditTriggerRef = useRef<HTMLElement | null>(null);
   const reveal = shouldReduceMotion
     ? {}
     : {
@@ -233,15 +276,6 @@ function HomePage() {
         viewport: { once: true, amount: 0.16 },
         transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
       };
-
-  const openAuditModal = (event: MouseEvent<HTMLElement>) => {
-    auditTriggerRef.current = event.currentTarget;
-    setIsAuditModalOpen(true);
-  };
-
-  const closeAuditModal = () => {
-    setIsAuditModalOpen(false);
-  };
 
   return (
     <>
@@ -255,7 +289,7 @@ function HomePage() {
           <img src="/backend-brilliance-logo.png" alt="" />
           <span>
             <strong>Backend Brilliance</strong>
-            <small>Client Acquisition Systems</small>
+            <small>Growth &amp; Automation Systems</small>
           </span>
         </a>
 
@@ -267,86 +301,113 @@ function HomePage() {
           ))}
         </nav>
 
-        <button
+        <a
           className="button button-primary header-button"
-          onClick={openAuditModal}
-          type="button"
+          href={LINKS.booking}
+          onClick={() => trackEvent("booking_click", { location: "header" })}
+          rel="noopener noreferrer"
+          target="_blank"
         >
-          Get Your Free Personalized Audit
-        </button>
+          Find the Right Solution
+        </a>
       </header>
 
       <main className="reference-page">
         <section className="reference-hero section-shell" id="home">
           <motion.p className="eyebrow" {...reveal}>
-            How We Help You Win More Customers
+            Growth and Automation Systems for Local Businesses
           </motion.p>
           <motion.h1 {...reveal}>
-            From Strangers to
-            <span>Paying Customers.</span>
+            Find the Bottleneck.
+            <span>Build the Right System.</span>
           </motion.h1>
           <motion.p className="reference-subhead" {...reveal}>
-            We build the systems that attract, convert, and retain more
-            customers for your local business.
+            Backend Brilliance helps businesses generate more opportunities,
+            capture more inquiries, respond faster, convert more leads, build
+            trust, reactivate past customers, and automate repetitive growth
+            operations.
           </motion.p>
           <motion.div className="hero-actions centered-actions" {...reveal}>
-            <button
+            <a
               className="button button-primary"
-              onClick={openAuditModal}
-              type="button"
+              href={LINKS.booking}
+              onClick={() => trackEvent("booking_click", { location: "hero" })}
+              rel="noopener noreferrer"
+              target="_blank"
             >
-              Get Your Free Personalized Audit
+              Find the Right Solution
               <ArrowRight size={18} />
-            </button>
+            </a>
             <a
               className="button button-secondary"
-              href={LINKS.booking}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#journey"
+              onClick={() =>
+                trackEvent("section_nav_click", {
+                  location: "hero",
+                  target: "journey",
+                })
+              }
             >
-              Book Your Strategy Call
+              See How We Help
             </a>
           </motion.div>
         </section>
 
         <section className="journey-section section-shell" id="journey">
-          {journeySteps.map((step) => (
-            <JourneyCard
-              key={step.step}
-              onAuditClick={openAuditModal}
-              reveal={reveal}
-              step={step}
-            />
-          ))}
+          <motion.div className="section-heading centered" {...reveal}>
+            <p className="eyebrow">Problem → Solution</p>
+            <h2>Where growth usually gets stuck.</h2>
+            <p>
+              Most businesses do not have one single problem. They have a few
+              small breakdowns across visibility, intake, follow-up, conversion,
+              trust, and operations.
+            </p>
+          </motion.div>
+          <div className="solution-map-grid">
+            {problemSolutions.map(({ bullets, copy, icon: Icon, problem, title }) => (
+              <motion.article className="solution-map-card" key={problem} {...reveal}>
+                <Icon size={28} />
+                <p>{problem}</p>
+                <h3>{title}</h3>
+                <span>{copy}</span>
+                <ul>
+                  {bullets.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </motion.article>
+            ))}
+          </div>
         </section>
 
-        <section className="black-audit-card section-shell" id="revenue-audit">
+        <section className="black-audit-card section-shell" id="growth-review-request">
           <div className="black-audit-icon">
             <BarChart3 size={34} />
           </div>
           <div>
-            <h2>Find Out Where You're Losing Customers.</h2>
-            <p>No obligations. 100% free.</p>
+            <h2>Not Sure What to Fix First?</h2>
+            <p>Start with a conversation or request a personalized review.</p>
           </div>
           <a
             className="button button-primary"
-            href={LINKS.revenueAudit}
+            href={LINKS.booking}
+            onClick={() => trackEvent("booking_click", { location: "midpage_cta" })}
             target="_blank"
             rel="noopener noreferrer"
           >
-            Get Your Free Revenue Leak Audit
+            Talk About My Business
             <ArrowRight size={18} />
           </a>
         </section>
 
         <Section
-          eyebrow="What's included"
-          id="included"
-          title="Everything Your Business Needs To Capture And Convert Leads."
+          eyebrow="Solution categories"
+          id="solutions"
+          title="The right system depends on the actual bottleneck."
           centered
         >
-          <div className="feature-grid compact-feature-grid">
-            {includedItems.map(({ icon: Icon, title, copy }) => (
+          <div className="feature-grid service-category-grid">
+            {serviceCards.map(({ icon: Icon, title, copy }) => (
               <motion.article className="feature-card" key={title} {...reveal}>
                 <Icon size={28} />
                 <h3>{title}</h3>
@@ -356,59 +417,65 @@ function HomePage() {
           </div>
         </Section>
 
-        <section className="pricing-section page-section" id="pricing">
+        <Section
+          eyebrow="How it works"
+          id="how-it-works"
+          title="Diagnose first. Then build what solves the problem."
+          centered
+        >
+          <div className="step-grid three-step-grid">
+            {howItWorks.map((step) => (
+              <motion.article className="step-card" key={step.step} {...reveal}>
+                <span>{step.step}</span>
+                <h3>{step.title}</h3>
+                <p>{step.copy}</p>
+              </motion.article>
+            ))}
+          </div>
+        </Section>
+
+        <section className="pricing-section page-section" id="growth-review">
           <div className="section-shell">
             <motion.div className="section-heading centered" {...reveal}>
-              <p className="eyebrow">Choose the system that fits your goals</p>
-              <h2>Simple Pricing. Powerful Results.</h2>
+              <p className="eyebrow">Consultative next step</p>
+              <h2>Find the right solution before you buy anything.</h2>
               <p>
-                Start with the right system for where your business is now, then
-                expand when you are ready for more visibility and automation.
+                Backend Brilliance is not here to force every business into one
+                product. The goal is to understand the revenue problem, then
+                recommend the right growth or automation system.
               </p>
             </motion.div>
 
-            <div className="pricing-grid">
-              {pricingOffers.map((plan) => (
-                <motion.article
-                  className={`pricing-card ${plan.popular ? "popular" : ""}`}
-                  key={plan.key}
-                  {...reveal}
-                >
-                  {plan.popular && <div className="popular-badge">Most Popular</div>}
-                  <h3>{plan.name}</h3>
-                  <p>{plan.shortDescription}</p>
-                  <div className="price">
-                    <span>From</span>
-                    <strong>{plan.price}</strong>
-                    <small>{plan.priceQualifier}</small>
-                  </div>
-                  <p className="setup-note">{plan.setupFee}</p>
-                  <p>{plan.positioning}</p>
-                  <ul>
-                    {plan.features.map((feature) => (
-                      <li key={feature}>
-                        <Check size={16} />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <a
-                    className="button button-primary"
-                    href={getOfferCtaUrl(plan)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {plan.ctaLabel}
-                    <ArrowRight size={18} />
-                  </a>
+            <div className="consult-card-grid">
+              {[
+                "Identify the highest-friction part of your current growth path.",
+                "Match the problem to the right service category.",
+                "Confirm scope, requirements, proposal, or invoice path before implementation.",
+              ].map((item, index) => (
+                <motion.article className="pricing-card consult-card" key={item} {...reveal}>
+                  <span>0{index + 1}</span>
+                  <p>{item}</p>
                 </motion.article>
               ))}
             </div>
 
             <p className="pricing-note">
-              {OFFER_CONFIG.policies.thirdPartyCosts} We do not guarantee local
-              rankings, lead volume, appointments, or revenue.
+              Specific pricing and scope depend on the solution recommended.
+              Third-party software, advertising spend, usage fees, and platform
+              costs are confirmed before work begins.
             </p>
+            <div className="centered-actions">
+              <a
+                className="button button-primary"
+                href={LINKS.booking}
+                onClick={() => trackEvent("booking_click", { location: "consult_section" })}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Find the Right Solution
+                <ArrowRight size={18} />
+              </a>
+            </div>
           </div>
         </section>
 
@@ -440,10 +507,11 @@ function HomePage() {
             <a
               className="button button-primary"
               href={LINKS.booking}
+              onClick={() => trackEvent("booking_click", { location: "final_cta" })}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Book Your Strategy Call
+              Find the Right Solution
               <ArrowRight size={18} />
             </a>
           </motion.div>
@@ -459,10 +527,10 @@ function HomePage() {
             <img src="/backend-brilliance-logo.png" alt="" />
             <span>
               <strong>Backend Brilliance</strong>
-              <small>Client Acquisition Systems</small>
+              <small>Growth &amp; Automation Systems</small>
             </span>
           </a>
-          <p>Client acquisition systems for local service businesses.</p>
+          <p>Growth and automation systems for local businesses.</p>
         </div>
 
         <div className="footer-column">
@@ -482,70 +550,7 @@ function HomePage() {
           ))}
         </div>
       </footer>
-
-      <AuditRequestModal
-        isOpen={isAuditModalOpen}
-        onClose={closeAuditModal}
-        returnFocusRef={auditTriggerRef}
-      />
     </>
-  );
-}
-
-function JourneyCard({
-  onAuditClick,
-  reveal,
-  step,
-}: {
-  onAuditClick: (event: MouseEvent<HTMLElement>) => void;
-  reveal: object;
-  step: JourneyStep;
-}) {
-  const Icon = step.icon;
-
-  return (
-    <motion.article className="journey-card" {...reveal}>
-      <div className="journey-marker">
-        <span>{step.step}</span>
-        <div>
-          <Icon size={58} />
-        </div>
-      </div>
-
-      <div className="journey-copy">
-        <h2>{step.title}</h2>
-        <h3>{step.subtitle}</h3>
-        <p>{step.copy}</p>
-      </div>
-
-      <div className="journey-details">
-        <ul>
-          {step.bullets.map((item) => (
-            <li key={item}>
-              <Check size={18} />
-              {item}
-            </li>
-          ))}
-        </ul>
-        {step.ctaType === "audit" && step.ctaLabel && (
-          <button className="outline-cta" onClick={onAuditClick} type="button">
-            {step.ctaLabel}
-            <ArrowRight size={18} />
-          </button>
-        )}
-        {step.ctaType === "booking" && step.ctaLabel && (
-          <a
-            className="outline-cta"
-            href={LINKS.booking}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {step.ctaLabel}
-            <ArrowRight size={18} />
-          </a>
-        )}
-      </div>
-    </motion.article>
   );
 }
 

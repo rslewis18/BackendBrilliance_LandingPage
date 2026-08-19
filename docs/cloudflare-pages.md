@@ -33,12 +33,11 @@ Set public Vite variables for the frontend:
 ```env
 VITE_SITE_URL=
 VITE_CALENDAR_URL=
-VITE_STRIPE_CHECKOUT_URL=
 VITE_SUPPORT_EMAIL=
 VITE_REVENUE_AUDIT_URL=
 ```
 
-Set private variables for the personalized audit request notification:
+Set private variables for the personalized growth review request notification:
 
 ```env
 RESEND_API_KEY=
@@ -83,26 +82,44 @@ functions/api/onboarding.ts
 
 It does not use filesystem writes and does not store submissions locally.
 
-It forwards the Quick Start onboarding fields to the Google Sheets Apps Script
-webhook as top-level JSON properties. The Apps Script must map these exact
+It forwards the service-neutral business intake to the Google Sheets Apps Script
+webhook as top-level JSON properties. The Apps Script should map these core
 property names:
 
 ```txt
+selectedService
+servicePurchased
+customService
 businessName
 contactName
 email
 phone
-currentWebsite
-services
+businessWebsite
+businessAddress
 serviceArea
-primaryGoal
+industry
+primaryGoals
+primaryGoalOther
+currentSetup
+serviceSpecificDetails
+serviceSpecificData
+systemsInvolved
+accessNotes
+primaryEmail
+primaryPhone
 preferredContactMethod
-brandAssetsLink
-additionalNotes
+bestContactTime
+additionalTeamContact
+finalNotes
+universalNotes
 source
 ```
 
-The personalized audit request popup posts to:
+The function also sends backward-compatible aliases for the previous quick
+intake script, including `currentWebsite`, `services`, `primaryGoal`,
+`brandAssetsLink`, and `additionalNotes`.
+
+The personalized growth review request popup posts to:
 
 ```txt
 /api/audit-request

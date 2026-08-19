@@ -1,22 +1,21 @@
 # Stripe Checkout Setup
 
-The Website Conversion System uses hosted Stripe Checkout through a Stripe
-Payment Link.
+Backend Brilliance may use hosted Stripe Checkout or Payment Links after a
+prospect has completed a conversation, proposal review, or approved payment
+path.
+
+The main public website should not force every visitor into one standardized
+product checkout. Use the Stripe link only for an agreed solution.
 
 ## Payment Link
 
-Create a Stripe Payment Link for:
+Create the appropriate Stripe Payment Link or invoice for the approved Backend
+Brilliance solution inside Stripe, then send that hosted Stripe URL directly to
+the customer after discovery.
 
-- Product: Website Conversion System
-- Price: $297/month recurring
-
-Copy the hosted payment-link URL into:
-
-```env
-VITE_STRIPE_CHECKOUT_URL=
-```
-
-or into `src/config/offers.ts` as the default fallback value.
+Do not hard-code product-specific checkout links in frontend source. The public
+website should route prospects to a conversation first, not one universal
+checkout page.
 
 ## Success URL
 
@@ -31,6 +30,9 @@ If the production domain is `https://backendbrilliance.com`, use:
 ```txt
 https://backendbrilliance.com/thank-you
 ```
+
+If useful, Stripe can append a `service` or `offer` query parameter so the
+universal onboarding page can preselect the selected solution.
 
 ## Cancellation URL
 

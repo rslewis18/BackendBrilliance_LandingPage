@@ -13,7 +13,7 @@ export function SimpleHeader({ showSupport = true }: SimpleHeaderProps) {
         <img src="/backend-brilliance-logo.png" alt="" />
         <span>
           <strong>Backend Brilliance</strong>
-          <small>Client Acquisition Systems</small>
+          <small>Growth &amp; Automation Systems</small>
         </span>
       </Link>
 

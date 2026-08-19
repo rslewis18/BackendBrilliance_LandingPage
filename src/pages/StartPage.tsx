@@ -13,7 +13,8 @@ import {
 import { PageMeta } from "../components/PageMeta";
 import { SimpleHeader } from "../components/SimpleHeader";
 import { LINKS } from "../config/links";
-import { getOfferCtaUrl, OFFER_CONFIG } from "../config/offers";
+import { OFFER_CONFIG } from "../config/offers";
+import { trackEvent } from "../utils/tracking";
 
 const sanitizeBusinessName = (value: string | null) => {
   if (!value) {
@@ -34,7 +35,6 @@ export function StartPage() {
     searchParams.has("audit") ||
     searchParams.get("source") === "audit";
   const checkoutCancelled = searchParams.get("checkout") === "cancelled";
-  const offer = OFFER_CONFIG.offers.websiteConversion;
   const reveal = shouldReduceMotion
     ? {}
     : {
@@ -44,16 +44,17 @@ export function StartPage() {
       };
 
   const personalizedMessage = businessName
-    ? `Based on the opportunities identified for ${businessName}, this is the system we recommend.`
+    ? `Based on the opportunities identified for ${businessName}, this is the next step we recommend.`
     : hasAuditContext
-      ? "Based on the opportunities identified in your audit, this is the system we recommend."
-      : "A clear starting point for turning more website visitors into real business inquiries.";
+      ? "Based on the opportunities identified in your audit, this is the next step we recommend."
+      : "Use this page when Backend Brilliance has sent you here after a conversation, proposal, or custom payment link.";
 
   const summaryDetails = [
-    `${offer.price} per month`,
-    "Month-to-month service",
-    "Most initial setups are completed within 7-14 business days after onboarding materials are received",
-    "Any one-time setup cost will be confirmed before work begins",
+    "Custom payment link or invoice after discovery",
+    "Scope confirmed before work begins",
+    "Generic thank-you page after payment",
+    "Universal onboarding follows after the next step is complete",
+    "Backend Brilliance will follow up if anything else is needed",
   ];
 
   const planDetails = [
@@ -76,18 +77,32 @@ export function StartPage() {
   ];
 
   const conciseFaqs = [
-    OFFER_CONFIG.websiteConversionDetails.faqs[0],
-    OFFER_CONFIG.websiteConversionDetails.faqs[1],
-    OFFER_CONFIG.websiteConversionDetails.faqs[2],
-    OFFER_CONFIG.websiteConversionDetails.faqs[6],
-    OFFER_CONFIG.websiteConversionDetails.faqs[8],
-  ].filter(Boolean);
+    {
+      question: "Should I use this page before talking with Backend Brilliance?",
+      answer:
+        "No. This page is intended for prospects who already discussed a recommended solution, proposal, or payment path.",
+    },
+    {
+      question: "What happens after payment or approval?",
+      answer:
+        "You will be directed to the universal business intake so Backend Brilliance can collect the details needed for setup.",
+    },
+    {
+      question: "What if I am not sure which solution I need?",
+      answer:
+        "Book a growth review first. Backend Brilliance will help identify the bottleneck and recommend the right system.",
+    },
+    {
+      question: "Are third-party costs included?",
+      answer: OFFER_CONFIG.policies.thirdPartyCosts,
+    },
+  ];
 
   return (
     <>
       <PageMeta
-        title="Start Your Website Conversion System | Backend Brilliance"
-        description="Start the Backend Brilliance Website Conversion System: a website, chatbot, lead capture, scheduling, and follow-up foundation for local service businesses."
+        title="Next Step | Backend Brilliance"
+        description="Confirm the right Backend Brilliance solution before payment or onboarding."
         path={OFFER_CONFIG.routes.start}
         noindex
       />
@@ -96,16 +111,16 @@ export function StartPage() {
       <main className="flow-page start-page">
         <section className="start-hero section-shell" aria-labelledby="start-title">
           <motion.div className="start-copy" {...reveal}>
-            <p className="eyebrow">Website Conversion System</p>
+            <p className="eyebrow">Backend Brilliance setup</p>
             {businessName && <p className="welcome-line">Welcome, {businessName}.</p>}
-            <h1 id="start-title">Your Website Conversion System</h1>
+            <h1 id="start-title">Confirm the Right Next Step</h1>
             <p className="start-subhead">
-              A simpler way to turn website visitors into real business inquiries.
+              Backend Brilliance solutions are scoped after a conversation.
             </p>
             <p className="start-intro">
-              We&apos;ll help you build a clear, professional website experience
-              that answers questions, makes it easy to take action, and follows
-              up with interested leads.
+              We do not send every business into one public checkout. After
+              discovery, you&apos;ll receive the appropriate proposal, invoice,
+              or Stripe payment link for the solution we recommend.
             </p>
             <p className="start-personal-note">{personalizedMessage}</p>
 
@@ -119,47 +134,47 @@ export function StartPage() {
             <div className="start-action-row">
               <a
                 className="button button-primary"
-                href={getOfferCtaUrl(offer)}
+                href={LINKS.booking}
+                onClick={() => trackEvent("booking_click", { location: "start_hero" })}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Start My Project
+                Find the Right Solution
                 <ArrowRight size={18} />
               </a>
               <a
                 className="button button-secondary"
                 href={LINKS.booking}
+                onClick={() => trackEvent("booking_click", { location: "start_hero" })}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Book a Strategy Call
+                Book a Growth Review
               </a>
             </div>
           </motion.div>
 
           <motion.aside className="start-purchase-card" {...reveal}>
             <p className="eyebrow">Start here</p>
-            <h2>{offer.name}</h2>
-            <div className="start-price">
-              <strong>{offer.price}</strong>
-              <span>{offer.priceQualifier}</span>
-            </div>
+            <h2>Need a custom payment link?</h2>
             <p>
-              A clear website and response system designed to help turn visitors
-              into inquiries.
+              Book or continue your growth review first. Once scope is clear,
+              Backend Brilliance can send the correct Stripe link, invoice, or
+              proposal for your setup.
             </p>
             <a
               className="button button-primary"
-              href={getOfferCtaUrl(offer)}
+              href={LINKS.booking}
+              onClick={() => trackEvent("booking_click", { location: "start_card" })}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Start My Project
+              Find the Right Solution
               <ArrowRight size={18} />
             </a>
             <small>
-              Secure monthly checkout through Stripe. Any applicable setup fee
-              will be confirmed before work begins.
+              If you already paid, use the thank-you or onboarding link sent
+              with your payment confirmation.
             </small>
           </motion.aside>
         </section>
@@ -167,10 +182,15 @@ export function StartPage() {
         <section className="start-section section-shell" aria-labelledby="included-title">
           <div className="section-heading centered compact-heading">
             <p className="eyebrow">What is included</p>
-            <h2 id="included-title">Four pieces that help visitors take action.</h2>
+            <h2 id="included-title">Your setup depends on the recommended solution.</h2>
           </div>
           <div className="start-outcome-grid">
-            {offer.features.map((feature) => (
+            {[
+              "A clear implementation path after discovery",
+              "A universal onboarding step for business details",
+              "Service-specific setup questions where needed",
+              "Follow-up from Backend Brilliance if access or clarification is required",
+            ].map((feature) => (
               <article className="start-outcome-card" key={feature}>
                 <CheckCircle2 size={20} />
                 <p>{feature}</p>
@@ -182,10 +202,27 @@ export function StartPage() {
         <section className="start-section section-shell" aria-labelledby="works-title">
           <div className="section-heading centered compact-heading">
             <p className="eyebrow">How it works</p>
-            <h2 id="works-title">From checkout to launch.</h2>
+            <h2 id="works-title">From recommendation to setup.</h2>
           </div>
           <div className="start-step-grid">
-            {OFFER_CONFIG.websiteConversionDetails.howItWorks.map((step, index) => {
+            {[
+              {
+                title: "Confirm the next step",
+                copy: "Review the recommended solution, scope, and next step.",
+              },
+              {
+                title: "Complete onboarding",
+                copy: "After payment or approval, tell us about your business, goals, and current bottleneck.",
+              },
+              {
+                title: "We prepare implementation",
+                copy: "Backend Brilliance reviews the details and starts the agreed setup.",
+              },
+              {
+                title: "Review and launch",
+                copy: "When applicable, you review or test the setup before final launch or handoff.",
+              },
+            ].map((step, index) => {
               const Icon = howItWorksIcons[index] || Check;
               return (
                 <article className="start-step-card" key={step.title}>
@@ -201,17 +238,16 @@ export function StartPage() {
 
         <section
           className="start-section section-shell"
-          id="purchase"
+          id="next-step"
           aria-labelledby="summary-title"
         >
           <div className="start-summary-card">
             <div>
               <p className="eyebrow">Offer summary</p>
-              <h2 id="summary-title">{offer.name}</h2>
+              <h2 id="summary-title">Custom Payment Comes After Discovery</h2>
               <p>
-                Your website, chatbot, lead capture, scheduling, and basic
-                follow-up system - set up to help turn more visitors into
-                inquiries.
+                Backend Brilliance uses customized payment links, invoices, or
+                proposals after the right solution has been identified.
               </p>
               <ul className="summary-check-list">
                 {summaryDetails.map((detail) => (
@@ -224,25 +260,26 @@ export function StartPage() {
             </div>
 
             <div className="start-price-panel">
-              <span>Website Conversion System</span>
-              <strong>{offer.price}</strong>
-              <small>{offer.priceQualifier}</small>
+              <span>Backend Brilliance setup</span>
+              <strong>Talk</strong>
+              <small>step confirmed before work begins</small>
               <p>
-                A clear website and response system designed to help turn
-                visitors into inquiries.
+                Start with the conversation so the solution, scope, and payment
+                path match your actual business problem.
               </p>
               <a
                 className="button button-primary"
-                href={getOfferCtaUrl(offer)}
+                href={LINKS.booking}
+                onClick={() => trackEvent("booking_click", { location: "start_summary" })}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Start My Project
+                Find the Right Solution
                 <ArrowRight size={18} />
               </a>
               <small>
-                Secure monthly checkout through Stripe. Any applicable setup fee
-                will be confirmed before work begins.
+                Stripe payment links and invoices are sent manually after scope
+                is confirmed.
               </small>
             </div>
           </div>
@@ -314,13 +351,6 @@ export function StartPage() {
           <a href={LINKS.supportEmail}>{OFFER_CONFIG.site.supportEmail}</a>
           <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">
             Strategy call
-          </a>
-          <a
-            href={LINKS.revenueAudit}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Revenue Leak Audit
           </a>
         </nav>
       </footer>

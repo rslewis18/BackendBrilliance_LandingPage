@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { ArrowRight, X } from "lucide-react";
+import { trackEvent } from "../utils/tracking";
 
 type AuditRequestModalProps = {
   isOpen: boolean;
@@ -207,7 +208,7 @@ export function AuditRequestModal({
         setErrors({
           form:
             result.code === "EMAIL_NOT_CONFIGURED"
-              ? "Audit notifications are temporarily unavailable. Please email Backend Brilliance directly."
+              ? "Growth review requests are temporarily unavailable. Please email Backend Brilliance directly."
               : result.message ||
             "We could not submit your request right now. Please try again or contact Backend Brilliance directly.",
         });
@@ -216,8 +217,11 @@ export function AuditRequestModal({
 
       setFormData(initialFormData);
       setErrors({});
+      trackEvent("growth_review_request_submit", {
+        sourcePage: window.location.pathname,
+      });
       setSuccessMessage(
-        "Your request has been received. We’ll review your website and prepare your personalized audit within approximately 24 hours.",
+        "Your request has been received. We'll review your business and prepare a personalized growth review within approximately 24 hours.",
       );
     } catch {
       setErrors({
@@ -242,7 +246,7 @@ export function AuditRequestModal({
         role="dialog"
       >
         <button
-          aria-label="Close personalized audit request"
+          aria-label="Close personalized growth review request"
           className="modal-close"
           disabled={isSubmitting}
           onClick={handleClose}
@@ -251,12 +255,12 @@ export function AuditRequestModal({
           <X size={20} />
         </button>
 
-        <p className="eyebrow">Free Personalized Audit</p>
-        <h2 id={titleId}>Get Your Free Personalized Audit</h2>
+        <p className="eyebrow">Personalized Growth Review</p>
+        <h2 id={titleId}>See What We Can Fix</h2>
         <p id={descriptionId}>
-          Tell us a little about your business and website. We'll review your
-          current online presence and send your personalized audit within
-          approximately 24 hours.
+          Tell us a little about your business and website. We&apos;ll review
+          the visible growth path and look for places where opportunities may be
+          slipping through.
         </p>
 
         {successMessage ? (
@@ -346,7 +350,7 @@ export function AuditRequestModal({
             </label>
 
             <button className="button button-primary" disabled={isSubmitting} type="submit">
-              {isSubmitting ? "Submitting..." : "Request My Free Audit"}
+              {isSubmitting ? "Submitting..." : "Request My Review"}
               <ArrowRight size={18} />
             </button>
           </form>

@@ -12,8 +12,8 @@ export function OnboardingSuccessPage() {
   return (
     <>
       <PageMeta
-        title="Onboarding Received | Backend Brilliance"
-        description="Backend Brilliance has received your onboarding information."
+        title="Business Intake Received | Backend Brilliance"
+        description="Backend Brilliance has received your business intake information."
         path={OFFER_CONFIG.routes.onboardingSuccess}
         noindex
       />
@@ -21,16 +21,16 @@ export function OnboardingSuccessPage() {
 
       <main className="flow-page confirmation-page">
         <section className="confirmation-card section-shell">
-          <p className="eyebrow">Onboarding received</p>
-          <h1>You&apos;re All Set 🎉</h1>
+          <p className="eyebrow">Business intake received</p>
+          <h1>We&apos;ve Got It</h1>
           <p className="hero-lead">
-            We&apos;ve received your onboarding information and now have what we
-            need to begin reviewing your Website Conversion System project.
+            Your onboarding information has been submitted successfully.
+            We&apos;ll review the details and begin preparing the next stage of
+            your setup.
           </p>
           <p>
-            Backend Brilliance will use your answers to prepare the website,
-            chatbot, scheduling, and follow-up foundation, then contact you with
-            next steps.
+            If we need clarification or additional access, we&apos;ll contact you
+            using the information you provided.
           </p>
           <div className="mini-panel">
             <strong>Response expectation</strong>
@@ -44,7 +44,7 @@ export function OnboardingSuccessPage() {
           )}
           <div className="hero-actions">
             <Link className="button button-primary" to={OFFER_CONFIG.routes.home}>
-              Back to Homepage
+              Back to Backend Brilliance
               <ArrowRight size={18} />
             </Link>
             <a className="button button-secondary" href={LINKS.supportEmail}>

@@ -5,13 +5,13 @@ Lucide site for Backend Brilliance.
 
 The site now supports:
 
-- Public homepage and three-offer pricing ladder
-- On-page personalized audit request popup
-- Personalized `/start` path for prospects who received an audit
+- Public homepage with consultative growth-system positioning
+- On-page personalized growth review request popup
+- `/start` payment/proposal handoff path for approved solutions
 - `/api/audit-request` email notification endpoint
-- Hosted Stripe Checkout handoff for Website Conversion System
-- `/thank-you` checkout next-step page
-- `/onboarding` short Quick Start client onboarding form
+- Post-sale Stripe Payment Link or invoice flow for approved solutions
+- `/thank-you` next-step page after payment or approval
+- `/onboarding` reusable multi-service business intake form
 - `/onboarding-success` confirmation page
 - Cloudflare Pages Functions submission endpoint
 
@@ -43,7 +43,7 @@ dist
 
 ## Central configuration
 
-Editable offer, pricing, policy, route, Stripe, calendar, support, and site URL
+Editable offer, policy, route, Stripe, calendar, support, and site URL
 configuration lives in:
 
 ```txt
@@ -56,12 +56,13 @@ Legacy CTA aliases are kept in:
 src/config/links.ts
 ```
 
-The homepage pricing cards and `/start` page both read from the same offer
+The homepage CTAs and `/start` handoff page both read from centralized
 configuration.
 
-The Revenue Leak Audit CTA still uses `VITE_REVENUE_AUDIT_URL`. The
-personalized audit popup submits to `/api/audit-request` and sends a Resend
-email notification server-side.
+The personalized growth review popup submits to `/api/audit-request` and sends
+a Resend email notification server-side. `VITE_REVENUE_AUDIT_URL` remains
+available for legacy Typeform links if needed, but it is not the primary public
+CTA.
 
 ## Routes
 
@@ -111,12 +112,12 @@ Public frontend/build variables:
 ```env
 VITE_SITE_URL=
 VITE_CALENDAR_URL=
-VITE_STRIPE_CHECKOUT_URL=
 VITE_SUPPORT_EMAIL=
 VITE_REVENUE_AUDIT_URL=
 ```
 
-Private Cloudflare Pages Function variables for personalized audit requests:
+Private Cloudflare Pages Function variables for personalized growth review
+requests:
 
 ```env
 RESEND_API_KEY=
@@ -138,13 +139,9 @@ Only `VITE_` variables are exposed to frontend browser code.
 
 ## Stripe Checkout
 
-Use hosted Stripe Checkout / Payment Links. Do not build a custom payment form.
-
-Website Conversion System checkout URL is configured through:
-
-```env
-VITE_STRIPE_CHECKOUT_URL=
-```
+Use hosted Stripe Checkout / Payment Links after discovery. Do not build a
+custom payment form and do not expose one universal public checkout link on the
+main website.
 
 Stripe success URL:
 
@@ -171,30 +168,40 @@ The onboarding form posts to:
 The Cloudflare Pages Function saves through a server-side Google Apps Script
 webhook. The browser never receives the webhook URL or secret.
 
-The browser submits this canonical top-level payload:
+The browser submits a service-neutral, top-level business-intake payload. Core
+fields include:
 
-```json
-{
-  "businessName": "",
-  "contactName": "",
-  "email": "",
-  "phone": "",
-  "currentWebsite": "",
-  "services": "",
-  "serviceArea": "",
-  "primaryGoal": "",
-  "preferredContactMethod": "",
-  "brandAssetsLink": "",
-  "additionalNotes": "",
-  "source": "Backend Brilliance Onboarding"
-}
+```txt
+selectedService
+customService
+businessName
+contactName
+email
+phone
+servicePurchased
+businessWebsite
+businessAddress
+serviceArea
+industry
+primaryGoals
+currentSetup
+systemsInvolved
+preferredContactMethod
+serviceSpecificDetails
+serviceSpecificData
 ```
+
+Service-specific answers are collected conditionally for AI Receptionist, AI
+Legal Intake System, Lead Follow-Up Automation, Website Conversion System,
+Local Visibility / SEO, Review Growth, Customer Reactivation, Lead Generation,
+Content Creation System, Paid Advertising, Property Marketing, Business Process
+Automation, and Other / Custom Solution.
 
 See [docs/google-sheets-apps-script.md](docs/google-sheets-apps-script.md).
 
 ## Email notification
 
-Personalized audit requests use the Resend API from the Cloudflare Pages
+Personalized growth review requests use the Resend API from the Cloudflare Pages
 Function at `/api/audit-request`. Configure these private server-side variables:
 
 ```env
@@ -226,34 +233,34 @@ ONBOARDING_NOTIFICATION_FROM=Backend Brilliance <onboarding@resend.dev>
 
 Use a sender address allowed by the configured Resend account.
 
-Personalized audit requests are sent to:
+Personalized growth review requests are sent to:
 
 ```txt
 backendbrilliance@gmail.com
 ```
 
-Audit requests are not marked successful in the browser unless the Resend API
+Growth review requests are not marked successful in the browser unless the Resend API
 accepts the email request. If onboarding Google Sheets succeeds and onboarding
 email fails, the onboarding submission is still treated as successful and the
 email failure is logged server-side.
 
-Audit requests do not currently use backup storage. The existing Google Sheets
+Growth review requests do not currently use backup storage. The existing Google Sheets
 Apps Script is shaped for onboarding rows; if backup storage is needed later,
-create a distinct audit-request sheet/webhook payload with submission type
-`personalized_audit_request` so audit fields are not mixed into onboarding rows.
+create a distinct growth-review sheet/webhook payload with submission type
+`personalized_growth_review_request` so review-request fields are not mixed into onboarding rows.
 
 ## Notes before launch
 
 Before production launch:
 
-1. Replace the Stripe checkout placeholder with the real Payment Link.
-2. Confirm the Cal.com URL.
-3. Configure Google Sheets Apps Script and test a real submission.
-4. Configure email notification credentials and test delivery for both
+1. Confirm the Cal.com URL.
+2. Configure Google Sheets Apps Script and test a real submission.
+3. Configure email notification credentials and test delivery for both
    `/api/audit-request` and `/api/onboarding`.
-5. Configure Stripe success/cancellation URLs.
-6. Confirm Preview and Production environment variables in Cloudflare Pages.
-7. Run `npm run lint` and `npm run build`.
+4. Configure each custom Stripe Payment Link or invoice to redirect successful
+   customers to `/thank-you`.
+5. Confirm Preview and Production environment variables in Cloudflare Pages.
+6. Run `npm run lint` and `npm run build`.
 
 Do not report Stripe, Google Sheets, or email as fully verified until real
 credentials are configured and a real test succeeds.

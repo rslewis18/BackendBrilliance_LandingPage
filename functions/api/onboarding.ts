@@ -91,8 +91,8 @@ export const onRequestPost = async ({ request, env }: PagesContext) => {
       emailNotificationSent,
       submissionId: submission.submissionId,
       message: emailNotificationSent
-        ? "Onboarding information submitted successfully."
-        : "Onboarding information was saved, but the internal email notification was not sent.",
+        ? "Business intake submitted successfully."
+        : "Business intake was saved, but the internal email notification was not sent.",
     });
   } catch (error) {
     console.error("Onboarding submission failed", error);
@@ -102,7 +102,7 @@ export const onRequestPost = async ({ request, env }: PagesContext) => {
         ok: false,
         saved: false,
         message:
-          "We could not submit your onboarding information right now. Please try again or contact Backend Brilliance directly.",
+          "We could not submit your business intake right now. Please try again or contact Backend Brilliance directly.",
       },
       { status: 400 },
     );

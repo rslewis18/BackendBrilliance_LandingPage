@@ -3,7 +3,7 @@ export type OfferKey =
   | "clientCapture"
   | "completeLocalGrowth";
 
-export type OfferCtaBehavior = "stripe" | "calendar";
+export type OfferCtaBehavior = "calendar";
 
 export type Offer = {
   key: OfferKey;
@@ -22,8 +22,6 @@ export type Offer = {
 const siteUrl = import.meta.env.VITE_SITE_URL || "https://backendbrilliance.com";
 const calendarUrl =
   import.meta.env.VITE_CALENDAR_URL || "https://cal.com/backendbrilliance/15min";
-const stripeCheckoutUrl =
-  import.meta.env.VITE_STRIPE_CHECKOUT_URL || "https://buy.stripe.com/3cI8wOeJd5XdexF7gA8AE01";
 const supportEmail =
   import.meta.env.VITE_SUPPORT_EMAIL || "backendbrilliance@gmail.com";
 const revenueAuditUrl =
@@ -37,7 +35,6 @@ export const OFFER_CONFIG = {
   },
   external: {
     calendarUrl,
-    stripeCheckoutUrl,
     revenueAuditUrl,
   },
   routes: {
@@ -48,9 +45,9 @@ export const OFFER_CONFIG = {
     onboardingSuccess: "/onboarding-success",
   },
   policies: {
-    selectedOffer: "Website Conversion System",
+    selectedOffer: "Backend Brilliance Solution",
     billingNote:
-      "Website Conversion System is a recurring monthly subscription.",
+      "Backend Brilliance solutions may be one-time, monthly, or proposal-based depending on scope.",
     setupFeeLanguage:
       "Any one-time setup fee, if applicable, will be confirmed before work begins.",
     cancellation:
@@ -68,15 +65,15 @@ export const OFFER_CONFIG = {
     websiteConversion: {
       key: "websiteConversion",
       name: "Website Conversion System",
-      price: "$297",
-      priceQualifier: "/month",
-      setupFee: "Setup confirmed before work begins",
+      price: "Proposal",
+      priceQualifier: "confirmed before work begins",
+      setupFee: "Scope and setup confirmed before work begins",
       shortDescription:
         "A website and automated response foundation that helps turn visitors into leads.",
       positioning:
         "A website, chatbot, scheduling, and follow-up foundation that helps local businesses turn more visitors into leads.",
-      ctaLabel: "Start My Project",
-      ctaBehavior: "stripe",
+      ctaLabel: "Find the Right Solution",
+      ctaBehavior: "calendar",
       features: [
         "A website built to turn visitors into leads",
         "An AI chatbot that answers questions and encourages bookings",
@@ -86,18 +83,18 @@ export const OFFER_CONFIG = {
     },
     clientCapture: {
       key: "clientCapture",
-      name: "Client Capture System",
-      price: "$499",
-      priceQualifier: "/month",
-      setupFee: "One-time setup from $750",
+      name: "Client Capture & Follow-Up System",
+      price: "Custom",
+      priceQualifier: "based on scope",
+      setupFee: "Scope confirmed before work begins",
       shortDescription:
         "A more complete system for managing leads, bookings, follow-up, and reviews.",
       positioning:
-        "Everything in Website Conversion System, plus a more complete lead-management, booking, CRM, review, and customer follow-up system.",
-      ctaLabel: "Book a Strategy Call",
+        "A more complete lead-management, booking, CRM, review, and customer follow-up system.",
+      ctaLabel: "Find the Right Solution",
       ctaBehavior: "calendar",
       features: [
-        "Everything in Website Conversion System",
+        "Lead capture and follow-up workflow",
         "A clearer dashboard for tracking leads and booked jobs",
         "Stronger booking and customer follow-up systems",
         "Review requests that help build trust",
@@ -107,19 +104,19 @@ export const OFFER_CONFIG = {
     },
     completeLocalGrowth: {
       key: "completeLocalGrowth",
-      name: "Complete Local Growth System",
-      price: "$699",
-      priceQualifier: "/month",
-      setupFee: "One-time setup from $750",
+      name: "Complete Growth & Automation System",
+      price: "Custom",
+      priceQualifier: "based on scope",
+      setupFee: "Scope confirmed before work begins",
       shortDescription:
         "The full system for visibility, capture, follow-up, reviews, and monthly growth.",
       positioning:
-        "Everything in Client Capture System, plus ongoing local visibility, campaigns, optimization, and growth strategy.",
-      ctaLabel: "Book a Strategy Call",
+        "A broader growth and automation system with visibility, campaigns, follow-up, optimization, and strategy.",
+      ctaLabel: "Find the Right Solution",
       ctaBehavior: "calendar",
       popular: true,
       features: [
-        "Everything in Client Capture System",
+        "Growth bottleneck review and implementation roadmap",
         "Local visibility and Google Business Profile support",
         "Campaigns that promote services and seasonal offers",
         "Monthly optimization based on performance",
@@ -155,7 +152,7 @@ export const OFFER_CONFIG = {
     howItWorks: [
       {
         title: "Start your project",
-        copy: "Complete secure checkout through Stripe.",
+        copy: "Confirm the recommended solution, proposal, or invoice path.",
       },
       {
         title: "Tell us about your business",
@@ -172,9 +169,9 @@ export const OFFER_CONFIG = {
     ],
     faqs: [
       {
-        question: "What happens after I subscribe?",
+        question: "What happens after the solution is approved?",
         answer:
-          "You will be sent to the onboarding questionnaire so Backend Brilliance can collect the information needed to begin your Website Conversion System project.",
+          "You will be sent to the onboarding questionnaire so Backend Brilliance can collect the information needed to begin your setup.",
       },
       {
         question: "How long does the initial setup take?",
@@ -204,7 +201,7 @@ export const OFFER_CONFIG = {
       {
         question: "Can you connect my current booking platform?",
         answer:
-          "Yes. The Website Conversion System includes simple scheduling or existing booking-link integration so customers can take action more easily.",
+          "Yes. When scheduling or booking is part of the recommended solution, Backend Brilliance can work with existing booking links or recommend a cleaner path.",
       },
       {
         question: "What happens to leads after they reach out?",
@@ -217,14 +214,14 @@ export const OFFER_CONFIG = {
           "No. Third-party subscriptions, domain fees, premium plugins, text-message usage, email usage, AI usage, booking-platform fees, and platform costs are not included unless specifically confirmed in writing.",
       },
       {
-        question: "Does this replace the Client Capture System?",
+        question: "Does this replace a growth review?",
         answer:
-          "No. The Website Conversion System provides the foundation. The Client Capture System adds a more complete lead-management, booking, CRM, review, and customer follow-up system.",
+          "No. A growth review helps identify which system makes the most sense before scope is confirmed.",
       },
       {
-        question: "Can I upgrade to the Client Capture System later?",
+        question: "Can the system expand later?",
         answer:
-          "Yes. If you need deeper lead management, review requests, missed-call improvements, or a more complete customer follow-up system, those can be discussed on a strategy call.",
+          "Yes. Many clients start with the most urgent bottleneck, then expand into follow-up, reviews, visibility, reactivation, or automation later.",
       },
       {
         question: "How does cancellation work?",
@@ -235,7 +232,4 @@ export const OFFER_CONFIG = {
   },
 };
 
-export const getOfferCtaUrl = (offer: Offer) =>
-  offer.ctaBehavior === "stripe"
-    ? OFFER_CONFIG.external.stripeCheckoutUrl
-    : OFFER_CONFIG.external.calendarUrl;
+export const getOfferCtaUrl = (_offer: Offer) => OFFER_CONFIG.external.calendarUrl;

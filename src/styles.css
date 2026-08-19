@@ -936,6 +936,41 @@ h1 {
   margin-top: 44px;
 }
 
+.service-category-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.three-step-grid,
+.consult-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: clamp(26px, 4vw, 42px);
+}
+
+.consult-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.consult-card span {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: rgba(229, 57, 53, 0.1);
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.consult-card p {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 760;
+  line-height: 1.55;
+}
+
 .pricing-card {
   position: relative;
   padding: 32px 28px;
@@ -1653,6 +1688,139 @@ h1 {
   background: var(--paper);
 }
 
+.post-purchase-card {
+  width: min(100%, 1040px);
+}
+
+.checkout-progress {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin: 28px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checkout-progress li {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.checkout-progress span {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.checkout-progress .is-complete,
+.checkout-progress .is-next {
+  border-color: rgba(229, 57, 53, 0.28);
+  color: var(--ink);
+}
+
+.checkout-progress .is-complete span {
+  background: var(--accent);
+  color: #fff;
+}
+
+.checkout-progress .is-next span {
+  background: rgba(229, 57, 53, 0.11);
+  color: var(--accent);
+}
+
+.intake-next-action,
+.support-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: clamp(20px, 4vw, 28px);
+  background: var(--paper);
+}
+
+.intake-next-action strong,
+.support-strip span {
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.intake-next-action p {
+  max-width: 620px;
+  margin: 8px 0 0;
+}
+
+.post-purchase-section {
+  margin-top: 30px;
+}
+
+.post-purchase-section h2 {
+  margin: 0 0 16px;
+  color: var(--ink);
+  font-size: clamp(1.45rem, 3vw, 2.2rem);
+  letter-spacing: -0.04em;
+}
+
+.post-purchase-steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.post-purchase-step {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  background: #fff;
+}
+
+.post-purchase-step span {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(229, 57, 53, 0.1);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.post-purchase-step h3 {
+  margin: 14px 0 0;
+  color: var(--ink);
+  font-size: 0.98rem;
+  line-height: 1.2;
+}
+
+.post-purchase-step p {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.support-strip {
+  margin-top: 24px;
+}
+
 .onboarding-shell .section-heading p:not(.eyebrow) {
   margin-inline: 0;
 }
@@ -1743,6 +1911,10 @@ h1 {
   color: var(--accent);
 }
 
+.checkbox-group b {
+  color: var(--accent);
+}
+
 .form-field input,
 .form-field textarea,
 .form-field select {
@@ -1779,6 +1951,12 @@ h1 {
   font-weight: 750;
 }
 
+.field-helper {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
 .error-summary ul {
   margin: 8px 0 0;
   padding-left: 18px;
@@ -1812,6 +1990,11 @@ h1 {
 .checkbox-card input {
   margin-top: 3px;
   accent-color: var(--accent);
+}
+
+.checkbox-card.is-selected {
+  border-color: rgba(229, 57, 53, 0.34);
+  background: rgba(229, 57, 53, 0.06);
 }
 
 .confirm-card {
@@ -1855,6 +2038,43 @@ h1 {
   margin: 6px 0 0;
   color: var(--muted);
   line-height: 1.6;
+}
+
+.intake-form {
+  max-width: 980px;
+}
+
+.intake-shell .form-card {
+  display: grid;
+  gap: 22px;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.review-item {
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+  background: var(--paper);
+}
+
+.review-item span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.review-item strong {
+  color: var(--ink);
+  line-height: 1.45;
 }
 
 .button:disabled {
@@ -1924,6 +2144,66 @@ h1 {
   display: grid;
   gap: 16px;
   padding: 22px 0 24px;
+}
+
+.solution-map-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: clamp(26px, 4vw, 42px);
+}
+
+.solution-map-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 24px;
+  padding: clamp(20px, 3vw, 26px);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 14px 44px rgba(17, 17, 17, 0.06);
+}
+
+.solution-map-card svg {
+  color: var(--accent);
+}
+
+.solution-map-card > p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.solution-map-card h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.25rem, 2.4vw, 1.8rem);
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.solution-map-card > span {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.solution-map-card ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.solution-map-card li {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 9px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.76rem;
+  font-weight: 800;
 }
 
 .journey-card {
@@ -2188,8 +2468,21 @@ h1 {
   .step-grid.four,
   .flow-footer,
   .start-hero,
-  .start-summary-card {
+  .start-summary-card,
+  .intake-next-action,
+  .support-strip {
     grid-template-columns: 1fr;
+  }
+
+  .intake-next-action,
+  .support-strip {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .checkout-progress,
+  .post-purchase-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .flow-footer {
@@ -2203,6 +2496,10 @@ h1 {
   .compact-card-grid,
   .compact-feature-grid,
   .checkbox-grid,
+  .solution-map-grid,
+  .service-category-grid,
+  .three-step-grid,
+  .consult-card-grid,
   .start-outcome-grid,
   .start-step-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -2343,10 +2640,17 @@ h1 {
   .outcome-grid.three,
   .testimonial-grid,
   .pricing-grid,
+  .solution-map-grid,
+  .service-category-grid,
+  .three-step-grid,
+  .consult-card-grid,
   .compact-card-grid,
   .compact-feature-grid,
     .checkbox-grid,
     .form-grid,
+    .review-grid,
+    .checkout-progress,
+    .post-purchase-steps,
     .start-outcome-grid,
     .start-step-grid,
     .audit-cta-card,
@@ -2405,7 +2709,9 @@ h1 {
   .start-action-row .button,
   .start-purchase-card .button,
   .start-price-panel .button,
-  .start-support-card .button {
+  .start-support-card .button,
+  .intake-next-action .button,
+  .support-strip .button {
     width: 100%;
   }
 
