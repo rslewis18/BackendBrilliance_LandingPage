@@ -7,7 +7,7 @@ const supportEmailHref = supportEmail.startsWith("mailto:")
 
 export const LINKS = {
   booking: OFFER_CONFIG.external.calendarUrl,
-  implementationBooking: OFFER_CONFIG.external.implementationCalendarUrl,
+  implementationBooking: OFFER_CONFIG.external.implementationSchedulingUrl,
   revenueAudit: OFFER_CONFIG.external.revenueAuditUrl,
   stripePayment: OFFER_CONFIG.external.stripePaymentUrl,
   vslVideos: OFFER_CONFIG.external.vslUrls,

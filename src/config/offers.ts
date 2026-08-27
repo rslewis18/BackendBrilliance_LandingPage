@@ -27,8 +27,8 @@ const supportEmail =
 const revenueAuditUrl =
   import.meta.env.VITE_REVENUE_AUDIT_URL || "https://form.typeform.com/to/bpgvWxsk";
 const stripePaymentUrl = import.meta.env.VITE_STRIPE_PAYMENT_LINK?.trim() || "";
-const implementationCalendarUrl =
-  import.meta.env.VITE_IMPLEMENTATION_CALENDAR_URL?.trim() || "";
+const implementationSchedulingUrl =
+  import.meta.env.VITE_IMPLEMENTATION_SCHEDULING_URL?.trim() || "";
 const homeServicesVslUrl =
   import.meta.env.VITE_HOME_SERVICES_VSL_URL?.trim() ||
   import.meta.env.VITE_VSL_VIDEO_URL?.trim() ||
@@ -47,7 +47,7 @@ export const OFFER_CONFIG = {
     calendarUrl,
     revenueAuditUrl,
     stripePaymentUrl,
-    implementationCalendarUrl,
+    implementationSchedulingUrl,
     vslUrls: {
       homeServices: homeServicesVslUrl,
       legal: legalVslUrl,

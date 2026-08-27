@@ -3383,15 +3383,24 @@ h1 {
   margin-top: 24px;
 }
 
+.setup-flow-strip article {
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: var(--paper);
+}
+
 .setup-flow-strip span {
   display: flex;
   align-items: center;
   gap: 10px;
-  border-radius: 14px;
-  padding: 12px 14px;
-  background: var(--paper);
   color: var(--ink);
   font-weight: 850;
+}
+
+.setup-flow-strip article p {
+  margin: 10px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
 .setup-flow-strip b {
@@ -3413,6 +3422,12 @@ h1 {
 .setup-support-line a {
   color: var(--accent);
   font-weight: 850;
+}
+
+@media (max-width: 900px) {
+  .setup-flow-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {

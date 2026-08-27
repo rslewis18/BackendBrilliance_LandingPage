@@ -12,7 +12,7 @@ The site now supports:
 - `/start` four-question fit check with qualified, low-fit, and complex outcomes
 - `/api/audit-request` email notification endpoint
 - Post-sale Stripe Payment Link or invoice flow for approved solutions
-- `/thank-you` post-purchase setup choice (self-service intake or Chloe implementation call)
+- `/thank-you` post-purchase setup choice (self-service intake or implementation call)
 - `/onboarding` reusable multi-service business intake form
 - `/onboarding-success` confirmation page
 - Cloudflare Pages Functions submission endpoint
@@ -117,7 +117,7 @@ VITE_CALENDAR_URL=
 VITE_SUPPORT_EMAIL=
 VITE_REVENUE_AUDIT_URL=
 VITE_STRIPE_PAYMENT_LINK=
-VITE_IMPLEMENTATION_CALENDAR_URL=
+VITE_IMPLEMENTATION_SCHEDULING_URL=
 VITE_HOME_SERVICES_VSL_URL=
 VITE_LEGAL_VSL_URL=
 VITE_MEDSPA_DENTAL_VSL_URL=
@@ -260,7 +260,7 @@ create a distinct growth-review sheet/webhook payload with submission type
 
 Before production launch:
 
-1. Confirm the Cal.com URL.
+1. Configure and confirm the customer and implementation scheduling URLs.
 2. Configure Google Sheets Apps Script and test a real submission.
 3. Configure email notification credentials and test delivery for both
    `/api/audit-request` and `/api/onboarding`.
