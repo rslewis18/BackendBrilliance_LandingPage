@@ -1,359 +1,224 @@
+import { useMemo, useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
-import {
-  ArrowRight,
-  Check,
-  CheckCircle2,
-  CreditCard,
-  FileText,
-  HelpCircle,
-  MessageCircle,
-  Rocket,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarDays, Check, CheckCircle2 } from "lucide-react";
 import { PageMeta } from "../components/PageMeta";
 import { SimpleHeader } from "../components/SimpleHeader";
 import { LINKS } from "../config/links";
 import { OFFER_CONFIG } from "../config/offers";
 import { trackEvent } from "../utils/tracking";
 
-const sanitizeBusinessName = (value: string | null) => {
-  if (!value) {
-    return "";
-  }
+type VerticalKey = "home-services" | "legal" | "medspa-dental";
+type FitAnswers = { businessType: string; leadRange: string; handling: string; goals: string[] };
+type FitResult = "qualified" | "low-fit" | "complex";
 
-  return value.replace(/[<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 80);
+type FitCheckConfig = {
+  key: VerticalKey;
+  label: string;
+  returnPath: string;
+  intro: string;
+  businessQuestion: string;
+  businessOptions: readonly string[];
+  volumeQuestion: string;
+  handlingQuestion: string;
+  handlingOptions: readonly string[];
+  priorityQuestion: string;
+  priorities: readonly string[];
+  lowFitCopy: string;
+  complexCopy: string;
+  qualifiedCopy: string;
 };
 
-const howItWorksIcons = [CreditCard, FileText, MessageCircle, Rocket];
+const leadRanges = ["Under 20", "20–50", "51–100", "101–250", "250+"] as const;
+
+const fitCheckConfigs: Record<VerticalKey, FitCheckConfig> = {
+  "home-services": {
+    key: "home-services",
+    label: "Home Service Conversion System",
+    returnPath: "/home-services",
+    intro: "Four quick questions help us confirm whether the standard agent fits your lead, estimate, and service-booking workflow.",
+    businessQuestion: "What type of home-service business do you operate?",
+    businessOptions: ["HVAC", "Plumbing", "Electrical", "Roofing", "Remodeling", "Restoration", "Tree service", "Junk removal", "Other home service"],
+    volumeQuestion: "Approximately how many new leads or homeowner inquiries does your business receive in a typical month?",
+    handlingQuestion: "How are new leads and missed calls currently handled?",
+    handlingOptions: ["Owner/team responds manually", "Receptionist/front desk", "Appointment setter / inside sales", "Call center", "Marketing or sales agency", "CRM automation", "Other"],
+    priorityQuestion: "What would you most like the AI Lead Booking Agent to help with?",
+    priorities: ["Faster new-lead response", "Missed-call recovery", "Lead qualification", "Automated follow-up", "Booking estimates/service appointments", "Appointment reminders", "No-show recovery", "Old-lead reactivation"],
+    lowFitCopy: "The agent works best for service businesses already generating a steady stream of homeowner inquiries and wanting to convert more of them into estimates, appointments, and booked jobs. It does not generate leads on its own.",
+    complexCopy: "Your lead volume may require a customized routing, capacity, calendar, or multi-location implementation beyond the standard setup.",
+    qualifiedCopy: "Based on what you've shared, the Brilliance AI Lead Booking Agent may be a strong fit for your lead, estimate, and service-booking process.",
+  },
+  legal: {
+    key: "legal",
+    label: "Legal Intake & Conversion System",
+    returnPath: "/legal",
+    intro: "Four quick questions help us confirm whether the standard agent fits your prospective-client intake and consultation workflow.",
+    businessQuestion: "What type of consumer-facing law practice do you operate?",
+    businessOptions: ["Personal injury", "Workers' compensation", "Criminal defense", "Family law", "Immigration", "Bankruptcy", "Employment law", "Estate planning / probate", "Other consumer law"],
+    volumeQuestion: "Approximately how many new prospective-client inquiries does your firm receive in a typical month?",
+    handlingQuestion: "How are new inquiries and preliminary intake currently handled?",
+    handlingOptions: ["Attorneys respond directly", "Receptionist/front desk", "Internal intake team", "Call center / answering service", "Marketing or intake agency", "CRM/intake automation", "Other"],
+    priorityQuestion: "What would you most like the AI Lead Booking Agent to support?",
+    priorities: ["Immediate inquiry response", "Missed-call follow-up", "Preliminary intake collection", "Firm-defined screening questions", "Consultation booking", "Confirmations and reminders", "No-show recovery", "Old-inquiry reactivation"],
+    lowFitCopy: "The system works best for firms already receiving a steady flow of prospective-client inquiries and wanting more qualified people to reach a scheduled consultation. It does not generate inquiries or determine whether someone has a valid case.",
+    complexCopy: "Your inquiry volume may require customized intake routing, screening workflows, practice-area logic, locations, or CRM capacity beyond the standard implementation.",
+    qualifiedCopy: "Based on what you've shared, the Brilliance AI Lead Booking Agent may be a strong fit for your firm's preliminary intake, follow-up, and consultation-booking workflow.",
+  },
+  "medspa-dental": {
+    key: "medspa-dental",
+    label: "Consultation Conversion System",
+    returnPath: "/medspa-dental",
+    intro: "Four quick questions help us confirm whether the standard agent fits your inquiry, consultation, and appointment-booking workflow.",
+    businessQuestion: "What type of consultation-driven business do you operate?",
+    businessOptions: ["Med spa", "Cosmetic dentistry", "Implant dentistry", "Orthodontics", "Aesthetic practice", "Wellness clinic", "Other appointment-based business"],
+    volumeQuestion: "Approximately how many new prospect or patient inquiries does your business receive in a typical month?",
+    handlingQuestion: "How are new inquiries and consultation bookings currently handled?",
+    handlingOptions: ["Owner/provider responds", "Front desk / receptionist", "Patient or treatment coordinator", "Appointment setter / inside sales", "Call center", "CRM/booking automation", "Other"],
+    priorityQuestion: "What would you most like the AI Lead Booking Agent to help with?",
+    priorities: ["Immediate inquiry response", "Missed-call recovery", "Treatment-interest questions", "Lead follow-up", "Consultation booking", "Appointment reminders", "No-show recovery", "Old-lead reactivation"],
+    lowFitCopy: "The agent works best for businesses already generating a steady stream of inquiries and wanting to turn more of them into booked consultations and appointments. It does not generate leads or provide medical advice.",
+    complexCopy: "Your inquiry volume may require customized location routing, booking capacity, treatment-interest workflows, calendars, or CRM integration beyond the standard setup.",
+    qualifiedCopy: "Based on what you've shared, the Brilliance AI Lead Booking Agent may be a strong fit for your inquiry follow-up, consultation, and appointment-booking process.",
+  },
+};
+
+const initialAnswers: FitAnswers = { businessType: "", leadRange: "", handling: "", goals: [] };
+
+function getVertical(value: string | null): VerticalKey {
+  return value === "legal" || value === "medspa-dental" ? value : "home-services";
+}
 
 export function StartPage() {
   const [searchParams] = useSearchParams();
-  const shouldReduceMotion = useReducedMotion();
-  const businessName = sanitizeBusinessName(searchParams.get("business"));
-  const hasAuditContext =
-    Boolean(businessName) ||
-    searchParams.has("audit") ||
-    searchParams.get("source") === "audit";
-  const checkoutCancelled = searchParams.get("checkout") === "cancelled";
-  const reveal = shouldReduceMotion
-    ? {}
-    : {
-        initial: { opacity: 0, y: 16 },
-        animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] as const },
-      };
+  const config = fitCheckConfigs[getVertical(searchParams.get("vertical"))];
+  const [answers, setAnswers] = useState(initialAnswers);
+  const [step, setStep] = useState(0);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<FitResult | null>(null);
 
-  const personalizedMessage = businessName
-    ? `Based on the opportunities identified for ${businessName}, this is the next step we recommend.`
-    : hasAuditContext
-      ? "Based on the opportunities identified in your audit, this is the next step we recommend."
-      : "Use this page when Backend Brilliance has sent you here after a conversation, proposal, or custom payment link.";
+  const questions = useMemo(() => [
+    { legend: config.businessQuestion, options: config.businessOptions, value: answers.businessType, field: "businessType" as const, multiple: false },
+    { legend: config.volumeQuestion, options: leadRanges, value: answers.leadRange, field: "leadRange" as const, multiple: false },
+    { legend: config.handlingQuestion, options: config.handlingOptions, value: answers.handling, field: "handling" as const, multiple: false },
+    { legend: config.priorityQuestion, options: config.priorities, value: answers.goals, field: "goals" as const, multiple: true },
+  ], [answers, config]);
 
-  const summaryDetails = [
-    "Custom payment link or invoice after discovery",
-    "Scope confirmed before work begins",
-    "Generic thank-you page after payment",
-    "Universal onboarding follows after the next step is complete",
-    "Backend Brilliance will follow up if anything else is needed",
-  ];
+  const currentQuestion = questions[step];
+  const progress = ((step + 1) / questions.length) * 100;
+  const isCurrentAnswered = currentQuestion.multiple ? answers.goals.length > 0 : Boolean(currentQuestion.value);
 
-  const planDetails = [
-    {
-      title: "Cancellation policy",
-      copy: OFFER_CONFIG.policies.cancellation,
-    },
-    {
-      title: "Third-party software and usage costs",
-      copy: OFFER_CONFIG.policies.thirdPartyCosts,
-    },
-    {
-      title: "Ongoing edits",
-      copy: OFFER_CONFIG.policies.ongoingEditsScope,
-    },
-    {
-      title: "Setup-fee clarification",
-      copy: OFFER_CONFIG.policies.setupFeeLanguage,
-    },
-  ];
+  const chooseSingle = (field: "businessType" | "leadRange" | "handling", value: string) => {
+    setAnswers((current) => ({ ...current, [field]: value }));
+    setError("");
+  };
 
-  const conciseFaqs = [
-    {
-      question: "Should I use this page before talking with Backend Brilliance?",
-      answer:
-        "No. This page is intended for prospects who already discussed a recommended solution, proposal, or payment path.",
-    },
-    {
-      question: "What happens after payment or approval?",
-      answer:
-        "You will be directed to the universal business intake so Backend Brilliance can collect the details needed for setup.",
-    },
-    {
-      question: "What if I am not sure which solution I need?",
-      answer:
-        "Book a growth review first. Backend Brilliance will help identify the bottleneck and recommend the right system.",
-    },
-    {
-      question: "Are third-party costs included?",
-      answer: OFFER_CONFIG.policies.thirdPartyCosts,
-    },
-  ];
+  const toggleGoal = (goal: string) => {
+    setAnswers((current) => ({
+      ...current,
+      goals: current.goals.includes(goal) ? current.goals.filter((item) => item !== goal) : [...current.goals, goal],
+    }));
+    setError("");
+  };
+
+  const next = () => {
+    if (!isCurrentAnswered) {
+      setError(currentQuestion.multiple ? "Select at least one priority." : "Choose one option to continue.");
+      return;
+    }
+    setError("");
+    setStep((current) => Math.min(current + 1, questions.length - 1));
+  };
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (answers.goals.length === 0) {
+      setError("Select at least one priority.");
+      return;
+    }
+    const fitResult: FitResult = answers.leadRange === "Under 20" ? "low-fit" : answers.leadRange === "250+" ? "complex" : "qualified";
+    setResult(fitResult);
+    trackEvent("fit_check_completed", {
+      vertical: config.key,
+      businessType: answers.businessType,
+      leadRange: answers.leadRange,
+      handling: answers.handling,
+      priorities: answers.goals.join(", "),
+      result: fitResult,
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const restart = () => {
+    setAnswers(initialAnswers);
+    setStep(0);
+    setResult(null);
+    setError("");
+  };
 
   return (
     <>
-      <PageMeta
-        title="Next Step | Backend Brilliance"
-        description="Confirm the right Backend Brilliance solution before payment or onboarding."
-        path={OFFER_CONFIG.routes.start}
-        noindex
-      />
+      <PageMeta title={`${config.label} Fit Check | Backend Brilliance`} description={`Complete a short ${config.label} fit check before setting up your AI Lead Booking Agent.`} path={OFFER_CONFIG.routes.start} noindex />
       <SimpleHeader />
-
-      <main className="flow-page start-page">
-        <section className="start-hero section-shell" aria-labelledby="start-title">
-          <motion.div className="start-copy" {...reveal}>
-            <p className="eyebrow">Backend Brilliance setup</p>
-            {businessName && <p className="welcome-line">Welcome, {businessName}.</p>}
-            <h1 id="start-title">Confirm the Right Next Step</h1>
-            <p className="start-subhead">
-              Backend Brilliance solutions are scoped after a conversation.
-            </p>
-            <p className="start-intro">
-              We do not send every business into one public checkout. After
-              discovery, you&apos;ll receive the appropriate proposal, invoice,
-              or Stripe payment link for the solution we recommend.
-            </p>
-            <p className="start-personal-note">{personalizedMessage}</p>
-
-            {checkoutCancelled && (
-              <div className="notice-card" role="status">
-                Your checkout was not completed. No payment was processed. You
-                can try again whenever you&apos;re ready.
+      <main className="flow-page fit-check-page">
+        {!result ? (
+          <section className="fit-check-shell section-shell" aria-labelledby="fit-check-title">
+            <div className="fit-check-intro">
+              <p className="eyebrow">{config.label} · Two-minute fit check</p>
+              <h1 id="fit-check-title">Let&apos;s Make Sure the Agent Fits Your Workflow.</h1>
+              <p>{config.intro} This is pre-purchase qualification, not onboarding.</p>
+            </div>
+            <form className="fit-check-card" onSubmit={submit} noValidate>
+              <div className="fit-progress" aria-label={`Question ${step + 1} of ${questions.length}`}>
+                <div><span>Question {step + 1} of {questions.length}</span><strong>{Math.round(progress)}%</strong></div>
+                <i aria-hidden="true"><b style={{ width: `${progress}%` }} /></i>
               </div>
-            )}
-
-            <div className="start-action-row">
-              <a
-                className="button button-primary"
-                href={LINKS.booking}
-                onClick={() => trackEvent("booking_click", { location: "start_hero" })}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Find the Right Solution
-                <ArrowRight size={18} />
-              </a>
-              <a
-                className="button button-secondary"
-                href={LINKS.booking}
-                onClick={() => trackEvent("booking_click", { location: "start_hero" })}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Book a Growth Review
-              </a>
-            </div>
-          </motion.div>
-
-          <motion.aside className="start-purchase-card" {...reveal}>
-            <p className="eyebrow">Start here</p>
-            <h2>Need a custom payment link?</h2>
-            <p>
-              Book or continue your growth review first. Once scope is clear,
-              Backend Brilliance can send the correct Stripe link, invoice, or
-              proposal for your setup.
-            </p>
-            <a
-              className="button button-primary"
-              href={LINKS.booking}
-              onClick={() => trackEvent("booking_click", { location: "start_card" })}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Find the Right Solution
-              <ArrowRight size={18} />
-            </a>
-            <small>
-              If you already paid, use the thank-you or onboarding link sent
-              with your payment confirmation.
-            </small>
-          </motion.aside>
-        </section>
-
-        <section className="start-section section-shell" aria-labelledby="included-title">
-          <div className="section-heading centered compact-heading">
-            <p className="eyebrow">What is included</p>
-            <h2 id="included-title">Your setup depends on the recommended solution.</h2>
-          </div>
-          <div className="start-outcome-grid">
-            {[
-              "A clear implementation path after discovery",
-              "A universal onboarding step for business details",
-              "Service-specific setup questions where needed",
-              "Follow-up from Backend Brilliance if access or clarification is required",
-            ].map((feature) => (
-              <article className="start-outcome-card" key={feature}>
-                <CheckCircle2 size={20} />
-                <p>{feature}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="start-section section-shell" aria-labelledby="works-title">
-          <div className="section-heading centered compact-heading">
-            <p className="eyebrow">How it works</p>
-            <h2 id="works-title">From recommendation to setup.</h2>
-          </div>
-          <div className="start-step-grid">
-            {[
-              {
-                title: "Confirm the next step",
-                copy: "Review the recommended solution, scope, and next step.",
-              },
-              {
-                title: "Complete onboarding",
-                copy: "After payment or approval, tell us about your business, goals, and current bottleneck.",
-              },
-              {
-                title: "We prepare implementation",
-                copy: "Backend Brilliance reviews the details and starts the agreed setup.",
-              },
-              {
-                title: "Review and launch",
-                copy: "When applicable, you review or test the setup before final launch or handoff.",
-              },
-            ].map((step, index) => {
-              const Icon = howItWorksIcons[index] || Check;
-              return (
-                <article className="start-step-card" key={step.title}>
-                  <span>0{index + 1}</span>
-                  <Icon size={22} />
-                  <h3>{step.title}</h3>
-                  <p>{step.copy}</p>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-
-        <section
-          className="start-section section-shell"
-          id="next-step"
-          aria-labelledby="summary-title"
-        >
-          <div className="start-summary-card">
-            <div>
-              <p className="eyebrow">Offer summary</p>
-              <h2 id="summary-title">Custom Payment Comes After Discovery</h2>
-              <p>
-                Backend Brilliance uses customized payment links, invoices, or
-                proposals after the right solution has been identified.
-              </p>
-              <ul className="summary-check-list">
-                {summaryDetails.map((detail) => (
-                  <li key={detail}>
-                    <Check size={16} />
-                    {detail}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="start-price-panel">
-              <span>Backend Brilliance setup</span>
-              <strong>Talk</strong>
-              <small>step confirmed before work begins</small>
-              <p>
-                Start with the conversation so the solution, scope, and payment
-                path match your actual business problem.
-              </p>
-              <a
-                className="button button-primary"
-                href={LINKS.booking}
-                onClick={() => trackEvent("booking_click", { location: "start_summary" })}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Find the Right Solution
-                <ArrowRight size={18} />
-              </a>
-              <small>
-                Stripe payment links and invoices are sent manually after scope
-                is confirmed.
-              </small>
-            </div>
-          </div>
-        </section>
-
-        <section className="start-section section-shell" aria-labelledby="faq-title">
-          <div className="section-heading centered compact-heading">
-            <p className="eyebrow">FAQs</p>
-            <h2 id="faq-title">Quick questions before you start.</h2>
-          </div>
-          <div className="faq-list start-faq-list">
-            {conciseFaqs.map((faq) => (
-              <details key={faq.question}>
-                <summary>
-                  {faq.question}
-                  <span>+</span>
-                </summary>
-                <p>{faq.answer}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-
-        <section
-          className="start-section section-shell"
-          id="plan-details"
-          aria-labelledby="details-title"
-        >
-          <details className="plan-details-card">
-            <summary>
-              <span>
-                <HelpCircle size={20} />
-                <strong id="details-title">Important plan details</strong>
-              </span>
-              <b>+</b>
-            </summary>
-            <div className="plan-details-list">
-              {planDetails.map((detail) => (
-                <article key={detail.title}>
-                  <h3>{detail.title}</h3>
-                  <p>{detail.copy}</p>
-                </article>
-              ))}
-            </div>
-          </details>
-        </section>
-
-        <section className="start-support-card section-shell">
-          <div>
-            <h2>Need help before starting?</h2>
-            <p>
-              Send a quick note and Backend Brilliance will help you choose the
-              cleanest next step.
-            </p>
-          </div>
-          <a className="button button-secondary" href={LINKS.supportEmail}>
-            {OFFER_CONFIG.site.supportEmail}
-          </a>
-        </section>
+              <fieldset>
+                <legend>{currentQuestion.legend}</legend>
+                {currentQuestion.multiple && <p className="fit-hint">Select all that apply.</p>}
+                <div className="fit-option-grid">
+                  {currentQuestion.options.map((option) => {
+                    const checked = currentQuestion.multiple ? answers.goals.includes(option) : currentQuestion.value === option;
+                    return (
+                      <label className={`fit-option ${checked ? "is-selected" : ""}`} key={option}>
+                        <input checked={checked} name={currentQuestion.field} onChange={() => currentQuestion.multiple ? toggleGoal(option) : chooseSingle(currentQuestion.field as "businessType" | "leadRange" | "handling", option)} type={currentQuestion.multiple ? "checkbox" : "radio"} value={option} />
+                        <span>{option}</span>{checked && <Check size={17} aria-hidden="true" />}
+                      </label>
+                    );
+                  })}
+                </div>
+              </fieldset>
+              {error && <p className="fit-error" role="alert">{error}</p>}
+              <div className="fit-actions">
+                <button className="button button-secondary" disabled={step === 0} onClick={() => { setStep((current) => Math.max(current - 1, 0)); setError(""); }} type="button"><ArrowLeft size={18} /> Back</button>
+                {step < questions.length - 1 ? <button className="button button-primary" onClick={next} type="button">Continue <ArrowRight size={18} /></button> : <button className="button button-primary" type="submit">See My Result <ArrowRight size={18} /></button>}
+              </div>
+            </form>
+            <p className="fit-human-path">Have questions before getting started? <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">Book a call.</a></p>
+          </section>
+        ) : <FitResultPanel config={config} result={result} onRestart={restart} />}
       </main>
-
-      <footer className="flow-footer section-shell">
-        <div>
-          <strong>Backend Brilliance</strong>
-          <p>Client acquisition systems for local service businesses.</p>
-        </div>
-        <nav aria-label="Start page footer links">
-          <Link to={OFFER_CONFIG.routes.home}>Main website</Link>
-          <a href={LINKS.supportEmail}>{OFFER_CONFIG.site.supportEmail}</a>
-          <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">
-            Strategy call
-          </a>
-        </nav>
-      </footer>
     </>
+  );
+}
+
+function FitResultPanel({ config, result, onRestart }: { config: FitCheckConfig; result: FitResult; onRestart: () => void }) {
+  if (result === "low-fit") {
+    return <section className="fit-result-card section-shell"><p className="eyebrow">A better first step</p><h1>Let&apos;s Build More Inquiry Flow First</h1><p className="hero-lead">{config.lowFitCopy}</p><p>Let&apos;s talk about whether a lead-generation or broader conversion plan makes more sense right now.</p><div className="hero-actions"><a className="button button-primary" href={LINKS.booking} target="_blank" rel="noopener noreferrer"><CalendarDays size={18} /> Book a Call</a><button className="button button-secondary" onClick={onRestart} type="button">Review My Answers</button></div></section>;
+  }
+  if (result === "complex") {
+    return <section className="fit-result-card section-shell"><p className="eyebrow">Custom configuration recommended</p><h1>Let&apos;s Talk First</h1><p className="hero-lead">{config.complexCopy}</p><p>We&apos;ll review the workflow before recommending the right configuration.</p><div className="hero-actions"><a className="button button-primary" href={LINKS.booking} target="_blank" rel="noopener noreferrer"><CalendarDays size={18} /> Book a Configuration Call</a><button className="button button-secondary" onClick={onRestart} type="button">Review My Answers</button></div></section>;
+  }
+
+  const paymentConfigured = Boolean(LINKS.stripePayment);
+  return (
+    <section className="fit-result-card qualified-result section-shell">
+      <div className="fit-result-heading"><span className="fit-result-icon"><CheckCircle2 size={28} /></span><div><p className="eyebrow">{config.label} · Fit check complete</p><h1>Your Business Looks Like a Fit</h1></div></div>
+      <p className="hero-lead">{config.qualifiedCopy}</p>
+      <div className="agent-offer-card">
+        <div className="agent-offer-main"><p className="eyebrow">AI Lead Booking Agent</p><div className="offer-price-row"><strong>$2,450</strong><span>/month</span></div><div className="implementation-price"><span>Implementation &amp; Customization</span><strong>$950 one-time</strong></div><ul>{["Customized around your business and vertical-specific workflow", "Qualification, routing, calendar, and lead-process configuration", "Integration setup within the agreed standard scope", "Testing, refinement, approval, and launch support"].map((item) => <li key={item}><Check size={17} /> {item}</li>)}</ul></div>
+        <aside className="agent-total-panel"><span>Due Today</span><strong>$3,400</strong><small>Then $2,450/month ongoing</small>{paymentConfigured ? <a className="button button-primary" href={LINKS.stripePayment} onClick={() => trackEvent("stripe_checkout_click", { offer: "ai_lead_booking_agent", vertical: config.key })} rel="noopener noreferrer">Set Up My Agent <ArrowRight size={18} /></a> : <><button className="button button-primary" disabled type="button">Set Up My Agent</button><small className="configuration-note">Checkout opens after the Stripe payment link is configured.</small></>}</aside>
+      </div>
+      <div className="qualified-secondary-row"><button className="text-button" onClick={onRestart} type="button">Review my answers</button><span>Have questions? <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">Book a call.</a></span></div>
+      <Link className="fit-return-link" to={config.returnPath}>← Back to {config.label}</Link>
+    </section>
   );
 }

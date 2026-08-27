@@ -6,11 +6,13 @@ Lucide site for Backend Brilliance.
 The site now supports:
 
 - Public homepage with consultative growth-system positioning
-- On-page personalized growth review request popup
-- `/start` payment/proposal handoff path for approved solutions
+- `/landing-backup` route that preserves the current main homepage
+- Vertical campaign landing pages for Home Services, Legal, and Med Spa/Dental
+- Home Services VSL funnel with an AI Lead Booking Agent fit check
+- `/start` four-question fit check with qualified, low-fit, and complex outcomes
 - `/api/audit-request` email notification endpoint
 - Post-sale Stripe Payment Link or invoice flow for approved solutions
-- `/thank-you` next-step page after payment or approval
+- `/thank-you` post-purchase setup choice (self-service intake or Chloe implementation call)
 - `/onboarding` reusable multi-service business intake form
 - `/onboarding-success` confirmation page
 - Cloudflare Pages Functions submission endpoint
@@ -43,7 +45,7 @@ dist
 
 ## Central configuration
 
-Editable offer, policy, route, Stripe, calendar, support, and site URL
+Editable offer, policy, route, checkout, calendar, VSL, support, and site URL
 configuration lives in:
 
 ```txt
@@ -56,17 +58,17 @@ Legacy CTA aliases are kept in:
 src/config/links.ts
 ```
 
-The homepage CTAs and `/start` handoff page both read from centralized
-configuration.
-
-The personalized growth review popup submits to `/api/audit-request` and sends
-a Resend email notification server-side. `VITE_REVENUE_AUDIT_URL` remains
-available for legacy Typeform links if needed, but it is not the primary public
-CTA.
+The Home Services VSL, fit check, checkout handoff, and post-purchase scheduling
+paths all read from centralized configuration. Blank external funnel URLs render
+honest disabled states instead of invented destinations.
 
 ## Routes
 
 - `/`
+- `/landing-backup`
+- `/home-services`
+- `/legal`
+- `/medspa-dental`
 - `/start`
 - `/thank-you`
 - `/onboarding`
@@ -114,6 +116,11 @@ VITE_SITE_URL=
 VITE_CALENDAR_URL=
 VITE_SUPPORT_EMAIL=
 VITE_REVENUE_AUDIT_URL=
+VITE_STRIPE_PAYMENT_LINK=
+VITE_IMPLEMENTATION_CALENDAR_URL=
+VITE_HOME_SERVICES_VSL_URL=
+VITE_LEGAL_VSL_URL=
+VITE_MEDSPA_DENTAL_VSL_URL=
 ```
 
 Private Cloudflare Pages Function variables for personalized growth review
@@ -139,9 +146,9 @@ Only `VITE_` variables are exposed to frontend browser code.
 
 ## Stripe Checkout
 
-Use hosted Stripe Checkout / Payment Links after discovery. Do not build a
-custom payment form and do not expose one universal public checkout link on the
-main website.
+Use a hosted Stripe Payment Link after a prospect completes the short fit check.
+The payment URL is configured with `VITE_STRIPE_PAYMENT_LINK`; no payment form or
+secret is implemented in the browser.
 
 Stripe success URL:
 
@@ -152,7 +159,7 @@ https://YOUR-DOMAIN.com/thank-you
 Stripe cancellation URL:
 
 ```txt
-https://YOUR-DOMAIN.com/start?checkout=cancelled
+https://YOUR-DOMAIN.com/home-services
 ```
 
 See [docs/stripe-checkout.md](docs/stripe-checkout.md).

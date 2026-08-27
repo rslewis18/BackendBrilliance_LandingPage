@@ -100,6 +100,7 @@ type SavedSubmission = {
 };
 
 const validServices = [
+  "AI Lead Booking Agent",
   "AI Receptionist",
   "AI Legal Intake System",
   "Lead Follow-Up Automation",
@@ -317,7 +318,7 @@ export function createSubmission(data: OnboardingPayload): SavedSubmission {
 }
 
 function getServiceSpecificDetails(data: OnboardingPayload) {
-  if (data.selectedService === "AI Receptionist") {
+  if (data.selectedService === "AI Receptionist" || data.selectedService === "AI Lead Booking Agent") {
     return stringifyDetails({
       businessHours: data.businessHours,
       callServices: data.callServices,
@@ -331,6 +332,12 @@ function getServiceSpecificDetails(data: OnboardingPayload) {
       receptionistTone: data.receptionistTone,
       notificationPreferences: data.notificationPreferences,
       specialCallInstructions: data.specialCallInstructions,
+      qualificationCriteria: data.qualificationCriteria,
+      currentCrm: data.currentCrm,
+      calendarSystem: data.calendarSystem,
+      currentFollowUpProcess: data.currentFollowUpProcess,
+      automationOutcome: data.automationOutcome,
+      neverAutomate: data.neverAutomate,
     });
   }
 

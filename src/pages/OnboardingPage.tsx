@@ -7,6 +7,7 @@ import { OFFER_CONFIG } from "../config/offers";
 import { trackEvent } from "../utils/tracking";
 
 type ServiceOption =
+  | "AI Lead Booking Agent"
   | "AI Receptionist"
   | "AI Legal Intake System"
   | "Lead Follow-Up Automation"
@@ -115,6 +116,7 @@ type ArrayField = "primaryGoals" | "followUpChannels" | "systemsInvolved";
 type FieldErrors = Partial<Record<keyof OnboardingData | "form", string>>;
 
 const serviceOptions: ServiceOption[] = [
+  "AI Lead Booking Agent",
   "AI Receptionist",
   "AI Legal Intake System",
   "Lead Follow-Up Automation",
@@ -278,6 +280,10 @@ function serviceFromParam(value: string | null): ServiceOption | "" {
 
   if (!normalized) {
     return "";
+  }
+
+  if (normalized.includes("leadbooking") || normalized.includes("bookingagent")) {
+    return "AI Lead Booking Agent";
   }
 
   if (normalized.includes("ai") || normalized.includes("receptionist")) {
@@ -640,28 +646,38 @@ function ServiceSpecificFields({
   updateField: (field: StringField, value: string) => void;
   updateArrayField: (field: ArrayField, option: string, checked: boolean) => void;
 }) {
-  if (data.selectedService === "AI Receptionist") {
+  if (data.selectedService === "AI Receptionist" || data.selectedService === "AI Lead Booking Agent") {
+    const isLeadBookingAgent = data.selectedService === "AI Lead Booking Agent";
     return (
       <>
         <div className="form-guidance">
-          <h2>AI Receptionist Setup</h2>
+          <h2>{isLeadBookingAgent ? "AI Lead Booking Agent Setup" : "AI Receptionist Setup"}</h2>
           <p>
-            Share the call-handling details you know now. Phone-number porting is
-            not required here.
+            Share the lead-handling details you know now. Phone-number porting is not required here.
           </p>
         </div>
         <TextField label="Business hours" field="businessHours" value={data.businessHours} error={errors.businessHours} onChange={updateField} />
         <TextField label="Current business phone number" field="currentBusinessPhone" value={data.currentBusinessPhone} error={errors.currentBusinessPhone} onChange={updateField} type="tel" inputMode="tel" />
         <SelectField label="Do you want after-hours answering?" field="afterHoursAnswering" value={data.afterHoursAnswering} error={errors.afterHoursAnswering} options={yesNoOptions} onChange={updateField} />
-        <SelectField label="Preferred receptionist tone" field="receptionistTone" value={data.receptionistTone} error={errors.receptionistTone} options={["Warm and friendly", "Professional and concise", "Casual and conversational", "Not sure yet"]} onChange={updateField} />
+        <SelectField label="Preferred agent tone" field="receptionistTone" value={data.receptionistTone} error={errors.receptionistTone} options={["Warm and friendly", "Professional and concise", "Casual and conversational", "Not sure yet"]} onChange={updateField} />
         <TextAreaField label="Main services customers call about" field="callServices" value={data.callServices} error={errors.callServices} onChange={updateField} />
-        <TextAreaField label="Information the receptionist should collect" field="informationToCollect" value={data.informationToCollect} error={errors.informationToCollect} onChange={updateField} />
+        <TextAreaField label="Information the agent should collect" field="informationToCollect" value={data.informationToCollect} error={errors.informationToCollect} onChange={updateField} />
         <TextAreaField label="How service requests should be handled" field="requestHandling" value={data.requestHandling} error={errors.requestHandling} onChange={updateField} />
         <TextAreaField label="Scheduling preferences" field="schedulingPreferences" value={data.schedulingPreferences} error={errors.schedulingPreferences} onChange={updateField} />
         <TextAreaField label="Common customer questions / FAQs" field="customerFaqs" value={data.customerFaqs} error={errors.customerFaqs} onChange={updateField} />
         <TextAreaField label="Escalation or urgent-call instructions" field="urgentInstructions" value={data.urgentInstructions} error={errors.urgentInstructions} onChange={updateField} />
         <TextAreaField label="Notification preferences" field="notificationPreferences" value={data.notificationPreferences} error={errors.notificationPreferences} onChange={updateField} />
         <TextAreaField label="Any special call-handling instructions" field="specialCallInstructions" value={data.specialCallInstructions} error={errors.specialCallInstructions} onChange={updateField} />
+        {isLeadBookingAgent && (
+          <>
+            <TextAreaField label="Lead qualification rules" field="qualificationCriteria" value={data.qualificationCriteria} error={errors.qualificationCriteria} onChange={updateField} />
+            <TextField label="Current CRM or customer-management system" field="currentCrm" value={data.currentCrm} error={errors.currentCrm} onChange={updateField} />
+            <TextField label="Existing calendar / scheduling system" field="calendarSystem" value={data.calendarSystem} error={errors.calendarSystem} onChange={updateField} />
+            <TextAreaField label="Current lead follow-up process" field="currentFollowUpProcess" value={data.currentFollowUpProcess} error={errors.currentFollowUpProcess} onChange={updateField} />
+            <TextAreaField label="Reminder, no-show, nurture, and old-lead preferences" field="automationOutcome" value={data.automationOutcome} error={errors.automationOutcome} onChange={updateField} />
+            <TextAreaField label="Anything the agent should never automate" field="neverAutomate" value={data.neverAutomate} error={errors.neverAutomate} onChange={updateField} />
+          </>
+        )}
       </>
     );
   }

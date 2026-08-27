@@ -21,6 +21,10 @@ Backend Brilliance is a Vite React app with Cloudflare Pages Functions.
 Confirm these routes load directly after deployment:
 
 - `/`
+- `/landing-backup`
+- `/home-services`
+- `/legal`
+- `/medspa-dental`
 - `/start`
 - `/thank-you`
 - `/onboarding`
@@ -35,6 +39,11 @@ VITE_SITE_URL=
 VITE_CALENDAR_URL=
 VITE_SUPPORT_EMAIL=
 VITE_REVENUE_AUDIT_URL=
+VITE_STRIPE_PAYMENT_LINK=
+VITE_IMPLEMENTATION_CALENDAR_URL=
+VITE_HOME_SERVICES_VSL_URL=
+VITE_LEGAL_VSL_URL=
+VITE_MEDSPA_DENTAL_VSL_URL=
 ```
 
 Set private variables for the personalized growth review request notification:

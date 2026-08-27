@@ -26,6 +26,16 @@ const supportEmail =
   import.meta.env.VITE_SUPPORT_EMAIL || "backendbrilliance@gmail.com";
 const revenueAuditUrl =
   import.meta.env.VITE_REVENUE_AUDIT_URL || "https://form.typeform.com/to/bpgvWxsk";
+const stripePaymentUrl = import.meta.env.VITE_STRIPE_PAYMENT_LINK?.trim() || "";
+const implementationCalendarUrl =
+  import.meta.env.VITE_IMPLEMENTATION_CALENDAR_URL?.trim() || "";
+const homeServicesVslUrl =
+  import.meta.env.VITE_HOME_SERVICES_VSL_URL?.trim() ||
+  import.meta.env.VITE_VSL_VIDEO_URL?.trim() ||
+  "";
+const legalVslUrl = import.meta.env.VITE_LEGAL_VSL_URL?.trim() || "";
+const medSpaDentalVslUrl =
+  import.meta.env.VITE_MEDSPA_DENTAL_VSL_URL?.trim() || "";
 
 export const OFFER_CONFIG = {
   site: {
@@ -36,6 +46,13 @@ export const OFFER_CONFIG = {
   external: {
     calendarUrl,
     revenueAuditUrl,
+    stripePaymentUrl,
+    implementationCalendarUrl,
+    vslUrls: {
+      homeServices: homeServicesVslUrl,
+      legal: legalVslUrl,
+      medSpaDental: medSpaDentalVslUrl,
+    },
   },
   routes: {
     home: "/",

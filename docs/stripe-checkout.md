@@ -1,21 +1,26 @@
-# Stripe Checkout Setup
+# Stripe Payment Link Setup
 
-Backend Brilliance may use hosted Stripe Checkout or Payment Links after a
-prospect has completed a conversation, proposal review, or approved payment
-path.
-
-The main public website should not force every visitor into one standardized
-product checkout. Use the Stripe link only for an agreed solution.
+The Home Services funnel sends prospects through the short `/start` fit check
+before showing the AI Lead Booking Agent offer. Only the qualified result exposes
+the hosted Stripe Payment Link.
 
 ## Payment Link
 
-Create the appropriate Stripe Payment Link or invoice for the approved Backend
-Brilliance solution inside Stripe, then send that hosted Stripe URL directly to
-the customer after discovery.
+Create the AI Lead Booking Agent Payment Link in Stripe with:
 
-Do not hard-code product-specific checkout links in frontend source. The public
-website should route prospects to a conversation first, not one universal
-checkout page.
+- AI Lead Booking Agent: `$2,450/month`
+- Implementation & Customization: `$950` one-time
+- Due at checkout: `$3,400`
+- Ongoing: `$2,450/month`
+
+Set the public Payment Link URL in the build environment:
+
+```env
+VITE_STRIPE_PAYMENT_LINK=https://buy.stripe.com/YOUR_REAL_PAYMENT_LINK
+```
+
+Do not place Stripe secret keys in any `VITE_` variable. The browser receives
+only the hosted payment URL.
 
 ## Success URL
 
@@ -25,28 +30,15 @@ Configure Stripe to redirect successful checkout to:
 https://YOUR-DOMAIN.com/thank-you
 ```
 
-If the production domain is `https://backendbrilliance.com`, use:
-
-```txt
-https://backendbrilliance.com/thank-you
-```
-
-If useful, Stripe can append a `service` or `offer` query parameter so the
-universal onboarding page can preselect the selected solution.
+The `/thank-you` page offers self-service setup or an implementation interview
+with Chloe. It includes a notice that the route itself does not independently
+verify payment; true payment verification still belongs in Stripe or a
+server-side webhook if one is added later.
 
 ## Cancellation URL
 
 Configure Stripe cancellation to return to:
 
 ```txt
-https://YOUR-DOMAIN.com/start?checkout=cancelled
+https://YOUR-DOMAIN.com/home-services
 ```
-
-If the production domain is `https://backendbrilliance.com`, use:
-
-```txt
-https://backendbrilliance.com/start?checkout=cancelled
-```
-
-The `/thank-you` page uses safe language and does not treat route access alone
-as webhook-verified proof of payment.

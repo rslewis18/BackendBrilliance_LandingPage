@@ -8,6 +8,7 @@ import { OnboardingPage } from "./pages/OnboardingPage";
 import { OnboardingSuccessPage } from "./pages/OnboardingSuccessPage";
 import { StartPage } from "./pages/StartPage";
 import { ThankYouPage } from "./pages/ThankYouPage";
+import { VerticalLandingPage, verticalPages } from "./pages/VerticalLandingPage";
 import { trackEvent } from "./utils/tracking";
 import {
   ArrowRight,
@@ -55,7 +56,7 @@ const problemSolutions: ProblemSolution[] = [
     icon: PhoneCall,
     title: "Capture them.",
     copy: "Make it easier to answer demand, qualify inquiries, and route people to the next step.",
-    bullets: ["AI Receptionist", "Call capture", "Scheduling", "After-hours handling"],
+    bullets: ["AI Lead Booking Agent", "Missed-call recovery", "Qualification", "Calendar booking"],
   },
   {
     problem: "Slow follow-up?",
@@ -111,8 +112,8 @@ const problemSolutions: ProblemSolution[] = [
 const serviceCards = [
   {
     icon: Bot,
-    title: "AI Receptionist",
-    copy: "Capture calls, answer common questions, qualify inquiries, schedule appointments, and handle after-hours demand.",
+    title: "Home Service Conversion System",
+    copy: "Turn more existing inquiries into booked jobs with instant response, missed-call recovery, qualification, follow-up, booking, reminders, reactivation, and CRM/calendar automation.",
   },
   {
     icon: FileText,
@@ -191,9 +192,9 @@ const faqs = [
       "No. The first step is a conversation about the bottleneck. From there, Backend Brilliance recommends the most practical solution.",
   },
   {
-    question: "Is AI Receptionist still available?",
+    question: "What is the Home Service Conversion System?",
     answer:
-      "Yes. AI Receptionist is one available solution when missed calls, after-hours demand, qualification, or scheduling are part of the problem.",
+      "It is a lead-conversion workflow for home-service businesses. The AI Lead Booking Agent powers response, follow-up, qualification, and booking while the broader system supports missed calls, reminders, no-shows, reactivation, nurture, CRM, and calendar workflows.",
   },
   {
     question: "Do you work with law firms?",
@@ -213,7 +214,7 @@ const faqs = [
 ] as const;
 
 const footerServices = [
-  "AI Receptionist",
+  "Home Service Conversion System",
   "AI Legal Intake",
   "Lead Follow-Up Automation",
   "Website Conversion Systems",
@@ -255,6 +256,19 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/landing-backup" element={<HomePage />} />
+      <Route
+        path={verticalPages.homeServices.path}
+        element={<VerticalLandingPage page={verticalPages.homeServices} />}
+      />
+      <Route
+        path={verticalPages.legal.path}
+        element={<VerticalLandingPage page={verticalPages.legal} />}
+      />
+      <Route
+        path={verticalPages.medspaDental.path}
+        element={<VerticalLandingPage page={verticalPages.medspaDental} />}
+      />
       <Route path={OFFER_CONFIG.routes.start} element={<StartPage />} />
       <Route path={OFFER_CONFIG.routes.thankYou} element={<ThankYouPage />} />
       <Route path={OFFER_CONFIG.routes.onboarding} element={<OnboardingPage />} />
