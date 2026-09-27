@@ -58,6 +58,11 @@ const homeFaqs = [
       "No. A receptionist answers phones. This is a conversion pipeline: every call becomes a qualified lead — captured, qualified, booked, handed off to your team with the full details, and followed up automatically. The AI is the first layer that makes sure an opportunity never disappears; your team takes over from there.",
   },
   {
+    question: "Will my customers mind that it's AI?",
+    answer:
+      "They won't know, and they won't care. Nobody calls your business hoping for small talk — they call because something needs fixing, and they want it handled now. What they get is a fast, natural text conversation that answers in seconds. Your clients don't want a human. They want their needs met.",
+  },
+  {
     question: "How fast does it respond?",
     answer:
       "Within seconds of the call or new inquiry — 24 hours a day, 7 days a week, including nights, weekends, and holidays.",
@@ -240,13 +245,14 @@ function HomePage() {
         <main>
           <section className="vertical-hero section-shell" id="top">
             <motion.div className="vertical-hero-copy" {...reveal}>
-              <p className="vertical-eyebrow">AI Lead Booking Agent</p>
-              <h1>Never miss a call.</h1>
+              <p className="vertical-eyebrow">AI Lead Booking Agent — for any business that takes calls</p>
+              <h1>Every missed call becomes a booked job.</h1>
               <p className="vertical-subheading">
-                When someone calls your business, they shouldn&apos;t have to
-                reach a human to become a lead. Our AI answers every call in
-                seconds — then qualifies, books, hands the qualified lead to
-                your team, and follows up — so no opportunity slips through.
+                Doesn&apos;t matter what industry you&apos;re in. If your
+                business runs on the phone, a missed call is missed money. Our
+                agent texts back every missed call in seconds, qualifies the
+                lead with your questions, and books them straight onto your
+                calendar — nights, weekends, and the middle of a job included.
               </p>
             </motion.div>
 
@@ -322,11 +328,28 @@ function HomePage() {
             </div>
           </section>
 
+          <section className="vertical-nevermiss section-shell">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <h2>When someone calls, you never miss it.</h2>
+            </motion.div>
+            <motion.p className="vertical-watch-line" {...reveal}>
+              The call goes unanswered. Seconds later, the caller gets a text.
+              Not a voicemail asking them to wait — a real conversation that
+              asks your questions and books them in. While your competitor is
+              still listening to their voicemail light blink, your calendar
+              just filled.
+            </motion.p>
+          </section>
+
           <section className="vertical-capabilities section-shell" id="home-who">
             <motion.div className="vertical-section-heading centered" {...reveal}>
-              <p className="vertical-eyebrow">Who it&apos;s for</p>
-              <h2>Built for the businesses that live on the phone.</h2>
+              <p className="vertical-eyebrow">Works anywhere the phone rings</p>
+              <h2>One agent. Any industry that lives on inbound calls.</h2>
             </motion.div>
+            <motion.p className="vertical-watch-line" {...reveal}>
+              Home services. Law firms. Med spas. Dental practices. If a missed
+              call costs you money, this is for you.
+            </motion.p>
             <div className="vertical-path-grid">
               {nichePaths.map((path) => (
                 <motion.div key={path.to} {...reveal}>
