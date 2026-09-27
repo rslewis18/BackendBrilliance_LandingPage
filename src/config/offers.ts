@@ -19,7 +19,7 @@ export type Offer = {
   popular?: boolean;
 };
 
-const siteUrl = import.meta.env.VITE_SITE_URL || "https://backendbrilliance.com";
+const siteUrl = import.meta.env.VITE_SITE_URL || "https://backendbrilliance.co";
 const calendarUrl =
   import.meta.env.VITE_CALENDAR_URL || "https://cal.com/backendbrilliance/15min";
 const supportEmail =
@@ -32,10 +32,10 @@ const implementationSchedulingUrl =
 const homeServicesVslUrl =
   import.meta.env.VITE_HOME_SERVICES_VSL_URL?.trim() ||
   import.meta.env.VITE_VSL_VIDEO_URL?.trim() ||
-  "";
-const legalVslUrl = import.meta.env.VITE_LEGAL_VSL_URL?.trim() || "";
+  "/demo-video.mp4";
+const legalVslUrl = import.meta.env.VITE_LEGAL_VSL_URL?.trim() || "/demo-video.mp4";
 const medSpaDentalVslUrl =
-  import.meta.env.VITE_MEDSPA_DENTAL_VSL_URL?.trim() || "";
+  import.meta.env.VITE_MEDSPA_DENTAL_VSL_URL?.trim() || "/demo-video.mp4";
 
 export const OFFER_CONFIG = {
   site: {
