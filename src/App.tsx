@@ -15,9 +15,8 @@ import {
   CalendarCheck,
   ClipboardList,
   Clock3,
+  MessageCircle,
   PhoneCall,
-  Play,
-  Plug,
   RefreshCcw,
   UserCheck,
   UsersRound,
@@ -53,6 +52,11 @@ function App() {
 }
 
 const homeFaqs = [
+  {
+    question: "Is this just an AI receptionist?",
+    answer:
+      "No. A receptionist answers phones. This is a conversion pipeline: every call becomes a qualified lead — captured, qualified, booked, handed off to your team with the full details, and followed up automatically. The AI is the first layer that makes sure an opportunity never disappears; your team takes over from there.",
+  },
   {
     question: "How fast does it respond?",
     answer:
@@ -91,19 +95,29 @@ const homeFaqs = [
 
 const homeSteps = [
   {
-    icon: Plug,
-    title: "Connect your phones",
-    copy: "We link the agent to your business line and calendar. Your number stays yours.",
+    icon: PhoneCall,
+    title: "Never miss a lead",
+    copy: "Every call gets answered in seconds — nights, weekends, holidays. No voicemail dead ends.",
+  },
+  {
+    icon: UserCheck,
+    title: "Qualify",
+    copy: "The agent asks your questions — service, location, urgency — and filters out the tire-kickers.",
   },
   {
     icon: CalendarCheck,
-    title: "Set your booking rules",
-    copy: "Services, qualifying questions, calendar — configured around how you work.",
+    title: "Book",
+    copy: "Qualified leads book straight onto your calendar, synced with your schedule.",
   },
   {
-    icon: Play,
-    title: "Answer, qualify, book",
-    copy: "The agent texts back missed calls in seconds, qualifies the lead, and books the job.",
+    icon: UsersRound,
+    title: "Handoff",
+    copy: "Your team gets the qualified lead with the full conversation — not a \u201csomeone called\u201d notification.",
+  },
+  {
+    icon: MessageCircle,
+    title: "Follow up",
+    copy: "Automatic follow-up texts keep the lead warm until your team takes over.",
   },
 ];
 
@@ -145,8 +159,13 @@ const homeCapabilities = [
   },
   {
     icon: UsersRound,
-    title: "Live handoff to your team",
-    copy: "The moment a human should step in, the agent hands over the full conversation.",
+    title: "Qualified handoff to your team",
+    copy: "Your team receives the qualified lead with the full conversation — not a missed-call notification that says \u201csomeone called.\u201d",
+  },
+  {
+    icon: MessageCircle,
+    title: "Automated follow-up",
+    copy: "After every call, the lead gets a follow-up text automatically — so they know they\u2019re taken care of until your team steps in.",
   },
 ];
 
@@ -187,7 +206,7 @@ function HomePage() {
   return (
     <>
       <PageMeta
-        description="Every missed call becomes a booked job. Backend Brilliance's AI Lead Booking Agent answers every missed call by text within seconds, qualifies the lead, and books the job. From $1,950/month."
+        description="When someone calls your business, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers instantly — then qualifies, books, hands off to your team, and follows up. From $1,950/month."
         path="/"
         title="Backend Brilliance | Every Missed Call Becomes a Booked Job"
       />
@@ -224,9 +243,10 @@ function HomePage() {
               <p className="vertical-eyebrow">AI Lead Booking Agent</p>
               <h1>Every missed call becomes a booked job.</h1>
               <p className="vertical-subheading">
-                Backend Brilliance&apos;s AI Lead Booking Agent answers every
-                missed call by text within seconds, qualifies the lead, and
-                books the job — so no opportunity slips through.
+                When someone calls your business, they shouldn&apos;t have to
+                reach a human to become a lead. Our AI answers in seconds —
+                then qualifies, books, hands the qualified lead to your team,
+                and follows up — so no opportunity slips through.
               </p>
             </motion.div>
 
@@ -257,7 +277,7 @@ function HomePage() {
           <section className="vertical-demo-section section-shell" id="demo">
             <motion.div className="vertical-section-heading centered" {...reveal}>
               <p className="vertical-eyebrow">Watch it work</p>
-              <h2>Thirty seconds. One missed call. One booked job.</h2>
+              <h2>Under a minute. One missed call. Qualified, booked, handed off.</h2>
             </motion.div>
             <motion.div {...reveal}>
               <div className="vertical-demo-panel is-video">
@@ -273,8 +293,9 @@ function HomePage() {
             </motion.div>
             <motion.p className="vertical-watch-line" {...reveal}>
               A dramatization of a real scenario — a homeowner calls after
-              hours, the agent texts back in seconds, qualifies the job, and
-              books the estimate. Watch the demo. It runs in under a minute.
+              hours, the agent texts back in seconds, qualifies the job, books
+              the estimate, hands the qualified lead to your team, and follows
+              up. Watch the demo. It runs in under a minute.
             </motion.p>
           </section>
 
@@ -285,7 +306,7 @@ function HomePage() {
           >
             <motion.div className="vertical-section-heading centered" {...reveal}>
               <p className="vertical-eyebrow">How it works</p>
-              <h2 id="home-how">Missed call in. Booked job out.</h2>
+              <h2 id="home-how">One pipeline. Every opportunity captured.</h2>
             </motion.div>
             <div className="vertical-how-grid">
               {homeSteps.map(({ icon: Icon, title, copy }, index) => (
@@ -358,8 +379,9 @@ function HomePage() {
               </p>
               <p>
                 Missed-call text-back, instant lead response, qualification,
-                calendar booking, confirmations and reminders, no-show recovery,
-                and CRM updates. Month-to-month. No long-term contract.
+                calendar booking, qualified handoff to your team, automated
+                follow-up, confirmations and reminders, no-show recovery, and
+                CRM updates. Month-to-month. No long-term contract.
               </p>
               <a
                 className="button button-primary vertical-primary"

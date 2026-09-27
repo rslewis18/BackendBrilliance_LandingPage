@@ -21,7 +21,6 @@ import {
   MessageCircle,
   PhoneCall,
   Play,
-  Plug,
   Plus,
   RefreshCcw,
   Scale,
@@ -102,16 +101,16 @@ const homeServices: VerticalPageConfig = {
   path: "/home-services",
   metaTitle: "AI Lead Booking Agent for Home Services | Backend Brilliance",
   metaDescription:
-    "Every missed call becomes a booked job. Backend Brilliance's AI Lead Booking Agent texts back missed calls in seconds, qualifies the lead, and books the job. From $1,950/month.",
+    "When someone calls your shop, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers instantly — then qualifies, books, hands off to your team, and follows up. From $1,950/month.",
   eyebrow: "AI Lead Booking Agent · Home Services",
   headline: "Every missed call becomes a booked job.",
   subheading:
-    "Backend Brilliance's AI Lead Booking Agent answers every missed call by text within seconds, qualifies the lead, and books the job — so no opportunity slips through.",
+    "When someone calls your shop, they shouldn't have to reach a human to become a lead. Our AI answers in seconds — qualifies the job, books the estimate, hands the qualified lead to your team, and follows up — so no opportunity slips through.",
   primaryCta: "Book a Demo",
   secondaryCta: "See It In Action",
-  demoHeading: "A missed plumbing call becomes a booked estimate in 30 seconds.",
+  demoHeading: "A missed plumbing call becomes a qualified, booked job in under a minute.",
   demoCopy:
-    "A dramatization of a real scenario — a homeowner calls after hours, the agent texts back in seconds, qualifies the job, and books the estimate.",
+    "A dramatization of a real scenario — a homeowner calls after hours, the agent texts back in seconds, qualifies the job, books the estimate, hands the qualified lead to your team, and follows up automatically.",
   heroWatchLine: "Watch the demo. It runs in under a minute.",
   demoLabel: "AI Lead Booking Agent demo",
   videoUrl: "/demo-video.mp4",
@@ -196,26 +195,41 @@ const homeServices: VerticalPageConfig = {
     },
     {
       icon: UsersRound,
-      title: "Live handoff to your team",
-      copy: "The moment a human should step in, the agent hands over the full conversation.",
+      title: "Qualified handoff to your team",
+      copy: "Your team receives the qualified job with the full conversation — not a missed-call notification that says \u201csomeone called.\u201d",
+    },
+    {
+      icon: MessageCircle,
+      title: "Automated follow-up",
+      copy: "After every call, the homeowner gets a follow-up text automatically — so they know they\u2019re taken care of until your tech steps in.",
     },
   ],
-  howItWorksTitle: "Missed call in. Booked job out.",
+  howItWorksTitle: "One pipeline. Every job captured.",
   howItWorks: [
     {
-      icon: Plug,
-      title: "Connect your phones",
-      copy: "We link the agent to your business line and calendar. Your number stays yours.",
+      icon: PhoneCall,
+      title: "Never miss a lead",
+      copy: "Every call gets answered in seconds — on a roof, under a sink, after hours. No voicemail dead ends.",
+    },
+    {
+      icon: UserCheck,
+      title: "Qualify the job",
+      copy: "The agent asks your questions — service needed, location, urgency — and filters out the tire-kickers.",
     },
     {
       icon: CalendarCheck,
-      title: "Set your booking rules",
-      copy: "Services, service area, qualifying questions, calendar — configured around how you work.",
+      title: "Book the estimate",
+      copy: "Qualified jobs book straight onto your calendar, synced with your schedule.",
     },
     {
-      icon: Play,
-      title: "Answer, qualify, book",
-      copy: "The agent texts back missed calls in seconds, qualifies the lead, and books the job.",
+      icon: UsersRound,
+      title: "Handoff",
+      copy: "Your team gets the qualified job with the full conversation — not a \u201csomeone called\u201d notification.",
+    },
+    {
+      icon: MessageCircle,
+      title: "Follow up",
+      copy: "Automatic follow-up texts keep the homeowner warm until your tech takes over.",
     },
   ],
   faqs: [
@@ -228,6 +242,11 @@ const homeServices: VerticalPageConfig = {
       question: "Does it replace my office staff?",
       answer:
         "No. It handles the first response, qualification, and booking — then hands off to your team with the full conversation. Your people focus on the work, not the phone tag.",
+    },
+    {
+      question: "Is this just an AI receptionist?",
+      answer:
+        "No. A receptionist answers phones. This is a conversion pipeline: every call becomes a qualified lead — captured, qualified, booked, handed off to your team with the full details, and followed up automatically. The AI is the first layer that makes sure an opportunity never disappears; your team takes over from there.",
     },
     {
       question: "What happens when a job needs a human?",
@@ -255,16 +274,16 @@ const legal: VerticalPageConfig = {
   path: "/legal",
   metaTitle: "AI Lead Booking Agent for Law Firms | Backend Brilliance",
   metaDescription:
-    "Every inquiry becomes a scheduled consultation. Backend Brilliance's AI Lead Booking Agent responds in seconds, collects preliminary intake, and books consultations. From $1,950/month.",
+    "When someone calls your firm, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers instantly — then collects intake, screens for case fit, books, hands off to your team, and follows up. From $1,950/month.",
   eyebrow: "AI Lead Booking Agent · Legal Intake",
   headline: "Every inquiry becomes a scheduled consultation.",
   subheading:
-    "Backend Brilliance's AI Lead Booking Agent answers every inquiry within seconds, collects preliminary intake, and books the consultation — so no potential client slips through. It supports your intake team and never gives legal advice.",
+    "When someone calls your firm, they shouldn't have to reach a human to become a lead. Our AI answers in seconds — collects preliminary intake, screens for case fit, books the consultation, hands the organized intake to your team, and follows up. It never gives legal advice.",
   primaryCta: "Book a Demo",
   secondaryCta: "See It In Action",
-  demoHeading: "A missed intake call becomes a booked consultation in under a minute.",
+  demoHeading: "A missed intake call becomes a qualified, booked consultation in under a minute.",
   demoCopy:
-    "A dramatization of a real scenario — a potential client calls during a hearing, the agent texts back in seconds, collects preliminary intake, and books the consultation.",
+    "A dramatization of a real scenario — a potential client calls during a hearing, the agent texts back in seconds, collects preliminary intake, screens for case fit, books the consultation, hands the organized intake to your team, and follows up.",
   heroWatchLine: "Watch the demo. It runs in under a minute.",
   demoLabel: "AI Lead Booking Agent demo",
   videoUrl: "/demo-video.mp4",
@@ -351,26 +370,41 @@ const legal: VerticalPageConfig = {
     },
     {
       icon: UsersRound,
-      title: "Live handoff to your team",
-      copy: "The moment a human should step in, the agent hands over the full conversation.",
+      title: "Qualified handoff to your team",
+      copy: "Your team receives the organized intake with the full conversation — ready for attorney review, not a missed-call notification that says \u201csomeone called.\u201d",
+    },
+    {
+      icon: MessageCircle,
+      title: "Automated follow-up",
+      copy: "After every inquiry, the potential client gets a follow-up text automatically — so they know they\u2019re taken care of until your team steps in.",
     },
   ],
-  howItWorksTitle: "Inquiry in. Consultation booked.",
+  howItWorksTitle: "One pipeline. Every inquiry captured.",
   howItWorks: [
     {
-      icon: Plug,
-      title: "Connect your lines",
-      copy: "We link the agent to your firm's lines, intake forms, and calendars.",
+      icon: PhoneCall,
+      title: "Never miss an inquiry",
+      copy: "Every call and form gets answered in seconds — after hours, during a hearing, on weekends.",
+    },
+    {
+      icon: ClipboardList,
+      title: "Preliminary intake",
+      copy: "The agent asks your firm's screening questions and organizes the answers.",
     },
     {
       icon: CalendarCheck,
-      title: "Set your intake rules",
-      copy: "Screening questions, practice areas, consultation types — configured around your firm.",
+      title: "Book the consultation",
+      copy: "Qualified inquiries book straight onto the calendar, synced with your schedule.",
     },
     {
-      icon: Play,
-      title: "Respond, collect, book",
-      copy: "The agent answers inquiries in seconds, collects preliminary intake, and books the consultation.",
+      icon: UsersRound,
+      title: "Handoff",
+      copy: "Your team gets the organized intake with the full conversation — ready for attorney review.",
+    },
+    {
+      icon: MessageCircle,
+      title: "Follow up",
+      copy: "Automatic follow-up texts keep the potential client warm until your team steps in.",
     },
   ],
   faqs: [
@@ -378,6 +412,11 @@ const legal: VerticalPageConfig = {
       question: "Does the agent give legal advice?",
       answer:
         "Never. It answers logistical questions, collects preliminary intake using your firm's screening questions, and books consultations. Everything is organized for attorney review.",
+    },
+    {
+      question: "Is this just an AI receptionist?",
+      answer:
+        "No. A receptionist answers phones. This is a conversion pipeline: every inquiry becomes a qualified lead — captured, screened for case fit, booked, handed off to your team with the full intake, and followed up automatically. The AI is the first layer that makes sure an opportunity never disappears; your team takes over from there.",
     },
     {
       question: "How fast does it respond?",
@@ -409,16 +448,16 @@ const medspaDental: VerticalPageConfig = {
   path: "/medspa-dental",
   metaTitle: "AI Lead Booking Agent for Med Spas & Dental | Backend Brilliance",
   metaDescription:
-    "Every inquiry becomes a booked consultation. Backend Brilliance's AI Lead Booking Agent responds in seconds, answers common questions, and books consultations. From $1,950/month.",
+    "When someone calls your practice, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers instantly — then identifies the treatment, qualifies, books, hands off to your staff, and follows up. From $1,950/month.",
   eyebrow: "AI Lead Booking Agent · Med Spa & Dental",
   headline: "Every inquiry becomes a booked consultation.",
   subheading:
-    "Backend Brilliance's AI Lead Booking Agent answers every inquiry within seconds, answers common questions, and books the consultation — so no potential patient slips through. It supports your front desk and never gives medical advice.",
+    "When someone calls your practice, they shouldn't have to reach a human to become a lead. Our AI answers in seconds — identifies the treatment they're after, qualifies, books the consultation, hands the qualified inquiry to your staff, and follows up. It never gives medical advice.",
   primaryCta: "Book a Demo",
   secondaryCta: "See It In Action",
-  demoHeading: "A missed call from a new patient becomes a booked consultation in under a minute.",
+  demoHeading: "A missed call from a new patient becomes a qualified, booked consultation in under a minute.",
   demoCopy:
-    "A dramatization of a real scenario — a potential patient calls after hours, the agent texts back in seconds, answers questions, and books the consultation.",
+    "A dramatization of a real scenario — a potential patient calls after hours, the agent texts back in seconds, answers common questions, books the consultation, hands the qualified inquiry to your staff, and follows up.",
   heroWatchLine: "Watch the demo. It runs in under a minute.",
   demoLabel: "AI Lead Booking Agent demo",
   videoUrl: "/demo-video.mp4",
@@ -505,26 +544,41 @@ const medspaDental: VerticalPageConfig = {
     },
     {
       icon: UsersRound,
-      title: "Live handoff to your team",
-      copy: "The moment a human should step in, the agent hands over the full conversation.",
+      title: "Qualified handoff to your team",
+      copy: "Your staff receives the qualified inquiry with the full conversation — not a missed-call notification that says \u201csomeone called.\u201d",
+    },
+    {
+      icon: MessageCircle,
+      title: "Automated follow-up",
+      copy: "After every inquiry, the patient gets a follow-up text automatically — so they know they\u2019re taken care of until your team steps in.",
     },
   ],
-  howItWorksTitle: "Inquiry in. Consultation booked.",
+  howItWorksTitle: "One pipeline. Every inquiry captured.",
   howItWorks: [
     {
-      icon: Plug,
-      title: "Connect your lines",
-      copy: "We link the agent to your business lines, forms, and provider calendars.",
+      icon: PhoneCall,
+      title: "Never miss an inquiry",
+      copy: "Every call and form gets answered in seconds — evenings, weekends, between appointments.",
+    },
+    {
+      icon: UserCheck,
+      title: "Identify and qualify",
+      copy: "The agent identifies the treatment they're after, answers common questions, and qualifies.",
     },
     {
       icon: CalendarCheck,
-      title: "Set your booking rules",
-      copy: "Treatments, qualifying questions, consultation types — configured around your practice.",
+      title: "Book the consultation",
+      copy: "Qualified inquiries book straight onto the calendar, synced with your providers.",
     },
     {
-      icon: Play,
-      title: "Answer, qualify, book",
-      copy: "The agent responds in seconds, answers common questions, and books the consultation.",
+      icon: UsersRound,
+      title: "Handoff",
+      copy: "Your staff gets the qualified inquiry with the full conversation — not a \u201csomeone called\u201d notification.",
+    },
+    {
+      icon: MessageCircle,
+      title: "Follow up",
+      copy: "Automatic follow-up texts keep the patient warm until your team steps in.",
     },
   ],
   faqs: [
@@ -532,6 +586,11 @@ const medspaDental: VerticalPageConfig = {
       question: "Does the agent give medical advice?",
       answer:
         "Never. It answers common questions about treatments, pricing ranges, and what to expect — then books the consultation so your providers handle the rest.",
+    },
+    {
+      question: "Is this just an AI receptionist?",
+      answer:
+        "No. A receptionist answers phones. This is a conversion pipeline: every inquiry becomes a qualified lead — captured, qualified, booked, handed off to your staff with the full conversation, and followed up automatically. The AI is the first layer that makes sure an opportunity never disappears; your team takes over from there.",
     },
     {
       question: "How fast does it respond?",
@@ -763,8 +822,9 @@ export function VerticalLandingPage({ page }: VerticalLandingPageProps) {
               </p>
               <p>
                 Missed-call text-back, instant lead response, qualification,
-                calendar booking, confirmations and reminders, no-show recovery,
-                and CRM updates. Month-to-month. No long-term contract.
+                calendar booking, qualified handoff to your team, automated
+                follow-up, confirmations and reminders, no-show recovery, and
+                CRM updates. Month-to-month. No long-term contract.
               </p>
               <a
                 className="button button-primary vertical-primary"
