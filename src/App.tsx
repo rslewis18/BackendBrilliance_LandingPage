@@ -60,7 +60,7 @@ const homeFaqs = [
   {
     question: "Will my customers mind that it's AI?",
     answer:
-      "They won't know, and they won't care. Nobody calls your business hoping for small talk — they call because something needs fixing, and they want it handled now. What they get is a fast, natural text conversation that answers in seconds. Your clients don't want a human. They want their needs met.",
+      "They won't know, and they won't care. Nobody calls your business hoping for small talk — they call because something needs fixing, and they want it handled now. What they get is a fast, natural conversation that answers in seconds. Your clients don't want a human. They want their needs met.",
   },
   {
     question: "How fast does it respond?",
@@ -250,9 +250,10 @@ function HomePage() {
               <p className="vertical-subheading">
                 Doesn&apos;t matter what industry you&apos;re in. If your
                 business runs on the phone, a missed call is missed money. Our
-                agent texts back every missed call in seconds, qualifies the
-                lead with your questions, and books them straight onto your
-                calendar — nights, weekends, and the middle of a job included.
+                agent answers every missed call in seconds — by voice or by
+                text — qualifies the lead with your questions, and books them
+                straight onto your calendar — nights, weekends, and the middle
+                of a job included.
               </p>
             </motion.div>
 
@@ -333,11 +334,11 @@ function HomePage() {
               <h2>When someone calls, you never miss it.</h2>
             </motion.div>
             <motion.p className="vertical-watch-line" {...reveal}>
-              The call goes unanswered. Seconds later, the caller gets a text.
-              Not a voicemail asking them to wait — a real conversation that
-              asks your questions and books them in. While your competitor is
-              still listening to their voicemail light blink, your calendar
-              just filled.
+              The call goes unanswered. Seconds later, your agent is on it —
+              answering by voice or texting back instantly. Not a voicemail
+              asking them to wait — a real conversation that asks your
+              questions and books them in. While your competitor is still
+              checking voicemail, your calendar just filled.
             </motion.p>
           </section>
 
