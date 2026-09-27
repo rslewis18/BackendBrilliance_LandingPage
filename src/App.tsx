@@ -60,7 +60,7 @@ const homeFaqs = [
   {
     question: "How fast does it respond?",
     answer:
-      "Within seconds of a missed call or new inquiry — 24 hours a day, 7 days a week, including nights, weekends, and holidays.",
+      "Within seconds of the call or new inquiry — 24 hours a day, 7 days a week, including nights, weekends, and holidays.",
   },
   {
     question: "Does it replace my staff?",
@@ -75,7 +75,7 @@ const homeFaqs = [
   {
     question: "Does it work for my industry?",
     answer:
-      "If your business lives on the phone — missed calls, new inquiries, appointment booking — the agent fits. We have dedicated setups for home services, law firms, and med spas & dental practices.",
+      "If your business lives on the phone — calls, new inquiries, appointment booking — the agent fits. We have dedicated setups for home services, law firms, and med spas & dental practices.",
   },
   {
     question: "Do I keep my business number?",
@@ -96,8 +96,8 @@ const homeFaqs = [
 const homeSteps = [
   {
     icon: PhoneCall,
-    title: "Never miss a lead",
-    copy: "Every call gets answered in seconds — nights, weekends, holidays. No voicemail dead ends.",
+    title: "Never miss a call",
+    copy: "Every call gets answered — nights, weekends, holidays. No voicemail dead ends.",
   },
   {
     icon: UserCheck,
@@ -124,8 +124,8 @@ const homeSteps = [
 const homeCapabilities = [
   {
     icon: PhoneCall,
-    title: "Missed-call text-back",
-    copy: "Every unanswered call gets an instant, personal text — seconds after it rings out.",
+    title: "Every call answered",
+    copy: "The AI answers every call — and when one slips through, it texts back within seconds, so the lead keeps talking to your business, not your voicemail.",
   },
   {
     icon: Clock3,
@@ -173,7 +173,7 @@ const nichePaths = [
   {
     to: "/home-services",
     title: "Home Services",
-    copy: "HVAC, plumbing, electrical, roofing, remodeling, tree service — every missed call becomes a booked job.",
+    copy: "HVAC, plumbing, electrical, roofing, remodeling, tree service — never miss a call.",
   },
   {
     to: "/legal",
@@ -206,9 +206,9 @@ function HomePage() {
   return (
     <>
       <PageMeta
-        description="When someone calls your business, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers instantly — then qualifies, books, hands off to your team, and follows up. From $1,950/month."
+        description="When someone calls your business, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers every call instantly — then qualifies, books, hands off to your team, and follows up. From $1,950/month."
         path="/"
-        title="Backend Brilliance | Every Missed Call Becomes a Booked Job"
+        title="Backend Brilliance | Never Miss a Call"
       />
 
       <div className="vertical-page vertical-page--home">
@@ -241,12 +241,12 @@ function HomePage() {
           <section className="vertical-hero section-shell" id="top">
             <motion.div className="vertical-hero-copy" {...reveal}>
               <p className="vertical-eyebrow">AI Lead Booking Agent</p>
-              <h1>Every missed call becomes a booked job.</h1>
+              <h1>Never miss a call.</h1>
               <p className="vertical-subheading">
                 When someone calls your business, they shouldn&apos;t have to
-                reach a human to become a lead. Our AI answers in seconds —
-                then qualifies, books, hands the qualified lead to your team,
-                and follows up — so no opportunity slips through.
+                reach a human to become a lead. Our AI answers every call in
+                seconds — then qualifies, books, hands the qualified lead to
+                your team, and follows up — so no opportunity slips through.
               </p>
             </motion.div>
 
@@ -277,7 +277,7 @@ function HomePage() {
           <section className="vertical-demo-section section-shell" id="demo">
             <motion.div className="vertical-section-heading centered" {...reveal}>
               <p className="vertical-eyebrow">Watch it work</p>
-              <h2>Under a minute. One missed call. Qualified, booked, handed off.</h2>
+              <h2>Under a minute. One call. Qualified, booked, handed off.</h2>
             </motion.div>
             <motion.div {...reveal}>
               <div className="vertical-demo-panel is-video">
@@ -369,7 +369,7 @@ function HomePage() {
           <section className="vertical-pricing section-shell" id="home-pricing">
             <motion.div className="vertical-section-heading centered" {...reveal}>
               <p className="vertical-eyebrow">Pricing</p>
-              <h2>One plan. Every missed call covered.</h2>
+              <h2>One plan. Every call covered.</h2>
             </motion.div>
             <motion.div className="vertical-pricing-card" {...reveal}>
               <p className="vertical-eyebrow">AI Lead Booking Agent</p>
@@ -378,7 +378,7 @@ function HomePage() {
                 <span>/month</span>
               </p>
               <p>
-                Missed-call text-back, instant lead response, qualification,
+                Every call answered, instant lead response, qualification,
                 calendar booking, qualified handoff to your team, automated
                 follow-up, confirmations and reminders, no-show recovery, and
                 CRM updates. Month-to-month. No long-term contract.

@@ -101,14 +101,14 @@ const homeServices: VerticalPageConfig = {
   path: "/home-services",
   metaTitle: "AI Lead Booking Agent for Home Services | Backend Brilliance",
   metaDescription:
-    "When someone calls your shop, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers instantly — then qualifies, books, hands off to your team, and follows up. From $1,950/month.",
+    "When someone calls your shop, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers every call instantly — then qualifies, books, hands off to your team, and follows up. From $1,950/month.",
   eyebrow: "AI Lead Booking Agent · Home Services",
-  headline: "Every missed call becomes a booked job.",
+  headline: "Never miss a call.",
   subheading:
-    "When someone calls your shop, they shouldn't have to reach a human to become a lead. Our AI answers in seconds — qualifies the job, books the estimate, hands the qualified lead to your team, and follows up — so no opportunity slips through.",
+    "When someone calls your shop, they shouldn't have to reach a human to become a lead. Our AI answers every call in seconds — qualifies the job, books the estimate, hands the qualified lead to your team, and follows up — so no opportunity slips through.",
   primaryCta: "Book a Demo",
   secondaryCta: "See It In Action",
-  demoHeading: "A missed plumbing call becomes a qualified, booked job in under a minute.",
+  demoHeading: "One after-hours call becomes a qualified, booked job in under a minute.",
   demoCopy:
     "A dramatization of a real scenario — a homeowner calls after hours, the agent texts back in seconds, qualifies the job, books the estimate, hands the qualified lead to your team, and follows up automatically.",
   heroWatchLine: "Watch the demo. It runs in under a minute.",
@@ -118,8 +118,8 @@ const homeServices: VerticalPageConfig = {
   valuePillars: [
     {
       icon: PhoneCall,
-      title: "Instant missed-call text-back",
-      copy: "The moment a call goes unanswered, the agent texts back — while the homeowner is still thinking about you.",
+      title: "Every call answered",
+      copy: "Every call gets answered — live or by instant text-back — while the homeowner is still thinking about you.",
     },
     {
       icon: Zap,
@@ -153,15 +153,15 @@ const homeServices: VerticalPageConfig = {
       "60%+ of calls to small businesses go unanswered",
       "Most callers never leave a voicemail",
       "The first business to respond usually wins",
-      "Every missed call is a job you already paid to earn",
+      "Every call you can't answer is a job you already paid to earn",
     ],
   },
   capabilitiesTitle: "The machinery behind every booked job.",
   capabilities: [
     {
       icon: PhoneCall,
-      title: "Missed-call text-back",
-      copy: "Every unanswered call gets an instant, personal text — seconds after it rings out.",
+      title: "Every call answered",
+      copy: "The AI answers every call — and when one slips through, it texts back within seconds, so the homeowner keeps talking to your business, not your voicemail.",
     },
     {
       icon: Clock3,
@@ -208,8 +208,8 @@ const homeServices: VerticalPageConfig = {
   howItWorks: [
     {
       icon: PhoneCall,
-      title: "Never miss a lead",
-      copy: "Every call gets answered in seconds — on a roof, under a sink, after hours. No voicemail dead ends.",
+      title: "Never miss a call",
+      copy: "Every call gets answered — on a roof, under a sink, after hours. No voicemail dead ends.",
     },
     {
       icon: UserCheck,
@@ -236,7 +236,7 @@ const homeServices: VerticalPageConfig = {
     {
       question: "How fast does it respond?",
       answer:
-        "Within seconds of a missed call or new inquiry — 24 hours a day, 7 days a week, including nights, weekends, and holidays.",
+        "Within seconds of the call or new inquiry — 24 hours a day, 7 days a week, including nights, weekends, and holidays.",
     },
     {
       question: "Does it replace my office staff?",
@@ -274,14 +274,14 @@ const legal: VerticalPageConfig = {
   path: "/legal",
   metaTitle: "AI Lead Booking Agent for Law Firms | Backend Brilliance",
   metaDescription:
-    "When someone calls your firm, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers instantly — then collects intake, screens for case fit, books, hands off to your team, and follows up. From $1,950/month.",
+    "When someone calls your firm, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers every call instantly — then collects intake, screens for case fit, books, hands off to your team, and follows up. From $1,950/month.",
   eyebrow: "AI Lead Booking Agent · Legal Intake",
-  headline: "Every inquiry becomes a scheduled consultation.",
+  headline: "Never miss a call.",
   subheading:
-    "When someone calls your firm, they shouldn't have to reach a human to become a lead. Our AI answers in seconds — collects preliminary intake, screens for case fit, books the consultation, hands the organized intake to your team, and follows up. It never gives legal advice.",
+    "When someone calls your firm, they shouldn't have to reach a human to become a lead. Our AI answers every call in seconds — collects preliminary intake, screens for case fit, books the consultation, hands the organized intake to your team, and follows up. It never gives legal advice.",
   primaryCta: "Book a Demo",
   secondaryCta: "See It In Action",
-  demoHeading: "A missed intake call becomes a qualified, booked consultation in under a minute.",
+  demoHeading: "One intake call becomes a qualified, booked consultation in under a minute.",
   demoCopy:
     "A dramatization of a real scenario — a potential client calls during a hearing, the agent texts back in seconds, collects preliminary intake, screens for case fit, books the consultation, hands the organized intake to your team, and follows up.",
   heroWatchLine: "Watch the demo. It runs in under a minute.",
@@ -291,8 +291,8 @@ const legal: VerticalPageConfig = {
   valuePillars: [
     {
       icon: PhoneCall,
-      title: "Instant inquiry text-back",
-      copy: "The moment a call or form goes unanswered, the agent responds — while the potential client is still deciding.",
+      title: "Every call answered",
+      copy: "Every call gets answered — live or by instant response — while the potential client is still deciding.",
     },
     {
       icon: Zap,
@@ -335,8 +335,8 @@ const legal: VerticalPageConfig = {
   capabilities: [
     {
       icon: PhoneCall,
-      title: "Inquiry text-back",
-      copy: "Every missed call or unanswered form gets an instant, personal response — within seconds.",
+      title: "Every call answered",
+      copy: "The AI answers every call — and when one slips through, it responds within seconds, so the potential client keeps talking to your firm, not your voicemail.",
     },
     {
       icon: Clock3,
@@ -383,8 +383,8 @@ const legal: VerticalPageConfig = {
   howItWorks: [
     {
       icon: PhoneCall,
-      title: "Never miss an inquiry",
-      copy: "Every call and form gets answered in seconds — after hours, during a hearing, on weekends.",
+      title: "Never miss a call",
+      copy: "Every call gets answered — after hours, during a hearing, on weekends. No voicemail dead ends.",
     },
     {
       icon: ClipboardList,
@@ -420,7 +420,7 @@ const legal: VerticalPageConfig = {
     },
     {
       question: "How fast does it respond?",
-      answer: "Within seconds of a missed call or new inquiry — 24 hours a day, 7 days a week.",
+      answer: "Within seconds of the call or new inquiry — 24 hours a day, 7 days a week.",
     },
     {
       question: "What happens with complex cases?",
@@ -448,14 +448,14 @@ const medspaDental: VerticalPageConfig = {
   path: "/medspa-dental",
   metaTitle: "AI Lead Booking Agent for Med Spas & Dental | Backend Brilliance",
   metaDescription:
-    "When someone calls your practice, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers instantly — then identifies the treatment, qualifies, books, hands off to your staff, and follows up. From $1,950/month.",
+    "When someone calls your practice, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers every call instantly — then identifies the treatment, qualifies, books, hands off to your staff, and follows up. From $1,950/month.",
   eyebrow: "AI Lead Booking Agent · Med Spa & Dental",
-  headline: "Every inquiry becomes a booked consultation.",
+  headline: "Never miss a call.",
   subheading:
-    "When someone calls your practice, they shouldn't have to reach a human to become a lead. Our AI answers in seconds — identifies the treatment they're after, qualifies, books the consultation, hands the qualified inquiry to your staff, and follows up. It never gives medical advice.",
+    "When someone calls your practice, they shouldn't have to reach a human to become a lead. Our AI answers every call in seconds — identifies the treatment they're after, qualifies, books the consultation, hands the qualified inquiry to your staff, and follows up. It never gives medical advice.",
   primaryCta: "Book a Demo",
   secondaryCta: "See It In Action",
-  demoHeading: "A missed call from a new patient becomes a qualified, booked consultation in under a minute.",
+  demoHeading: "One call from a new patient becomes a qualified, booked consultation in under a minute.",
   demoCopy:
     "A dramatization of a real scenario — a potential patient calls after hours, the agent texts back in seconds, answers common questions, books the consultation, hands the qualified inquiry to your staff, and follows up.",
   heroWatchLine: "Watch the demo. It runs in under a minute.",
@@ -465,8 +465,8 @@ const medspaDental: VerticalPageConfig = {
   valuePillars: [
     {
       icon: PhoneCall,
-      title: "Instant inquiry text-back",
-      copy: "The moment a call or form goes unanswered, the agent responds — while the potential patient is still deciding.",
+      title: "Every call answered",
+      copy: "Every call gets answered — live or by instant response — while the potential patient is still deciding.",
     },
     {
       icon: Zap,
@@ -509,8 +509,8 @@ const medspaDental: VerticalPageConfig = {
   capabilities: [
     {
       icon: PhoneCall,
-      title: "Inquiry text-back",
-      copy: "Every missed call or unanswered form gets an instant, personal response — within seconds.",
+      title: "Every call answered",
+      copy: "The AI answers every call — and when one slips through, it responds within seconds, so the patient keeps talking to your practice, not your voicemail.",
     },
     {
       icon: Clock3,
@@ -557,8 +557,8 @@ const medspaDental: VerticalPageConfig = {
   howItWorks: [
     {
       icon: PhoneCall,
-      title: "Never miss an inquiry",
-      copy: "Every call and form gets answered in seconds — evenings, weekends, between appointments.",
+      title: "Never miss a call",
+      copy: "Every call gets answered — evenings, weekends, between appointments. No voicemail dead ends.",
     },
     {
       icon: UserCheck,
@@ -594,7 +594,7 @@ const medspaDental: VerticalPageConfig = {
     },
     {
       question: "How fast does it respond?",
-      answer: "Within seconds of a missed call or new inquiry — 24 hours a day, 7 days a week.",
+      answer: "Within seconds of the call or new inquiry — 24 hours a day, 7 days a week.",
     },
     {
       question: "What happens when a patient needs a human?",
@@ -812,7 +812,7 @@ export function VerticalLandingPage({ page }: VerticalLandingPageProps) {
           <section className="vertical-pricing section-shell" id="vertical-pricing">
             <motion.div className="vertical-section-heading centered" {...reveal}>
               <p className="vertical-eyebrow">Pricing</p>
-              <h2>One plan. Every missed call covered.</h2>
+              <h2>One plan. Every call covered.</h2>
             </motion.div>
             <motion.div className="vertical-pricing-card" {...reveal}>
               <p className="vertical-eyebrow">AI Lead Booking Agent</p>
@@ -821,7 +821,7 @@ export function VerticalLandingPage({ page }: VerticalLandingPageProps) {
                 <span>/month</span>
               </p>
               <p>
-                Missed-call text-back, instant lead response, qualification,
+                Every call answered, instant lead response, qualification,
                 calendar booking, qualified handoff to your team, automated
                 follow-up, confirmations and reminders, no-show recovery, and
                 CRM updates. Month-to-month. No long-term contract.
