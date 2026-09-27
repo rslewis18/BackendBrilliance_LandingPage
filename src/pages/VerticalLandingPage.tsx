@@ -1,34 +1,45 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {
+  Activity,
   ArrowRight,
   Bell,
-  Bot,
+  Briefcase,
   CalendarCheck,
-  CalendarDays,
   ClipboardList,
   Clock3,
+  Droplets,
+  FileCheck,
   FileText,
+  Flower2,
   Gavel,
-  HeartPulse,
+  Globe,
+  Hammer,
+  HardHat,
   Home,
   MessageCircle,
   PhoneCall,
   Play,
+  Plug,
+  Plus,
   RefreshCcw,
-  Search,
+  Scale,
+  ScrollText,
   ShieldCheck,
+  Smile,
+  Snowflake,
   Sparkles,
   Stethoscope,
+  Sun,
+  TreePine,
   UserCheck,
   UsersRound,
+  Wrench,
   Zap,
 } from "lucide-react";
 import { PageMeta } from "../components/PageMeta";
 import { LINKS } from "../config/links";
-import { OFFER_CONFIG } from "../config/offers";
 import { trackEvent } from "../utils/tracking";
 
 type VerticalSlug = "home-services" | "legal" | "medspa-dental";
@@ -41,11 +52,12 @@ type VerticalPageConfig = {
   eyebrow: string;
   headline: string;
   subheading: string;
-  supportingCopy: string;
   primaryCta: string;
   secondaryCta: string;
   heroWatchLine: string;
   demoLabel: string;
+  demoHeading: string;
+  demoCopy: string;
   videoUrl?: string;
   videoPoster?: string;
   demoEnabled: boolean;
@@ -62,7 +74,6 @@ type VerticalPageConfig = {
   problem: {
     headline: string;
     copy: string;
-    support: string;
     points: string[];
   };
   capabilitiesTitle: string;
@@ -71,10 +82,15 @@ type VerticalPageConfig = {
     title: string;
     copy: string;
   }>;
+  howItWorksTitle: string;
   howItWorks: Array<{
     icon: LucideIcon;
     title: string;
     copy: string;
+  }>;
+  faqs: Array<{
+    question: string;
+    answer: string;
   }>;
   finalHeadline: string;
   finalCopy: string;
@@ -84,433 +100,462 @@ type VerticalPageConfig = {
 const homeServices: VerticalPageConfig = {
   slug: "home-services",
   path: "/home-services",
-  metaTitle: "AI Lead Booking for Home Service Businesses | Backend Brilliance",
+  metaTitle: "AI Lead Booking Agent for Home Services | Backend Brilliance",
   metaDescription:
-    "AI lead response, follow-up, information gathering, and booking support for established home-service businesses.",
-  eyebrow: "Home Service Conversion System",
-  headline: "AI Lead Booking Agent",
+    "Every missed call becomes a booked job. Backend Brilliance's AI Lead Booking Agent texts back missed calls in seconds, qualifies the lead, and books the job. From $1,950/month.",
+  eyebrow: "AI Lead Booking Agent · Home Services",
+  headline: "Every missed call becomes a booked job.",
   subheading:
-    "Responds to new leads, follows up automatically, qualifies prospects, and books appointments directly onto your calendar.",
-  supportingCopy:
-    "The AI technology powering the response, follow-up, qualification, and booking portion of a broader system built to capture more leads, convert more opportunities, book more jobs, and increase profitability.",
-  primaryCta: "Get Your Agent",
-  secondaryCta: "See How It Works",
-  heroWatchLine: "See how the system handles new leads, missed calls, old opportunities, no-shows, and long-term follow-up.",
-  demoLabel: "AI Lead Booking Agent VSL",
-  videoUrl: OFFER_CONFIG.external.vslUrls.homeServices || undefined,
-  demoEnabled: Boolean(OFFER_CONFIG.external.vslUrls.homeServices),
+    "Backend Brilliance's AI Lead Booking Agent answers every missed call by text within seconds, qualifies the lead, and books the job — so no opportunity slips through.",
+  primaryCta: "Book a Demo",
+  secondaryCta: "See It In Action",
+  demoHeading: "A missed plumbing call becomes a booked estimate in 30 seconds.",
+  demoCopy:
+    "A dramatization of a real scenario — a homeowner calls after hours, the agent texts back in seconds, qualifies the job, and books the estimate.",
+  heroWatchLine: "Watch the demo. It runs in under a minute.",
+  demoLabel: "AI Lead Booking Agent demo",
+  videoUrl: "/demo-video.mp4",
+  demoEnabled: true,
   valuePillars: [
     {
+      icon: PhoneCall,
+      title: "Instant missed-call text-back",
+      copy: "The moment a call goes unanswered, the agent texts back — while the homeowner is still thinking about you.",
+    },
+    {
       icon: Zap,
-      title: "Faster Lead Response",
-      copy: "Help engage new opportunities while interest is high.",
-    },
-    {
-      icon: RefreshCcw,
-      title: "Consistent Follow-Up",
-      copy: "Keep conversations moving even when staff are busy.",
-    },
-    {
-      icon: ClipboardList,
-      title: "Information Gathering",
-      copy: "Collect important prospect details before team handoff.",
+      title: "Response in seconds, 24/7",
+      copy: "Nights, weekends, holidays. The agent never sleeps, never takes a day off, never lets a lead wait.",
     },
     {
       icon: CalendarCheck,
-      title: "Calendar Booking",
-      copy: "Help move qualified opportunities onto the schedule.",
+      title: "Estimates booked for you",
+      copy: "Qualified leads go straight onto your calendar — you just show up and close.",
+    },
+    {
+      icon: RefreshCcw,
+      title: "No-show recovery",
+      copy: "The agent follows up with no-shows and stale leads automatically, winning back jobs you'd written off.",
     },
   ],
-  audienceTitle: "Built for home-service businesses already generating opportunities",
+  audienceTitle: "Built for home service pros",
   audiences: [
-    { icon: Home, label: "HVAC" },
-    { icon: PhoneCall, label: "Plumbing" },
-    { icon: Home, label: "Roofing" },
+    { icon: Snowflake, label: "HVAC" },
+    { icon: Wrench, label: "Plumbing" },
     { icon: Zap, label: "Electrical" },
-    { icon: ShieldCheck, label: "Remodeling" },
-    { icon: RefreshCcw, label: "Restoration" },
-    { icon: Sparkles, label: "Tree Service" },
-    { icon: CalendarDays, label: "Junk Removal" },
-    { icon: Search, label: "Pest Control" },
-    { icon: Home, label: "Similar Services" },
+    { icon: Home, label: "Roofing" },
+    { icon: Hammer, label: "Remodeling" },
+    { icon: TreePine, label: "Tree service" },
   ],
   problem: {
-    headline: "You May Already Have More Revenue Opportunities Than You Think.",
-    copy:
-      "Slow response, missed calls, inconsistent follow-up, and unworked CRM records can quietly turn paid-for opportunities into lost jobs.",
-    support:
-      "The Home Service Conversion System helps your team turn more of the leads and opportunities you are already generating into booked estimates and jobs.",
+    headline: "The phone rings. The job goes to someone else.",
+    copy: "You spend good money getting the phone to ring — ads, trucks, reputation. But when a call comes in during a job, after hours, or on a weekend, it goes to voicemail. Most callers don't leave one. They call the next company on the list.",
     points: [
-      "Missed calls",
-      "Slow response to web leads",
-      "Repetitive follow-up",
-      "After-hours inquiries",
-      "Appointment scheduling",
-      "Overwhelmed front-office teams",
-      "Old leads sitting untouched",
-      "Inconsistent follow-up",
+      "60%+ of calls to small businesses go unanswered",
+      "Most callers never leave a voicemail",
+      "The first business to respond usually wins",
+      "Every missed call is a job you already paid to earn",
     ],
   },
-  capabilitiesTitle: "The Home Service Conversion System",
+  capabilitiesTitle: "The machinery behind every booked job.",
   capabilities: [
     {
-      icon: MessageCircle,
-      title: "New Lead Response",
-      copy: "Replies to new inquiries from forms, calls, and campaigns.",
-    },
-    {
       icon: PhoneCall,
-      title: "Missed Call Follow-Up",
-      copy: "Follows up when a call goes unanswered.",
-    },
-    {
-      icon: UserCheck,
-      title: "Lead Qualification",
-      copy: "Uses your rules to collect the details your team needs before the next step.",
-    },
-    {
-      icon: CalendarCheck,
-      title: "Estimate / Appointment Booking",
-      copy: "Helps qualified prospects move toward the calendar.",
-    },
-    {
-      icon: RefreshCcw,
-      title: "Old Lead Reactivation",
-      copy: "Reconnects with cold or forgotten opportunities.",
-    },
-    {
-      icon: Bell,
-      title: "Confirmations & Reminders",
-      copy: "Sends confirmations and reminders that help keep appointments on track.",
-    },
-    {
-      icon: RefreshCcw,
-      title: "No-Show Recovery",
-      copy: "Re-engages prospects after a missed estimate or appointment.",
+      title: "Missed-call text-back",
+      copy: "Every unanswered call gets an instant, personal text — seconds after it rings out.",
     },
     {
       icon: Clock3,
-      title: "Long-Term Lead Follow-Up",
-      copy: "Keeps longer buying cycles from going quiet.",
+      title: "24/7 lead response",
+      copy: "Nights, weekends, holidays. New inquiries get an answer immediately, every time.",
     },
-    {
-      icon: UsersRound,
-      title: "CRM & Calendar Automation",
-      copy: "Keeps routing, scheduling, status updates, and staff handoffs moving.",
-    },
-  ],
-  howItWorks: [
     {
       icon: UserCheck,
-      title: "Lead Comes In",
-      copy: "Website, advertisements, calls, forms, or other campaigns.",
-    },
-    {
-      icon: Bot,
-      title: "Automation Supports the Conversation",
-      copy: "Responds, gathers information, follows up, and helps move the prospect forward.",
+      title: "Lead qualification",
+      copy: "The agent asks your questions — service needed, timeline, location — and filters out the tire-kickers.",
     },
     {
       icon: CalendarCheck,
-      title: "Your Team Takes It From There",
-      copy: "Qualified opportunities can be scheduled or handed to staff for the next step.",
+      title: "Estimate and job booking",
+      copy: "Qualified leads book straight onto your calendar, synced with your schedule.",
+    },
+    {
+      icon: Bell,
+      title: "Confirmations and reminders",
+      copy: "Automatic texts keep the calendar full and the no-shows down.",
+    },
+    {
+      icon: RefreshCcw,
+      title: "No-show recovery",
+      copy: "Missed appointments get followed up automatically — and rebooked.",
+    },
+    {
+      icon: ClipboardList,
+      title: "CRM and calendar updates",
+      copy: "Every conversation, lead, and booking is logged where your team can see it.",
+    },
+    {
+      icon: UsersRound,
+      title: "Live handoff to your team",
+      copy: "The moment a human should step in, the agent hands over the full conversation.",
     },
   ],
-  finalHeadline: "Capture More Leads. Convert More Opportunities. Book More Jobs.",
+  howItWorksTitle: "Missed call in. Booked job out.",
+  howItWorks: [
+    {
+      icon: Plug,
+      title: "Connect your phones",
+      copy: "We link the agent to your business line and calendar. Your number stays yours.",
+    },
+    {
+      icon: CalendarCheck,
+      title: "Set your booking rules",
+      copy: "Services, service area, qualifying questions, calendar — configured around how you work.",
+    },
+    {
+      icon: Play,
+      title: "Answer, qualify, book",
+      copy: "The agent texts back missed calls in seconds, qualifies the lead, and books the job.",
+    },
+  ],
+  faqs: [
+    {
+      question: "How fast does it respond?",
+      answer:
+        "Within seconds of a missed call or new inquiry — 24 hours a day, 7 days a week, including nights, weekends, and holidays.",
+    },
+    {
+      question: "Does it replace my office staff?",
+      answer:
+        "No. It handles the first response, qualification, and booking — then hands off to your team with the full conversation. Your people focus on the work, not the phone tag.",
+    },
+    {
+      question: "What happens when a job needs a human?",
+      answer:
+        "The agent recognizes when a human should step in and hands over the complete conversation instantly — nothing gets lost.",
+    },
+    {
+      question: "Do I keep my business number?",
+      answer: "Yes. Your number stays yours. The agent works through your existing business line.",
+    },
+    {
+      question: "What does it cost?",
+      answer:
+        "From $1,950/month, month-to-month. Any one-time setup and third-party messaging costs are confirmed with you before anything starts.",
+    },
+  ],
+  finalHeadline: "Stop losing jobs to voicemail.",
   finalCopy:
-    "Put an AI Lead Booking Agent inside a complete home-service conversion workflow built around your business.",
-  finalCta: "Get Your Agent",
+    "Book a 15-minute walkthrough and we'll show you the agent working — on your phone, with your business.",
+  finalCta: "Book a Demo",
 };
 
 const legal: VerticalPageConfig = {
   slug: "legal",
   path: "/legal",
-  metaTitle: "Legal Intake & Conversion System | Backend Brilliance",
+  metaTitle: "AI Lead Booking Agent for Law Firms | Backend Brilliance",
   metaDescription:
-    "Help more qualified prospective clients reach a scheduled consultation with structured intake, follow-up, and booking support.",
-  eyebrow: "Legal Intake & Conversion System",
-  headline: "AI Lead Booking Agent",
+    "Every inquiry becomes a scheduled consultation. Backend Brilliance's AI Lead Booking Agent responds in seconds, collects preliminary intake, and books consultations. From $1,950/month.",
+  eyebrow: "AI Lead Booking Agent · Legal Intake",
+  headline: "Every inquiry becomes a scheduled consultation.",
   subheading:
-    "Responds to prospective clients, supports structured preliminary intake, follows up consistently, and moves qualified inquiries toward scheduled consultations.",
-  supportingCopy:
-    "The agent applies firm-defined intake and screening criteria, routes information to your team, and never replaces attorney judgment or provides legal advice.",
-  primaryCta: "Get Your Agent",
-  secondaryCta: "See How It Works",
-  heroWatchLine: "See how more prospective-client inquiries can become scheduled consultations.",
-  demoLabel: "Legal Intake & Conversion VSL",
-  videoUrl: OFFER_CONFIG.external.vslUrls.legal || undefined,
-  demoEnabled: Boolean(OFFER_CONFIG.external.vslUrls.legal),
+    "Backend Brilliance's AI Lead Booking Agent answers every inquiry within seconds, collects preliminary intake, and books the consultation — so no potential client slips through. It supports your intake team and never gives legal advice.",
+  primaryCta: "Book a Demo",
+  secondaryCta: "See It In Action",
+  demoHeading: "A missed intake call becomes a booked consultation in under a minute.",
+  demoCopy:
+    "A dramatization of a real scenario — a potential client calls during a hearing, the agent texts back in seconds, collects preliminary intake, and books the consultation.",
+  heroWatchLine: "Watch the demo. It runs in under a minute.",
+  demoLabel: "AI Lead Booking Agent demo",
+  videoUrl: "/demo-video.mp4",
+  demoEnabled: true,
   valuePillars: [
     {
-      icon: Clock3,
-      title: "24/7 Inquiry Support",
-      copy: "Provide an initial response even when staff are unavailable.",
+      icon: PhoneCall,
+      title: "Instant inquiry text-back",
+      copy: "The moment a call or form goes unanswered, the agent responds — while the potential client is still deciding.",
     },
     {
-      icon: FileText,
-      title: "Structured Preliminary Intake",
-      copy: "Collect case-type and intake information using questions defined by the firm.",
+      icon: Zap,
+      title: "Response in seconds, 24/7",
+      copy: "After hours, weekends, during trial. The agent never misses an inquiry.",
     },
     {
-      icon: RefreshCcw,
-      title: "Consistent Follow-Up",
-      copy: "Help keep prospective clients from falling through the cracks.",
+      icon: UserCheck,
+      title: "Preliminary intake collected",
+      copy: "The agent asks your firm's screening questions and organizes the answers — ready for attorney review.",
     },
     {
       icon: CalendarCheck,
-      title: "Consultation Scheduling",
-      copy: "Assist with moving appropriate inquiries onto the firm's calendar.",
+      title: "Consultations booked for you",
+      copy: "Qualified inquiries go straight onto the calendar — your team just shows up prepared.",
     },
   ],
-  audienceTitle: "Built for intake-heavy legal practices",
+  audienceTitle: "Built for law firms",
   audiences: [
-    { icon: Gavel, label: "Personal Injury" },
-    { icon: ShieldCheck, label: "Workers' Comp" },
-    { icon: Gavel, label: "Criminal Defense" },
-    { icon: UsersRound, label: "Family Law" },
-    { icon: FileText, label: "Immigration" },
-    { icon: ClipboardList, label: "Bankruptcy" },
-    { icon: UserCheck, label: "Employment Law" },
-    { icon: FileText, label: "Estate Planning" },
-    { icon: ShieldCheck, label: "Probate" },
-    { icon: MessageCircle, label: "Disability" },
+    { icon: Scale, label: "Personal injury" },
+    { icon: HardHat, label: "Workers' comp" },
+    { icon: Gavel, label: "Criminal defense" },
+    { icon: UsersRound, label: "Family law" },
+    { icon: Globe, label: "Immigration" },
+    { icon: FileText, label: "Bankruptcy" },
+    { icon: Briefcase, label: "Employment" },
+    { icon: ScrollText, label: "Estate planning" },
   ],
   problem: {
-    headline: "More Qualified Prospective Clients Should Reach Your Calendar.",
-    copy:
-      "Slow response, missed calls, inconsistent intake follow-up, and unworked inquiries can keep prospective clients from reaching a scheduled consultation.",
-    support:
-      "The Legal Intake & Conversion System supports the intake pipeline while attorneys and staff remain responsible for legal judgment, screening decisions, and client relationships.",
+    headline: "The inquiry arrives. The consultation goes to another firm.",
+    copy: "You spend good money generating inquiries — ads, referrals, reputation. But when a call or form comes in after hours, during a hearing, or on a weekend, it sits. Most potential clients don't wait. They contact the next firm on the list.",
     points: [
-      "After-hours inquiries",
-      "Missed calls",
-      "Repetitive initial information gathering",
-      "Delayed callbacks",
-      "Prospects contacting multiple firms",
-      "Consultation scheduling",
-      "Repeated administrative follow-up",
-      "Overloaded intake staff",
+      "Most clients contact multiple firms",
+      "The first firm to respond usually wins",
+      "After-hours inquiries pile up unanswered",
+      "Every lost inquiry is a case you already paid to earn",
     ],
   },
-  capabilitiesTitle: "The Legal Intake & Conversion System",
+  capabilitiesTitle: "The machinery behind every booked job.",
   capabilities: [
     {
-      icon: MessageCircle,
-      title: "New Inquiry Response",
-      copy: "Provides a prompt administrative response to new prospects.",
+      icon: PhoneCall,
+      title: "Inquiry text-back",
+      copy: "Every missed call or unanswered form gets an instant, personal response — within seconds.",
     },
     {
       icon: Clock3,
-      title: "After-Hours Intake Support",
-      copy: "Offers a consistent first touch outside normal office hours.",
-    },
-    {
-      icon: PhoneCall,
-      title: "Missed Call Follow-Up",
-      copy: "Helps reconnect after unanswered calls.",
+      title: "Instant response, 24/7",
+      copy: "After hours, weekends, during hearings. New inquiries get an answer immediately.",
     },
     {
       icon: ClipboardList,
-      title: "Firm-Defined Screening Questions",
-      copy: "Applies administrative intake criteria set by the firm without making legal judgments.",
-    },
-    {
-      icon: Gavel,
-      title: "Practice-Area Routing",
-      copy: "Routes inquiries according to firm-defined administrative rules.",
+      title: "Preliminary intake",
+      copy: "The agent asks your firm's screening questions and organizes the answers for attorney review.",
     },
     {
       icon: CalendarCheck,
-      title: "Consultation Scheduling",
-      copy: "Helps move appropriate inquiries toward a consultation.",
+      title: "Consultation booking",
+      copy: "Qualified inquiries book straight onto the calendar, synced with your schedule.",
     },
     {
       icon: Bell,
-      title: "Appointment Reminders",
-      copy: "Sends administrative reminders for scheduled consultations.",
+      title: "Confirmations and reminders",
+      copy: "Automatic texts keep consultations on the calendar and no-shows down.",
     },
     {
       icon: RefreshCcw,
-      title: "No-Show & Unresponsive Follow-Up",
-      copy: "Re-engages prospective clients who miss or do not schedule a consultation.",
+      title: "No-show recovery",
+      copy: "Missed consultations get followed up automatically — and rebooked.",
     },
     {
-      icon: Clock3,
-      title: "Old-Inquiry Reactivation",
-      copy: "Reconnects with prior prospective-client inquiries still eligible for firm follow-up.",
+      icon: FileCheck,
+      title: "CRM and intake updates",
+      copy: "Every conversation and inquiry is logged where your team can see it.",
     },
     {
       icon: UsersRound,
-      title: "Intake Pipeline Updates",
-      copy: "Keeps CRM status, routing, and staff notifications moving according to firm rules.",
+      title: "Live handoff to your team",
+      copy: "The moment a human should step in, the agent hands over the full conversation.",
     },
   ],
+  howItWorksTitle: "Inquiry in. Consultation booked.",
   howItWorks: [
     {
-      icon: MessageCircle,
-      title: "Inquiry Comes In",
-      copy: "From calls, forms, advertisements, referrals, or other sources.",
+      icon: Plug,
+      title: "Connect your lines",
+      copy: "We link the agent to your firm's lines, intake forms, and calendars.",
     },
     {
-      icon: Bot,
-      title: "Intake Support Begins",
-      copy: "The system gathers initial information and follows firm-defined administrative workflows.",
+      icon: CalendarCheck,
+      title: "Set your intake rules",
+      copy: "Screening questions, practice areas, consultation types — configured around your firm.",
     },
     {
-      icon: UsersRound,
-      title: "Staff Takes the Next Step",
-      copy: "The prospect can be scheduled, routed, or handed to firm staff according to the firm's process.",
+      icon: Play,
+      title: "Respond, collect, book",
+      copy: "The agent answers inquiries in seconds, collects preliminary intake, and books the consultation.",
     },
   ],
-  finalHeadline: "Help More Qualified Prospective Clients Reach a Consultation",
+  faqs: [
+    {
+      question: "Does the agent give legal advice?",
+      answer:
+        "Never. It answers logistical questions, collects preliminary intake using your firm's screening questions, and books consultations. Everything is organized for attorney review.",
+    },
+    {
+      question: "How fast does it respond?",
+      answer: "Within seconds of a missed call or new inquiry — 24 hours a day, 7 days a week.",
+    },
+    {
+      question: "What happens with complex cases?",
+      answer:
+        "The agent recognizes when a human should step in and hands over the complete conversation instantly — nothing gets lost.",
+    },
+    {
+      question: "Do we keep our firm's numbers?",
+      answer: "Yes. Your numbers stay yours. The agent works through your existing lines and intake forms.",
+    },
+    {
+      question: "What does it cost?",
+      answer:
+        "From $1,950/month, month-to-month. Any one-time setup and third-party messaging costs are confirmed with you before anything starts.",
+    },
+  ],
+  finalHeadline: "Stop losing consultations to slow intake.",
   finalCopy:
-    "Add a consistent response, preliminary intake, follow-up, and consultation-booking layer that works alongside your firm.",
-  finalCta: "Get Your Agent",
+    "Book a 15-minute walkthrough and we'll show you the agent working — on your phone, with your firm.",
+  finalCta: "Book a Demo",
 };
 
 const medspaDental: VerticalPageConfig = {
   slug: "medspa-dental",
   path: "/medspa-dental",
-  metaTitle: "Consultation Conversion System | Backend Brilliance",
+  metaTitle: "AI Lead Booking Agent for Med Spas & Dental | Backend Brilliance",
   metaDescription:
-    "AI lead response and patient booking support for med spas, dental practices, and high-value appointment-driven practices.",
-  eyebrow: "Consultation Conversion System",
-  headline: "AI Lead Booking Agent",
+    "Every inquiry becomes a booked consultation. Backend Brilliance's AI Lead Booking Agent responds in seconds, answers common questions, and books consultations. From $1,950/month.",
+  eyebrow: "AI Lead Booking Agent · Med Spa & Dental",
+  headline: "Every inquiry becomes a booked consultation.",
   subheading:
-    "Responds to new inquiries, follows up consistently, and helps turn more prospects into booked consultations and appointments.",
-  supportingCopy:
-    "Support your booking team with immediate response, treatment-interest questions, reminders, no-show recovery, reactivation, and long-term nurture—without medical advice or diagnosis.",
-  primaryCta: "Get Your Agent",
-  secondaryCta: "See How It Works",
-  heroWatchLine: "See how more inquiries can become booked consultations and appointments.",
-  demoLabel: "Consultation Conversion VSL",
-  videoUrl: OFFER_CONFIG.external.vslUrls.medSpaDental || undefined,
-  demoEnabled: Boolean(OFFER_CONFIG.external.vslUrls.medSpaDental),
+    "Backend Brilliance's AI Lead Booking Agent answers every inquiry within seconds, answers common questions, and books the consultation — so no potential patient slips through. It supports your front desk and never gives medical advice.",
+  primaryCta: "Book a Demo",
+  secondaryCta: "See It In Action",
+  demoHeading: "A missed call from a new patient becomes a booked consultation in under a minute.",
+  demoCopy:
+    "A dramatization of a real scenario — a potential patient calls after hours, the agent texts back in seconds, answers questions, and books the consultation.",
+  heroWatchLine: "Watch the demo. It runs in under a minute.",
+  demoLabel: "AI Lead Booking Agent demo",
+  videoUrl: "/demo-video.mp4",
+  demoEnabled: true,
   valuePillars: [
     {
+      icon: PhoneCall,
+      title: "Instant inquiry text-back",
+      copy: "The moment a call or form goes unanswered, the agent responds — while the potential patient is still deciding.",
+    },
+    {
       icon: Zap,
-      title: "Faster Lead Response",
-      copy: "Engage inquiries while interest is high.",
+      title: "Response in seconds, 24/7",
+      copy: "Evenings, weekends, between appointments. The agent never misses an inquiry.",
     },
     {
       icon: CalendarCheck,
-      title: "Consultation Booking Support",
-      copy: "Help prospects take the next scheduling step.",
+      title: "Consultations booked for you",
+      copy: "Qualified inquiries go straight onto the calendar — your team just shows up and treats.",
     },
     {
       icon: RefreshCcw,
-      title: "Consistent Follow-Up",
-      copy: "Continue communication when leads don't immediately book.",
-    },
-    {
-      icon: Bell,
-      title: "Lead & Appointment Recovery",
-      copy: "Help reconnect with missed opportunities and no-shows.",
+      title: "No-show recovery",
+      copy: "The agent follows up with no-shows and stale inquiries automatically, filling chairs you'd written off.",
     },
   ],
-  audienceTitle: "Built for high-value consultation-driven businesses",
+  audienceTitle: "Built for med spas and dental practices",
   audiences: [
-    { icon: Stethoscope, label: "Med Spas" },
-    { icon: HeartPulse, label: "Cosmetic Dentistry" },
-    { icon: Stethoscope, label: "Dental Implants" },
-    { icon: CalendarCheck, label: "Orthodontics" },
-    { icon: Sparkles, label: "Cosmetic Dermatology" },
-    { icon: HeartPulse, label: "Elective Wellness" },
-    { icon: UsersRound, label: "Patient Coordinators" },
-    { icon: MessageCircle, label: "Consultation Teams" },
+    { icon: Sparkles, label: "Med spas" },
+    { icon: Stethoscope, label: "Cosmetic dentistry" },
+    { icon: Plus, label: "Implants" },
+    { icon: Smile, label: "Orthodontics" },
+    { icon: Sun, label: "Aesthetic practices" },
+    { icon: Flower2, label: "Laser & skin clinics" },
+    { icon: Activity, label: "Wellness clinics" },
+    { icon: Droplets, label: "IV therapy" },
   ],
   problem: {
-    headline: "Turn More Inquiries Into Booked Consultations.",
-    copy:
-      "Slow response, incomplete follow-up, missed calls, and no-shows can reduce the return from every marketing channel generating patient and prospect inquiries.",
-    support:
-      "The Consultation Conversion System supports response, booking, reminders, and reactivation while your staff remains responsible for patient care and all medical decisions.",
+    headline: "The inquiry arrives. The consultation goes to another practice.",
+    copy: "You spend good money generating inquiries — ads, social, reputation. But when a call or form comes in after hours or between appointments, it sits. Most potential patients don't wait. They book with the next practice on the list.",
     points: [
-      "Meta leads requiring quick response",
-      "Google leads",
-      "Staff helping current patients",
-      "Prospects not answering the first callback",
-      "Consultation follow-up",
-      "Appointment reminders",
-      "No-shows",
-      "Old CRM leads",
-      "Busy front-desk staff",
+      "Most patients contact multiple practices",
+      "The first practice to respond usually wins",
+      "After-hours inquiries pile up unanswered",
+      "Every lost inquiry is a patient you already paid to earn",
     ],
   },
-  capabilitiesTitle: "The Consultation Conversion System",
+  capabilitiesTitle: "The machinery behind every booked job.",
   capabilities: [
     {
-      icon: MessageCircle,
-      title: "Website Lead Response",
-      copy: "Responds to new website inquiries while interest is high.",
-    },
-    {
-      icon: Sparkles,
-      title: "Meta / Social Lead Follow-Up",
-      copy: "Helps keep paid social leads from going cold.",
-    },
-    {
-      icon: Search,
-      title: "Google Lead Follow-Up",
-      copy: "Supports quick response from search-driven inquiries.",
-    },
-    {
       icon: PhoneCall,
-      title: "Missed Call Follow-Up",
-      copy: "Reconnects when calls are missed during busy hours.",
+      title: "Inquiry text-back",
+      copy: "Every missed call or unanswered form gets an instant, personal response — within seconds.",
+    },
+    {
+      icon: Clock3,
+      title: "Instant response, 24/7",
+      copy: "Evenings, weekends, between appointments. New inquiries get an answer immediately.",
+    },
+    {
+      icon: MessageCircle,
+      title: "Question answering",
+      copy: "The agent answers common questions about treatments, pricing ranges, and what to expect.",
     },
     {
       icon: CalendarCheck,
-      title: "Consultation Booking",
-      copy: "Helps prospects take the next scheduling step.",
-    },
-    {
-      icon: UserCheck,
-      title: "Treatment-Interest Questions",
-      copy: "Collects basic, non-clinical interest details without diagnosing or giving medical advice.",
+      title: "Consultation booking",
+      copy: "Qualified inquiries book straight onto the calendar, synced with your providers.",
     },
     {
       icon: Bell,
-      title: "Appointment Reminders",
-      copy: "Sends administrative reminders to reduce missed appointments.",
+      title: "Confirmations and reminders",
+      copy: "Automatic texts keep consultations on the calendar and no-shows down.",
     },
     {
       icon: RefreshCcw,
-      title: "No-Show Follow-Up",
-      copy: "Helps recover opportunities after missed visits.",
+      title: "No-show recovery",
+      copy: "Missed appointments get followed up automatically — and rebooked.",
     },
     {
-      icon: Clock3,
-      title: "Old Lead Reactivation",
-      copy: "Reconnects with CRM leads that never booked.",
-    },
-    {
-      icon: Clock3,
-      title: "Long-Term Nurture",
-      copy: "Keeps appropriate unresponsive prospects from disappearing after the first follow-up.",
-    },
-  ],
-  howItWorks: [
-    {
-      icon: MessageCircle,
-      title: "Inquiry Comes In",
-      copy: "From advertisements, websites, social platforms, calls, or campaigns.",
-    },
-    {
-      icon: Bot,
-      title: "Automation Supports Follow-Up",
-      copy: "The system responds, gathers basic administrative information, and helps the prospect move forward.",
+      icon: ClipboardList,
+      title: "CRM and calendar updates",
+      copy: "Every conversation and booking is logged where your team can see it.",
     },
     {
       icon: UsersRound,
-      title: "Your Team Takes Over",
-      copy: "Prospects can be scheduled or handed to staff for consultations, questions, or next steps.",
+      title: "Live handoff to your team",
+      copy: "The moment a human should step in, the agent hands over the full conversation.",
     },
   ],
-  finalHeadline: "Turn More Inquiries Into Booked Consultations and Appointments",
+  howItWorksTitle: "Inquiry in. Consultation booked.",
+  howItWorks: [
+    {
+      icon: Plug,
+      title: "Connect your lines",
+      copy: "We link the agent to your business lines, forms, and provider calendars.",
+    },
+    {
+      icon: CalendarCheck,
+      title: "Set your booking rules",
+      copy: "Treatments, qualifying questions, consultation types — configured around your practice.",
+    },
+    {
+      icon: Play,
+      title: "Answer, qualify, book",
+      copy: "The agent responds in seconds, answers common questions, and books the consultation.",
+    },
+  ],
+  faqs: [
+    {
+      question: "Does the agent give medical advice?",
+      answer:
+        "Never. It answers common questions about treatments, pricing ranges, and what to expect — then books the consultation so your providers handle the rest.",
+    },
+    {
+      question: "How fast does it respond?",
+      answer: "Within seconds of a missed call or new inquiry — 24 hours a day, 7 days a week.",
+    },
+    {
+      question: "What happens when a patient needs a human?",
+      answer:
+        "The agent recognizes when a human should step in and hands over the complete conversation instantly — nothing gets lost.",
+    },
+    {
+      question: "Do we keep our business numbers?",
+      answer: "Yes. Your numbers stay yours. The agent works through your existing lines and forms.",
+    },
+    {
+      question: "What does it cost?",
+      answer:
+        "From $1,950/month, month-to-month. Any one-time setup and third-party messaging costs are confirmed with you before anything starts.",
+    },
+  ],
+  finalHeadline: "Stop losing patients to slow response.",
   finalCopy:
-    "Add an automated lead-response and booking layer that works alongside your practice team.",
-  finalCta: "Get Your Agent",
+    "Book a 15-minute walkthrough and we'll show you the agent working — on your phone, with your practice.",
+  finalCta: "Book a Demo",
 };
 
 export const verticalPages = {
@@ -524,7 +569,6 @@ type VerticalLandingPageProps = {
 };
 
 export function VerticalLandingPage({ page }: VerticalLandingPageProps) {
-  const fitCheckPath = `${OFFER_CONFIG.routes.start}?vertical=${encodeURIComponent(page.slug)}`;
   const shouldReduceMotion = useReducedMotion();
   const reveal = shouldReduceMotion
     ? {}
@@ -574,9 +618,37 @@ export function VerticalLandingPage({ page }: VerticalLandingPageProps) {
               <p className="vertical-eyebrow">{page.eyebrow}</p>
               <h1>{page.headline}</h1>
               <p className="vertical-subheading">{page.subheading}</p>
-              <p className="vertical-supporting-copy">{page.supportingCopy}</p>
             </motion.div>
 
+            <motion.div className="vertical-hero-actions" {...reveal}>
+              <a
+                className="button button-primary vertical-primary"
+                href={LINKS.booking}
+                onClick={() => trackBooking("hero")}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {page.primaryCta}<ArrowRight size={20} />
+              </a>
+              <a
+                className="button button-secondary vertical-secondary"
+                href="#demo"
+                onClick={() => trackSecondary("hero")}
+              >
+                <ArrowRight size={20} />
+                {page.secondaryCta}
+              </a>
+            </motion.div>
+            <motion.p className="vertical-microline" {...reveal}>
+              From $1,950/month · No new staff · Nothing to install
+            </motion.p>
+          </section>
+
+          <section className="vertical-demo-section section-shell" id="demo">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">Watch it work</p>
+              <h2>{page.demoHeading}</h2>
+            </motion.div>
             <motion.div {...reveal}>
               <DemoPanel
                 label={page.demoLabel}
@@ -586,28 +658,32 @@ export function VerticalLandingPage({ page }: VerticalLandingPageProps) {
                 page={page}
               />
             </motion.div>
-
             <motion.p className="vertical-watch-line" {...reveal}>
               {page.heroWatchLine}
             </motion.p>
+          </section>
 
-            <motion.div className="vertical-hero-actions" {...reveal}>
-              <a
-                className="button button-secondary vertical-secondary"
-                href="#vertical-how-it-works"
-                onClick={() => trackSecondary("hero")}
-              >
-                <ArrowRight size={20} />
-                {page.secondaryCta}
-              </a>
-              <Link className="button button-primary vertical-primary" onClick={() => trackBooking("hero")} to={fitCheckPath}>
-                {page.primaryCta}<ArrowRight size={20} />
-              </Link>
+          <section
+            className="vertical-how section-shell"
+            id="vertical-how-it-works"
+            aria-labelledby={`${page.slug}-how`}
+          >
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">How it works</p>
+              <h2 id={`${page.slug}-how`}>{page.howItWorksTitle}</h2>
             </motion.div>
-            <motion.p className="vertical-question-path" {...reveal}>
-              Have questions before getting started?{" "}
-              <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">Book a call.</a>
-            </motion.p>
+            <div className="vertical-how-grid">
+              {page.howItWorks.map(({ icon: Icon, title, copy }, index) => (
+                <motion.article className="vertical-how-card" key={title} {...reveal}>
+                  <span className="vertical-step-number">{index + 1}</span>
+                  <div className="vertical-how-icon">
+                    <Icon size={34} />
+                  </div>
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                </motion.article>
+              ))}
+            </div>
           </section>
 
           <section className="vertical-value-strip section-shell" aria-label="Core benefits">
@@ -624,26 +700,11 @@ export function VerticalLandingPage({ page }: VerticalLandingPageProps) {
             ))}
           </section>
 
-          <section className="vertical-audience section-shell" aria-labelledby={`${page.slug}-audience`}>
-            <motion.h2 id={`${page.slug}-audience`} {...reveal}>
-              {page.audienceTitle}
-            </motion.h2>
-            <div className="vertical-chip-grid">
-              {page.audiences.map(({ icon: Icon, label }) => (
-                <motion.article className="vertical-chip" key={label} {...reveal}>
-                  <Icon size={26} />
-                  <span>{label}</span>
-                </motion.article>
-              ))}
-            </div>
-          </section>
-
           <section className="vertical-problem section-shell" id="vertical-problem">
             <motion.div className="vertical-section-heading" {...reveal}>
-              <p className="vertical-eyebrow">Workflow pressure</p>
+              <p className="vertical-eyebrow">The problem</p>
               <h2>{page.problem.headline}</h2>
               <p>{page.problem.copy}</p>
-              <p>{page.problem.support}</p>
             </motion.div>
             <div className="vertical-problem-grid">
               {page.problem.points.map((point) => (
@@ -657,7 +718,7 @@ export function VerticalLandingPage({ page }: VerticalLandingPageProps) {
 
           <section className="vertical-capabilities section-shell" id="vertical-capabilities">
             <motion.div className="vertical-section-heading centered" {...reveal}>
-              <p className="vertical-eyebrow">Capabilities</p>
+              <p className="vertical-eyebrow">What&apos;s included</p>
               <h2>{page.capabilitiesTitle}</h2>
             </motion.div>
             <div className="vertical-capability-grid">
@@ -675,54 +736,66 @@ export function VerticalLandingPage({ page }: VerticalLandingPageProps) {
             </div>
           </section>
 
-          <section className="vertical-human-ai section-shell">
-            <motion.div className="vertical-human-card" {...reveal}>
-              <div className="vertical-human-icon">
-                <UsersRound size={34} />
-              </div>
-              <div>
-                <p className="vertical-eyebrow">Human + AI</p>
-                <h2>Automation Where It Helps. People Where They Matter.</h2>
-                <p>
-                  Backend Brilliance is designed to support your team—not replace
-                  the relationships, judgment, and expertise that people bring to
-                  your business.
-                </p>
-                <p>
-                  Automation handles repetitive tasks such as immediate responses,
-                  repeated follow-up, information gathering, reminders, scheduling,
-                  and reactivation. Your team stays focused on customers, patients,
-                  clients, sales conversations, professional judgment, and service
-                  delivery.
-                </p>
-                <strong>
-                  Use automation to extend your team&apos;s capacity, improve
-                  consistency, and give people more time for the work that
-                  requires a human touch.
-                </strong>
-              </div>
+          <section className="vertical-audience section-shell" id="vertical-audience" aria-labelledby={`${page.slug}-audience`}>
+            <motion.h2 id={`${page.slug}-audience`} {...reveal}>
+              {page.audienceTitle}
+            </motion.h2>
+            <div className="vertical-chip-grid">
+              {page.audiences.map(({ icon: Icon, label }) => (
+                <motion.article className="vertical-chip" key={label} {...reveal}>
+                  <Icon size={26} />
+                  <span>{label}</span>
+                </motion.article>
+              ))}
+            </div>
+          </section>
+
+          <section className="vertical-pricing section-shell" id="vertical-pricing">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">Pricing</p>
+              <h2>One plan. Every missed call covered.</h2>
+            </motion.div>
+            <motion.div className="vertical-pricing-card" {...reveal}>
+              <p className="vertical-eyebrow">AI Lead Booking Agent</p>
+              <p className="vertical-price">
+                <strong>From $1,950</strong>
+                <span>/month</span>
+              </p>
+              <p>
+                Missed-call text-back, instant lead response, qualification,
+                calendar booking, confirmations and reminders, no-show recovery,
+                and CRM updates. Month-to-month. No long-term contract.
+              </p>
+              <a
+                className="button button-primary vertical-primary"
+                href={LINKS.booking}
+                onClick={() => trackBooking("pricing")}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {page.primaryCta}<ArrowRight size={18} />
+              </a>
+              <small>
+                Any one-time setup and third-party messaging costs are confirmed
+                with you before anything starts. No surprises.
+              </small>
             </motion.div>
           </section>
 
-          <section
-            className="vertical-how section-shell"
-            id="vertical-how-it-works"
-            aria-labelledby={`${page.slug}-how`}
-          >
+          <section className="vertical-faq section-shell" id="vertical-faq">
             <motion.div className="vertical-section-heading centered" {...reveal}>
-              <p className="vertical-eyebrow">How it works</p>
-              <h2 id={`${page.slug}-how`}>A simple path from inquiry to next step.</h2>
+              <p className="vertical-eyebrow">Questions</p>
+              <h2>Questions before you book?</h2>
             </motion.div>
-            <div className="vertical-how-grid">
-              {page.howItWorks.map(({ icon: Icon, title, copy }, index) => (
-                <motion.article className="vertical-how-card" key={title} {...reveal}>
-                  <span className="vertical-step-number">{index + 1}</span>
-                  <div className="vertical-how-icon">
-                    <Icon size={34} />
-                  </div>
-                  <h3>{title}</h3>
-                  <p>{copy}</p>
-                </motion.article>
+            <div className="vertical-faq-list">
+              {page.faqs.map((faq) => (
+                <motion.details className="vertical-faq-item" key={faq.question} {...reveal}>
+                  <summary>
+                    {faq.question}
+                    <span aria-hidden="true">+</span>
+                  </summary>
+                  <p>{faq.answer}</p>
+                </motion.details>
               ))}
             </div>
           </section>
@@ -736,12 +809,20 @@ export function VerticalLandingPage({ page }: VerticalLandingPageProps) {
                 <h2>{page.finalHeadline}</h2>
                 <p>{page.finalCopy}</p>
               </div>
-              <Link className="button button-primary vertical-primary" onClick={() => trackBooking("final_cta")} to={fitCheckPath}>
+              <a
+                className="button button-primary vertical-primary"
+                href={LINKS.booking}
+                onClick={() => trackBooking("final_cta")}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {page.finalCta}<ArrowRight size={18} />
-              </Link>
+              </a>
             </motion.div>
           </section>
         </main>
+
+        <SiteFooter onBookingClick={() => trackBooking("footer")} />
       </div>
     </>
   );
@@ -754,7 +835,6 @@ function VerticalHeader({
   page: VerticalPageConfig;
   onBookingClick: () => void;
 }) {
-  const fitCheckPath = `${OFFER_CONFIG.routes.start}?vertical=${encodeURIComponent(page.slug)}`;
   return (
     <header className="vertical-header">
       <a className="vertical-brand" href="/" aria-label="Backend Brilliance home">
@@ -765,12 +845,59 @@ function VerticalHeader({
         </span>
       </a>
       <nav aria-label={`${page.headline} navigation`}>
-        <a href="#vertical-problem">Problems</a>
-        <a href="#vertical-capabilities">Capabilities</a>
         <a href="#vertical-how-it-works">How It Works</a>
+        <a href="#vertical-audience">Who It&apos;s For</a>
+        <a href="#vertical-pricing">Pricing</a>
+        <a href="#vertical-faq">FAQ</a>
       </nav>
-      <Link className="button button-primary vertical-header-cta" onClick={onBookingClick} to={fitCheckPath}>{page.primaryCta}</Link>
+      <a
+        className="button button-primary vertical-header-cta"
+        href={LINKS.booking}
+        onClick={onBookingClick}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {page.primaryCta}
+      </a>
     </header>
+  );
+}
+
+export function SiteFooter({ onBookingClick }: { onBookingClick?: () => void }) {
+  return (
+    <footer className="vertical-footer">
+      <div className="vertical-footer-inner section-shell">
+        <div className="vertical-footer-brand">
+          <strong>Backend Brilliance</strong>
+          <p>The AI Lead Booking Agent for local service businesses.</p>
+        </div>
+        <nav aria-label="Footer">
+          <div className="vertical-footer-col">
+            <strong>Niches</strong>
+            <a href="/home-services">Home Services</a>
+            <a href="/legal">Legal</a>
+            <a href="/medspa-dental">Med Spa &amp; Dental</a>
+          </div>
+          <div className="vertical-footer-col">
+            <strong>Company</strong>
+            <a
+              href={LINKS.booking}
+              onClick={onBookingClick}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Book a Demo
+            </a>
+            <a href="mailto:backendbrilliance@gmail.com">Contact</a>
+          </div>
+        </nav>
+      </div>
+      <p className="vertical-footer-legal">
+        © {new Date().getFullYear()} Backend Brilliance. The agent assists your
+        staff and customers — it does not replace professional judgment, and it
+        never gives legal or medical advice.
+      </p>
+    </footer>
   );
 }
 

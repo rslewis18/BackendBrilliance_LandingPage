@@ -4411,3 +4411,257 @@ h1 {
     flex-direction: column;
   }
 }
+
+/* ---- Uniform revamp additions (2026-09-27): microline, demo section, pricing, FAQ, path cards, footer ---- */
+.vertical-microline {
+  margin-top: 14px;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.62);
+  letter-spacing: 0.01em;
+}
+
+.vertical-demo-copy {
+  margin: 0 auto 26px;
+  max-width: 620px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.vertical-pricing-card {
+  margin: 0 auto;
+  max-width: 560px;
+  text-align: center;
+  border: 1px solid rgba(229, 57, 53, 0.72);
+  border-radius: 28px;
+  padding: clamp(30px, 4vw, 46px);
+  background:
+    radial-gradient(circle at top center, rgba(229, 57, 53, 0.22), transparent 26rem),
+    linear-gradient(160deg, rgba(70, 11, 11, 0.72), rgba(7, 7, 7, 0.95));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 28px 80px rgba(0, 0, 0, 0.44);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.vertical-pricing-card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.65;
+}
+
+.vertical-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+}
+
+.vertical-price strong {
+  font-size: clamp(2.4rem, 5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.vertical-price span {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1rem;
+}
+
+.vertical-pricing-card small {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.vertical-faq-list {
+  margin: 0 auto;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vertical-faq-item {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 4px 20px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.vertical-faq-item[open] {
+  border-color: rgba(229, 57, 53, 0.55);
+  background: rgba(229, 57, 53, 0.06);
+}
+
+.vertical-faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  font-weight: 650;
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.vertical-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.vertical-faq-item summary span {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(229, 57, 53, 0.6);
+  color: #ff6b5e;
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.vertical-faq-item[open] summary span {
+  transform: rotate(45deg);
+}
+
+.vertical-faq-item p {
+  margin: 0 0 18px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+}
+
+.vertical-path-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.vertical-path-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  padding: 28px;
+  background: linear-gradient(160deg, rgba(40, 8, 8, 0.55), rgba(7, 7, 7, 0.92));
+  color: #fff;
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.vertical-path-card:hover {
+  border-color: rgba(229, 57, 53, 0.7);
+  transform: translateY(-3px);
+}
+
+.vertical-path-card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+}
+
+.vertical-path-card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.65;
+  flex: 1;
+}
+
+.vertical-path-card span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ff6b5e;
+  font-weight: 650;
+}
+
+.vertical-footer {
+  margin-top: 72px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 44px 0 30px;
+}
+
+.vertical-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.vertical-footer-brand strong {
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+
+.vertical-footer-brand p {
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 320px;
+  line-height: 1.6;
+}
+
+.vertical-footer nav {
+  display: flex;
+  gap: 56px;
+}
+
+.vertical-footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vertical-footer-col strong {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.vertical-footer-col a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+}
+
+.vertical-footer-col a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.vertical-footer-legal {
+  margin: 36px auto 0;
+  max-width: 720px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 860px) {
+  .vertical-path-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vertical-footer nav {
+    gap: 36px;
+  }
+}
+
+.offer-plan-note {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 1rem;
+}

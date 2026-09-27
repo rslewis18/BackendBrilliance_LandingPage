@@ -33,7 +33,7 @@ const leadRanges = ["Under 20", "20–50", "51–100", "101–250", "250+"] as c
 const fitCheckConfigs: Record<VerticalKey, FitCheckConfig> = {
   "home-services": {
     key: "home-services",
-    label: "Home Service Conversion System",
+    label: "AI Lead Booking Agent \u00b7 Home Services",
     returnPath: "/home-services",
     intro: "Four quick questions help us confirm whether the standard agent fits your lead, estimate, and service-booking workflow.",
     businessQuestion: "What type of home-service business do you operate?",
@@ -49,7 +49,7 @@ const fitCheckConfigs: Record<VerticalKey, FitCheckConfig> = {
   },
   legal: {
     key: "legal",
-    label: "Legal Intake & Conversion System",
+    label: "AI Lead Booking Agent \u00b7 Legal",
     returnPath: "/legal",
     intro: "Four quick questions help us confirm whether the standard agent fits your prospective-client intake and consultation workflow.",
     businessQuestion: "What type of consumer-facing law practice do you operate?",
@@ -65,7 +65,7 @@ const fitCheckConfigs: Record<VerticalKey, FitCheckConfig> = {
   },
   "medspa-dental": {
     key: "medspa-dental",
-    label: "Consultation Conversion System",
+    label: "AI Lead Booking Agent \u00b7 Med Spa & Dental",
     returnPath: "/medspa-dental",
     intro: "Four quick questions help us confirm whether the standard agent fits your inquiry, consultation, and appointment-booking workflow.",
     businessQuestion: "What type of consultation-driven business do you operate?",
@@ -208,14 +208,13 @@ function FitResultPanel({ config, result, onRestart }: { config: FitCheckConfig;
     return <section className="fit-result-card section-shell"><p className="eyebrow">Custom configuration recommended</p><h1>Let&apos;s Talk First</h1><p className="hero-lead">{config.complexCopy}</p><p>We&apos;ll review the workflow before recommending the right configuration.</p><div className="hero-actions"><a className="button button-primary" href={LINKS.booking} target="_blank" rel="noopener noreferrer"><CalendarDays size={18} /> Book a Configuration Call</a><button className="button button-secondary" onClick={onRestart} type="button">Review My Answers</button></div></section>;
   }
 
-  const paymentConfigured = Boolean(LINKS.stripePayment);
   return (
     <section className="fit-result-card qualified-result section-shell">
       <div className="fit-result-heading"><span className="fit-result-icon"><CheckCircle2 size={28} /></span><div><p className="eyebrow">{config.label} · Fit check complete</p><h1>Your Business Looks Like a Fit</h1></div></div>
       <p className="hero-lead">{config.qualifiedCopy}</p>
       <div className="agent-offer-card">
-        <div className="agent-offer-main"><p className="eyebrow">AI Lead Booking Agent</p><div className="offer-price-row"><strong>$2,450</strong><span>/month</span></div><div className="implementation-price"><span>Implementation &amp; Customization</span><strong>$950 one-time</strong></div><ul>{["Customized around your business and vertical-specific workflow", "Qualification, routing, calendar, and lead-process configuration", "Integration setup within the agreed standard scope", "Testing, refinement, approval, and launch support"].map((item) => <li key={item}><Check size={17} /> {item}</li>)}</ul></div>
-        <aside className="agent-total-panel"><span>Due Today</span><strong>$3,400</strong><small>Then $2,450/month ongoing</small>{paymentConfigured ? <a className="button button-primary" href={LINKS.stripePayment} onClick={() => trackEvent("stripe_checkout_click", { offer: "ai_lead_booking_agent", vertical: config.key })} rel="noopener noreferrer">Set Up My Agent <ArrowRight size={18} /></a> : <><button className="button button-primary" disabled type="button">Set Up My Agent</button><small className="configuration-note">Checkout opens after the Stripe payment link is configured.</small></>}</aside>
+        <div className="agent-offer-main"><p className="eyebrow">AI Lead Booking Agent</p><div className="offer-price-row"><strong>From $1,950</strong><span>/month</span></div><p className="offer-plan-note">Month-to-month. No long-term contract.</p><ul>{["Missed-call text-back within seconds, 24/7", "Lead qualification and calendar booking", "Confirmations, reminders, and no-show recovery", "CRM and calendar updates with live handoff to your team"].map((item) => <li key={item}><Check size={17} /> {item}</li>)}</ul></div>
+        <aside className="agent-total-panel"><span>Next step</span><strong>Book a demo</strong><small>15-minute walkthrough — we&apos;ll show it working on your phone.</small><a className="button button-primary" href={LINKS.booking} onClick={() => trackEvent("booking_cta_clicked", { offer: "ai_lead_booking_agent", vertical: config.key })} target="_blank" rel="noopener noreferrer">Book My Demo <ArrowRight size={18} /></a></aside>
       </div>
       <div className="qualified-secondary-row"><button className="text-button" onClick={onRestart} type="button">Review my answers</button><span>Have questions? <a href={LINKS.booking} target="_blank" rel="noopener noreferrer">Book a call.</a></span></div>
       <Link className="fit-return-link" to={config.returnPath}>← Back to {config.label}</Link>

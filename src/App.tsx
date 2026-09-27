@@ -1,256 +1,28 @@
-import { type ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
-import { Route, Routes } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
+import { PageMeta } from "./components/PageMeta";
 import { LINKS } from "./config/links";
 import { OFFER_CONFIG } from "./config/offers";
 import { OnboardingPage } from "./pages/OnboardingPage";
 import { OnboardingSuccessPage } from "./pages/OnboardingSuccessPage";
 import { StartPage } from "./pages/StartPage";
 import { ThankYouPage } from "./pages/ThankYouPage";
-import { VerticalLandingPage, verticalPages } from "./pages/VerticalLandingPage";
+import { SiteFooter, VerticalLandingPage, verticalPages } from "./pages/VerticalLandingPage";
 import { trackEvent } from "./utils/tracking";
 import {
   ArrowRight,
-  BarChart3,
-  Bot,
+  Bell,
+  CalendarCheck,
+  ClipboardList,
   Clock3,
-  FileText,
-  Globe2,
-  MessageSquareText,
   PhoneCall,
-  Search,
-  ShieldCheck,
-  Sparkles,
-  Star,
-  Zap,
+  Play,
+  Plug,
+  RefreshCcw,
+  UserCheck,
+  UsersRound,
 } from "lucide-react";
 
-const siteUrl = OFFER_CONFIG.site.siteUrl;
-
-const navItems = [
-  ["Problems", "#journey"],
-  ["Solutions", "#solutions"],
-  ["How It Works", "#how-it-works"],
-  ["FAQ", "#faq"],
-] as const;
-
-type ProblemSolution = {
-  problem: string;
-  icon: LucideIcon;
-  title: string;
-  copy: string;
-  bullets: string[];
-};
-
-const problemSolutions: ProblemSolution[] = [
-  {
-    problem: "Need more opportunities?",
-    icon: Search,
-    title: "Generate them.",
-    copy: "Create more qualified chances to start conversations with the right local prospects.",
-    bullets: ["Lead Generation", "Paid Advertising", "Local Search / SEO", "Direct-to-home campaigns"],
-  },
-  {
-    problem: "Missing calls?",
-    icon: PhoneCall,
-    title: "Capture them.",
-    copy: "Make it easier to answer demand, qualify inquiries, and route people to the next step.",
-    bullets: ["AI Lead Booking Agent", "Missed-call recovery", "Qualification", "Calendar booking"],
-  },
-  {
-    problem: "Slow follow-up?",
-    icon: Zap,
-    title: "Respond faster.",
-    copy: "Reduce the time between interest and action with cleaner reminders and follow-up.",
-    bullets: ["Lead Follow-Up Automation", "SMS/email follow-up", "Appointment reminders", "Lead nurturing"],
-  },
-  {
-    problem: "Leads aren't converting?",
-    icon: Globe2,
-    title: "Convert them.",
-    copy: "Turn more visits, calls, forms, and quote requests into real opportunities.",
-    bullets: ["Website Conversion Systems", "Landing pages", "Booking/quote flows", "Intake optimization"],
-  },
-  {
-    problem: "Hard to get found?",
-    icon: BarChart3,
-    title: "Improve visibility.",
-    copy: "Strengthen the places prospects check before they choose who to contact.",
-    bullets: ["Google Business Profile", "Local SEO", "Map visibility", "Website search visibility"],
-  },
-  {
-    problem: "Weak reviews?",
-    icon: Star,
-    title: "Build trust.",
-    copy: "Create more visible proof from happy customers and make trust easier to see.",
-    bullets: ["Review Growth", "Reputation systems", "Review-request automation"],
-  },
-  {
-    problem: "Old leads sitting untouched?",
-    icon: Clock3,
-    title: "Reactivate them.",
-    copy: "Follow up with past leads and customers who may still need help.",
-    bullets: ["Customer Reactivation", "Database campaigns", "Dormant lead follow-up", "Previous customer outreach"],
-  },
-  {
-    problem: "Too much manual work?",
-    icon: Bot,
-    title: "Automate it.",
-    copy: "Connect repetitive growth operations so staff can focus on higher-value work.",
-    bullets: ["AI workflows", "CRM automation", "Intake routing", "Lead handling"],
-  },
-  {
-    problem: "Inconsistent content?",
-    icon: FileText,
-    title: "Create consistently.",
-    copy: "Build repeatable content systems for campaigns, properties, services, and follow-up.",
-    bullets: ["Content Creation Systems", "Short-form content", "Property/listing content", "Campaign creative"],
-  },
-];
-
-const serviceCards = [
-  {
-    icon: Bot,
-    title: "Home Service Conversion System",
-    copy: "Turn more existing inquiries into booked jobs with instant response, missed-call recovery, qualification, follow-up, booking, reminders, reactivation, and CRM/calendar automation.",
-  },
-  {
-    icon: FileText,
-    title: "AI Legal Intake",
-    copy: "Capture inquiries, gather initial case information, route prospects by firm-defined rules, schedule consultations, and follow up.",
-  },
-  {
-    icon: MessageSquareText,
-    title: "Lead Follow-Up Automation",
-    copy: "Send timely SMS and email follow-up so interested prospects do not disappear after the first touch.",
-  },
-  {
-    icon: Globe2,
-    title: "Website Conversion Systems",
-    copy: "Improve pages, landing experiences, quote flows, and booking paths so more visitors take action.",
-  },
-  {
-    icon: Search,
-    title: "Local Visibility / SEO",
-    copy: "Improve search, Google Business Profile, map visibility, and local trust signals.",
-  },
-  {
-    icon: Star,
-    title: "Review Growth",
-    copy: "Request, organize, and use reviews to build trust with prospects before they call.",
-  },
-  {
-    icon: Clock3,
-    title: "Customer Reactivation",
-    copy: "Reach dormant leads, previous customers, and old opportunities with focused campaigns.",
-  },
-  {
-    icon: BarChart3,
-    title: "Lead Generation & Paid Advertising",
-    copy: "Build campaigns designed to create more qualified opportunities for the right services and markets.",
-  },
-  {
-    icon: Sparkles,
-    title: "Content & Property Marketing",
-    copy: "Create repeatable content systems for local campaigns, property promotion, and consistent visibility.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Business Process Automation",
-    copy: "Automate intake, routing, CRM tasks, reporting, and repetitive growth operations.",
-  },
-] as const;
-
-const howItWorks = [
-  {
-    step: "01",
-    title: "We diagnose the bottleneck",
-    copy: "We look at where prospects are getting lost: visibility, calls, conversion, follow-up, reviews, content, or manual operations.",
-  },
-  {
-    step: "02",
-    title: "We recommend the right system",
-    copy: "You get a practical recommendation based on the actual revenue problem instead of a one-size-fits-all product.",
-  },
-  {
-    step: "03",
-    title: "We build and improve it",
-    copy: "Backend Brilliance configures the agreed solution, reviews it with you, and keeps the path clear for future improvements.",
-  },
-];
-
-const faqs = [
-  {
-    question: "What does Backend Brilliance actually build?",
-    answer:
-      "We build growth and automation systems that help businesses get found, capture inquiries, respond faster, follow up, earn trust, reactivate customers, and reduce manual work.",
-  },
-  {
-    question: "Do I need to know which service I need first?",
-    answer:
-      "No. The first step is a conversation about the bottleneck. From there, Backend Brilliance recommends the most practical solution.",
-  },
-  {
-    question: "What is the Home Service Conversion System?",
-    answer:
-      "It is a lead-conversion workflow for home-service businesses. The AI Lead Booking Agent powers response, follow-up, qualification, and booking while the broader system supports missed calls, reminders, no-shows, reactivation, nurture, CRM, and calendar workflows.",
-  },
-  {
-    question: "Do you work with law firms?",
-    answer:
-      "Yes. AI Legal Intake can help law firms capture inquiries, gather initial information, route prospects by firm-defined rules, schedule consultations, and notify staff. It does not provide legal advice or replace attorney review.",
-  },
-  {
-    question: "Do I have to sign a long-term contract?",
-    answer:
-      "Engagement structure depends on the recommended solution. Any pricing, scope, and terms are confirmed before work begins.",
-  },
-  {
-    question: "What happens after I book a growth review?",
-    answer:
-      "We review your current growth path, identify the biggest bottlenecks, and discuss the cleanest next step.",
-  },
-] as const;
-
-const footerServices = [
-  "Home Service Conversion System",
-  "AI Legal Intake",
-  "Lead Follow-Up Automation",
-  "Website Conversion Systems",
-  "Local Visibility / SEO",
-  "Review Growth",
-  "Customer Reactivation",
-  "Business Process Automation",
-] as const;
-
-const schema = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": `${siteUrl}/#organization`,
-      name: "Backend Brilliance",
-      url: siteUrl,
-      logo: `${siteUrl}/backend-brilliance-logo.png`,
-      description:
-        "Backend Brilliance identifies and fixes growth, revenue, and automation bottlenecks for local businesses.",
-    },
-    {
-      "@type": "ProfessionalService",
-      "@id": `${siteUrl}/#localbusiness`,
-      name: "Backend Brilliance",
-      url: siteUrl,
-      image: `${siteUrl}/backend-brilliance-logo.png`,
-      description:
-        "Growth and automation systems for local businesses, including lead generation, intake, websites, follow-up, visibility, reviews, reactivation, content, and operations.",
-      areaServed: "United States",
-      parentOrganization: {
-        "@id": `${siteUrl}/#organization`,
-      },
-    },
-  ],
-};
 
 function App() {
   return (
@@ -280,6 +52,122 @@ function App() {
   );
 }
 
+const homeFaqs = [
+  {
+    question: "How fast does it respond?",
+    answer:
+      "Within seconds of a missed call or new inquiry — 24 hours a day, 7 days a week, including nights, weekends, and holidays.",
+  },
+  {
+    question: "Does it replace my staff?",
+    answer:
+      "No. It handles the first response, qualification, and booking — then hands off to your team with the full conversation. Your people focus on the work, not the phone tag.",
+  },
+  {
+    question: "What happens when a human is needed?",
+    answer:
+      "The agent recognizes when a human should step in and hands over the complete conversation instantly — nothing gets lost.",
+  },
+  {
+    question: "Does it work for my industry?",
+    answer:
+      "If your business lives on the phone — missed calls, new inquiries, appointment booking — the agent fits. We have dedicated setups for home services, law firms, and med spas & dental practices.",
+  },
+  {
+    question: "Do I keep my business number?",
+    answer: "Yes. Your number stays yours. The agent works through your existing business line.",
+  },
+  {
+    question: "What does it cost?",
+    answer:
+      "From $1,950/month, month-to-month. Any one-time setup and third-party messaging costs are confirmed with you before anything starts.",
+  },
+  {
+    question: "How do we get started?",
+    answer:
+      "Book a 15-minute walkthrough. We'll show you the agent working on your phone, then connect it to your business line and calendar and configure it around how you work.",
+  },
+];
+
+const homeSteps = [
+  {
+    icon: Plug,
+    title: "Connect your phones",
+    copy: "We link the agent to your business line and calendar. Your number stays yours.",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Set your booking rules",
+    copy: "Services, qualifying questions, calendar — configured around how you work.",
+  },
+  {
+    icon: Play,
+    title: "Answer, qualify, book",
+    copy: "The agent texts back missed calls in seconds, qualifies the lead, and books the job.",
+  },
+];
+
+const homeCapabilities = [
+  {
+    icon: PhoneCall,
+    title: "Missed-call text-back",
+    copy: "Every unanswered call gets an instant, personal text — seconds after it rings out.",
+  },
+  {
+    icon: Clock3,
+    title: "24/7 lead response",
+    copy: "Nights, weekends, holidays. New inquiries get an answer immediately, every time.",
+  },
+  {
+    icon: UserCheck,
+    title: "Lead qualification",
+    copy: "The agent asks your questions and filters out the tire-kickers before they reach your calendar.",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Appointment booking",
+    copy: "Qualified leads book straight onto your calendar, synced with your schedule.",
+  },
+  {
+    icon: Bell,
+    title: "Confirmations and reminders",
+    copy: "Automatic texts keep the calendar full and the no-shows down.",
+  },
+  {
+    icon: RefreshCcw,
+    title: "No-show recovery",
+    copy: "Missed appointments get followed up automatically — and rebooked.",
+  },
+  {
+    icon: ClipboardList,
+    title: "CRM and calendar updates",
+    copy: "Every conversation, lead, and booking is logged where your team can see it.",
+  },
+  {
+    icon: UsersRound,
+    title: "Live handoff to your team",
+    copy: "The moment a human should step in, the agent hands over the full conversation.",
+  },
+];
+
+const nichePaths = [
+  {
+    to: "/home-services",
+    title: "Home Services",
+    copy: "HVAC, plumbing, electrical, roofing, remodeling, tree service — every missed call becomes a booked job.",
+  },
+  {
+    to: "/legal",
+    title: "Legal",
+    copy: "Personal injury, family law, criminal defense, and more — every inquiry becomes a scheduled consultation.",
+  },
+  {
+    to: "/medspa-dental",
+    title: "Med Spa & Dental",
+    copy: "Med spas, cosmetic dentistry, orthodontics, wellness — every inquiry becomes a booked consultation.",
+  },
+];
+
 function HomePage() {
   const shouldReduceMotion = useReducedMotion();
   const reveal = shouldReduceMotion
@@ -291,304 +179,250 @@ function HomePage() {
         transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
       };
 
+  const trackBooking = (location: string) => {
+    trackEvent("booking_cta_clicked", { vertical: "home", location });
+    trackEvent("primary_cta_clicked", { vertical: "home", location });
+  };
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      <PageMeta
+        description="Every missed call becomes a booked job. Backend Brilliance's AI Lead Booking Agent answers every missed call by text within seconds, qualifies the lead, and books the job. From $1,950/month."
+        path="/"
+        title="Backend Brilliance | Every Missed Call Becomes a Booked Job"
       />
 
-      <header className="site-header reference-header">
-        <a className="brand" href="#home" aria-label="Backend Brilliance home">
-          <img src="/backend-brilliance-logo.png" alt="" />
-          <span>
-            <strong>Backend Brilliance</strong>
-            <small>Growth &amp; Automation Systems</small>
-          </span>
-        </a>
-
-        <nav aria-label="Primary navigation">
-          {navItems.map(([label, href]) => (
-            <a key={label} href={href}>
-              {label}
-            </a>
-          ))}
-        </nav>
-
-        <a
-          className="button button-primary header-button"
-          href={LINKS.booking}
-          onClick={() => trackEvent("booking_click", { location: "header" })}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Find the Right Solution
-        </a>
-      </header>
-
-      <main className="reference-page">
-        <section className="reference-hero section-shell" id="home">
-          <motion.p className="eyebrow" {...reveal}>
-            Growth and Automation Systems for Local Businesses
-          </motion.p>
-          <motion.h1 {...reveal}>
-            Find the Bottleneck.
-            <span>Build the Right System.</span>
-          </motion.h1>
-          <motion.p className="reference-subhead" {...reveal}>
-            Backend Brilliance helps businesses generate more opportunities,
-            capture more inquiries, respond faster, convert more leads, build
-            trust, reactivate past customers, and automate repetitive growth
-            operations.
-          </motion.p>
-          <motion.div className="hero-actions centered-actions" {...reveal}>
-            <a
-              className="button button-primary"
-              href={LINKS.booking}
-              onClick={() => trackEvent("booking_click", { location: "hero" })}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Find the Right Solution
-              <ArrowRight size={18} />
-            </a>
-            <a
-              className="button button-secondary"
-              href="#journey"
-              onClick={() =>
-                trackEvent("section_nav_click", {
-                  location: "hero",
-                  target: "journey",
-                })
-              }
-            >
-              See How We Help
-            </a>
-          </motion.div>
-        </section>
-
-        <section className="journey-section section-shell" id="journey">
-          <motion.div className="section-heading centered" {...reveal}>
-            <p className="eyebrow">Problem → Solution</p>
-            <h2>Where growth usually gets stuck.</h2>
-            <p>
-              Most businesses do not have one single problem. They have a few
-              small breakdowns across visibility, intake, follow-up, conversion,
-              trust, and operations.
-            </p>
-          </motion.div>
-          <div className="solution-map-grid">
-            {problemSolutions.map(({ bullets, copy, icon: Icon, problem, title }) => (
-              <motion.article className="solution-map-card" key={problem} {...reveal}>
-                <Icon size={28} />
-                <p>{problem}</p>
-                <h3>{title}</h3>
-                <span>{copy}</span>
-                <ul>
-                  {bullets.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </motion.article>
-            ))}
-          </div>
-        </section>
-
-        <section className="black-audit-card section-shell" id="growth-review-request">
-          <div className="black-audit-icon">
-            <BarChart3 size={34} />
-          </div>
-          <div>
-            <h2>Not Sure What to Fix First?</h2>
-            <p>Start with a conversation or request a personalized review.</p>
-          </div>
+      <div className="vertical-page vertical-page--home">
+        <header className="vertical-header">
+          <a className="vertical-brand" href="/" aria-label="Backend Brilliance home">
+            <img src="/backend-brilliance-logo.png" alt="" />
+            <span>
+              <strong>Backend</strong>
+              <strong>Brilliance</strong>
+            </span>
+          </a>
+          <nav aria-label="Homepage navigation">
+            <a href="#home-how-it-works">How It Works</a>
+            <a href="#home-who">Who It&apos;s For</a>
+            <a href="#home-pricing">Pricing</a>
+            <a href="#home-faq">FAQ</a>
+          </nav>
           <a
-            className="button button-primary"
+            className="button button-primary vertical-header-cta"
             href={LINKS.booking}
-            onClick={() => trackEvent("booking_click", { location: "midpage_cta" })}
+            onClick={() => trackBooking("header")}
             target="_blank"
             rel="noopener noreferrer"
           >
-            Talk About My Business
-            <ArrowRight size={18} />
+            Book a Demo
           </a>
-        </section>
+        </header>
 
-        <Section
-          eyebrow="Solution categories"
-          id="solutions"
-          title="The right system depends on the actual bottleneck."
-          centered
-        >
-          <div className="feature-grid service-category-grid">
-            {serviceCards.map(({ icon: Icon, title, copy }) => (
-              <motion.article className="feature-card" key={title} {...reveal}>
-                <Icon size={28} />
-                <h3>{title}</h3>
-                <p>{copy}</p>
-              </motion.article>
-            ))}
-          </div>
-        </Section>
-
-        <Section
-          eyebrow="How it works"
-          id="how-it-works"
-          title="Diagnose first. Then build what solves the problem."
-          centered
-        >
-          <div className="step-grid three-step-grid">
-            {howItWorks.map((step) => (
-              <motion.article className="step-card" key={step.step} {...reveal}>
-                <span>{step.step}</span>
-                <h3>{step.title}</h3>
-                <p>{step.copy}</p>
-              </motion.article>
-            ))}
-          </div>
-        </Section>
-
-        <section className="pricing-section page-section" id="growth-review">
-          <div className="section-shell">
-            <motion.div className="section-heading centered" {...reveal}>
-              <p className="eyebrow">Consultative next step</p>
-              <h2>Find the right solution before you buy anything.</h2>
-              <p>
-                Backend Brilliance is not here to force every business into one
-                product. The goal is to understand the revenue problem, then
-                recommend the right growth or automation system.
+        <main>
+          <section className="vertical-hero section-shell" id="top">
+            <motion.div className="vertical-hero-copy" {...reveal}>
+              <p className="vertical-eyebrow">AI Lead Booking Agent</p>
+              <h1>Every missed call becomes a booked job.</h1>
+              <p className="vertical-subheading">
+                Backend Brilliance&apos;s AI Lead Booking Agent answers every
+                missed call by text within seconds, qualifies the lead, and
+                books the job — so no opportunity slips through.
               </p>
             </motion.div>
 
-            <div className="consult-card-grid">
-              {[
-                "Identify the highest-friction part of your current growth path.",
-                "Match the problem to the right service category.",
-                "Confirm scope, requirements, proposal, or invoice path before implementation.",
-              ].map((item, index) => (
-                <motion.article className="pricing-card consult-card" key={item} {...reveal}>
-                  <span>0{index + 1}</span>
-                  <p>{item}</p>
-                </motion.article>
-              ))}
-            </div>
-
-            <p className="pricing-note">
-              Specific pricing and scope depend on the solution recommended.
-              Third-party software, advertising spend, usage fees, and platform
-              costs are confirmed before work begins.
-            </p>
-            <div className="centered-actions">
+            <motion.div className="vertical-hero-actions" {...reveal}>
               <a
-                className="button button-primary"
+                className="button button-primary vertical-primary"
                 href={LINKS.booking}
-                onClick={() => trackEvent("booking_click", { location: "consult_section" })}
+                onClick={() => trackBooking("hero")}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Find the Right Solution
-                <ArrowRight size={18} />
+                Book a Demo<ArrowRight size={20} />
               </a>
+              <a
+                className="button button-secondary vertical-secondary"
+                href="#demo"
+                onClick={() => trackEvent("secondary_cta_clicked", { vertical: "home", location: "hero" })}
+              >
+                <ArrowRight size={20} />
+                See It In Action
+              </a>
+            </motion.div>
+            <motion.p className="vertical-microline" {...reveal}>
+              From $1,950/month · No new staff · Nothing to install
+            </motion.p>
+          </section>
+
+          <section className="vertical-demo-section section-shell" id="demo">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">Watch it work</p>
+              <h2>Thirty seconds. One missed call. One booked job.</h2>
+            </motion.div>
+            <motion.div {...reveal}>
+              <div className="vertical-demo-panel is-video">
+                <video
+                  controls
+                  onPlay={() => trackEvent("demo_video_clicked", { vertical: "home" })}
+                  preload="metadata"
+                  src="/demo-video.mp4"
+                >
+                  <track kind="captions" />
+                </video>
+              </div>
+            </motion.div>
+            <motion.p className="vertical-watch-line" {...reveal}>
+              A dramatization of a real scenario — a homeowner calls after
+              hours, the agent texts back in seconds, qualifies the job, and
+              books the estimate. Watch the demo. It runs in under a minute.
+            </motion.p>
+          </section>
+
+          <section
+            className="vertical-how section-shell"
+            id="home-how-it-works"
+            aria-labelledby="home-how"
+          >
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">How it works</p>
+              <h2 id="home-how">Missed call in. Booked job out.</h2>
+            </motion.div>
+            <div className="vertical-how-grid">
+              {homeSteps.map(({ icon: Icon, title, copy }, index) => (
+                <motion.article className="vertical-how-card" key={title} {...reveal}>
+                  <span className="vertical-step-number">{index + 1}</span>
+                  <div className="vertical-how-icon">
+                    <Icon size={34} />
+                  </div>
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                </motion.article>
+              ))}
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="faq-section section-shell" id="faq">
-          <motion.div className="section-heading centered" {...reveal}>
-            <p className="eyebrow">Frequently Asked Questions</p>
-            <h2>Questions Before You Start?</h2>
-          </motion.div>
-          <div className="faq-list">
-            {faqs.map((faq) => (
-              <motion.details key={faq.question} {...reveal}>
-                <summary>
-                  {faq.question}
-                  <span>+</span>
-                </summary>
-                <p>{faq.answer}</p>
-              </motion.details>
-            ))}
-          </div>
-        </section>
+          <section className="vertical-capabilities section-shell" id="home-who">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">Who it&apos;s for</p>
+              <h2>Built for the businesses that live on the phone.</h2>
+            </motion.div>
+            <div className="vertical-path-grid">
+              {nichePaths.map((path) => (
+                <motion.div key={path.to} {...reveal}>
+                  <Link
+                    className="vertical-path-card"
+                    onClick={() => trackEvent("niche_path_clicked", { vertical: "home", path: path.to })}
+                    to={path.to}
+                  >
+                    <h3>{path.title}</h3>
+                    <p>{path.copy}</p>
+                    <span>
+                      See how it works<ArrowRight size={18} />
+                    </span>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </section>
 
-        <section className="final-cta section-shell" id="booking">
-          <motion.div {...reveal}>
-            <h2>Ready to Build a Smarter Client System?</h2>
-            <p>
-              Book a strategy call to see which Backend Brilliance system fits
-              your business best.
-            </p>
-            <a
-              className="button button-primary"
-              href={LINKS.booking}
-              onClick={() => trackEvent("booking_click", { location: "final_cta" })}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Find the Right Solution
-              <ArrowRight size={18} />
-            </a>
-          </motion.div>
-          <motion.div className="clipboard-visual" {...reveal}>
-            <ShieldCheck size={96} />
-          </motion.div>
-        </section>
-      </main>
+          <section className="vertical-capabilities section-shell" id="home-capabilities">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">What&apos;s included</p>
+              <h2>The machinery behind every booked job.</h2>
+            </motion.div>
+            <div className="vertical-capability-grid">
+              {homeCapabilities.map(({ icon: Icon, title, copy }) => (
+                <motion.article className="vertical-capability-card" key={title} {...reveal}>
+                  <span>
+                    <Icon size={28} />
+                  </span>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{copy}</p>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          </section>
 
-      <footer className="site-footer" id="contact">
-        <div>
-          <a className="brand" href="#home" aria-label="Backend Brilliance home">
-            <img src="/backend-brilliance-logo.png" alt="" />
-            <span>
-              <strong>Backend Brilliance</strong>
-              <small>Growth &amp; Automation Systems</small>
-            </span>
-          </a>
-          <p>Growth and automation systems for local businesses.</p>
-        </div>
+          <section className="vertical-pricing section-shell" id="home-pricing">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">Pricing</p>
+              <h2>One plan. Every missed call covered.</h2>
+            </motion.div>
+            <motion.div className="vertical-pricing-card" {...reveal}>
+              <p className="vertical-eyebrow">AI Lead Booking Agent</p>
+              <p className="vertical-price">
+                <strong>From $1,950</strong>
+                <span>/month</span>
+              </p>
+              <p>
+                Missed-call text-back, instant lead response, qualification,
+                calendar booking, confirmations and reminders, no-show recovery,
+                and CRM updates. Month-to-month. No long-term contract.
+              </p>
+              <a
+                className="button button-primary vertical-primary"
+                href={LINKS.booking}
+                onClick={() => trackBooking("pricing")}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Book a Demo<ArrowRight size={18} />
+              </a>
+              <small>
+                Any one-time setup and third-party messaging costs are confirmed
+                with you before anything starts. No surprises.
+              </small>
+            </motion.div>
+          </section>
 
-        <div className="footer-column">
-          <h3>Quick Links</h3>
-          {navItems.map(([label, href]) => (
-            <a key={label} href={href}>
-              {label}
-            </a>
-          ))}
-          <a href={LINKS.supportEmail}>{OFFER_CONFIG.site.supportEmail}</a>
-        </div>
+          <section className="vertical-faq section-shell" id="home-faq">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">Questions</p>
+              <h2>Questions before you book?</h2>
+            </motion.div>
+            <div className="vertical-faq-list">
+              {homeFaqs.map((faq) => (
+                <motion.details className="vertical-faq-item" key={faq.question} {...reveal}>
+                  <summary>
+                    {faq.question}
+                    <span aria-hidden="true">+</span>
+                  </summary>
+                  <p>{faq.answer}</p>
+                </motion.details>
+              ))}
+            </div>
+          </section>
 
-        <div className="footer-column">
-          <h3>Services</h3>
-          {footerServices.map((service) => (
-            <span key={service}>{service}</span>
-          ))}
-        </div>
-      </footer>
-    </>
-  );
-}
+          <section className="vertical-final-cta section-shell">
+            <motion.div className="vertical-final-card" {...reveal}>
+              <div className="vertical-final-logo" aria-hidden="true">
+                BB
+              </div>
+              <div>
+                <h2>Stop losing jobs to the businesses that answer first.</h2>
+                <p>
+                  Book a 15-minute walkthrough and we&apos;ll show you the agent
+                  working — on your phone, with your business.
+                </p>
+              </div>
+              <a
+                className="button button-primary vertical-primary"
+                href={LINKS.booking}
+                onClick={() => trackBooking("final_cta")}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Book a Demo<ArrowRight size={18} />
+              </a>
+            </motion.div>
+          </section>
+        </main>
 
-function Section({
-  children,
-  centered = false,
-  eyebrow,
-  id,
-  title,
-}: {
-  children: ReactNode;
-  centered?: boolean;
-  eyebrow: string;
-  id: string;
-  title: string;
-}) {
-  return (
-    <section className="content-section section-shell" id={id}>
-      <div className={`section-heading ${centered ? "centered" : ""}`}>
-        <p className="eyebrow">{eyebrow}</p>
-        <h2>{title}</h2>
+        <SiteFooter onBookingClick={() => trackBooking("footer")} />
       </div>
-      {children}
-    </section>
+    </>
   );
 }
 

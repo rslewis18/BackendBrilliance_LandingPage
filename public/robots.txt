@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://backendbrilliance.com/sitemap.xml
+Sitemap: https://backendbrilliance.co/sitemap.xml
