@@ -246,14 +246,15 @@ function HomePage() {
           <section className="vertical-hero section-shell" id="top">
             <motion.div className="vertical-hero-copy" {...reveal}>
               <p className="vertical-eyebrow">AI Lead Booking Agent — for any business that takes calls</p>
-              <h1>Every missed call becomes a booked job.</h1>
+              <h1>Never miss a call.</h1>
               <p className="vertical-subheading">
                 Doesn&apos;t matter what industry you&apos;re in. If your
-                business runs on the phone, a missed call is missed money. Our
-                agent answers every missed call in seconds — by voice or by
-                text — qualifies the lead with your questions, and books them
-                straight onto your calendar — nights, weekends, and the middle
-                of a job included.
+                business runs on the phone, every call is an opportunity. Our
+                AI answers every call live — qualifies the lead with your
+                questions, books them straight onto your calendar, hands the
+                qualified lead to your team with the full details, and follows
+                up automatically — nights, weekends, and the middle of a job
+                included.
               </p>
             </motion.div>
 
