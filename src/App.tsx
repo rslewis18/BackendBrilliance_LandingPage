@@ -299,10 +299,10 @@ function HomePage() {
               </div>
             </motion.div>
             <motion.p className="vertical-watch-line" {...reveal}>
-              A dramatization of a real scenario — a homeowner calls after
-              hours, the agent texts back in seconds, qualifies the job, books
-              the estimate, hands the qualified lead to your team, and follows
-              up. Watch the demo. It runs in under a minute.
+              A dramatization of a real scenario — a homeowner calls, Olivia
+              answers live, qualifies the job, books the visit, hands the
+              qualified lead to your team with the full details, and follows
+              up automatically. Watch the demo. It runs in under a minute.
             </motion.p>
           </section>
 

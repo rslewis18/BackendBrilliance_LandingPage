@@ -108,9 +108,9 @@ const homeServices: VerticalPageConfig = {
     "When someone calls your shop, they shouldn't have to reach a human to become a lead. Our AI answers every call in seconds — qualifies the job, books the estimate, hands the qualified lead to your team, and follows up — so no opportunity slips through.",
   primaryCta: "Book a Demo",
   secondaryCta: "See It In Action",
-  demoHeading: "One after-hours call becomes a qualified, booked job in under a minute.",
+  demoHeading: "One call becomes a qualified, booked job in under a minute.",
   demoCopy:
-    "A dramatization of a real scenario — a homeowner calls after hours, the agent texts back in seconds, qualifies the job, books the estimate, hands the qualified lead to your team, and follows up automatically.",
+    "A dramatization of a real scenario — a homeowner calls, Olivia answers live, qualifies the job, books the visit, hands the qualified lead to your team with the full details, and follows up automatically.",
   heroWatchLine: "Watch the demo. It runs in under a minute.",
   demoLabel: "AI Lead Booking Agent demo",
   videoUrl: "/demo-video.mp4",
@@ -283,7 +283,7 @@ const legal: VerticalPageConfig = {
   secondaryCta: "See It In Action",
   demoHeading: "One intake call becomes a qualified, booked consultation in under a minute.",
   demoCopy:
-    "A dramatization of a real scenario — a potential client calls during a hearing, the agent texts back in seconds, collects preliminary intake, screens for case fit, books the consultation, hands the organized intake to your team, and follows up.",
+    "A dramatization of a real scenario — a potential client calls, Olivia answers live, collects preliminary intake, screens for case fit, books the consultation, hands the organized intake to your team with the full details, and follows up automatically.",
   heroWatchLine: "Watch the demo. It runs in under a minute.",
   demoLabel: "AI Lead Booking Agent demo",
   videoUrl: "/demo-video.mp4",
@@ -457,7 +457,7 @@ const medspaDental: VerticalPageConfig = {
   secondaryCta: "See It In Action",
   demoHeading: "One call from a new patient becomes a qualified, booked consultation in under a minute.",
   demoCopy:
-    "A dramatization of a real scenario — a potential patient calls after hours, the agent texts back in seconds, answers common questions, books the consultation, hands the qualified inquiry to your staff, and follows up.",
+    "A dramatization of a real scenario — a potential patient calls, Olivia answers live, answers common questions, books the consultation, hands the qualified inquiry to your staff with the full details, and follows up automatically.",
   heroWatchLine: "Watch the demo. It runs in under a minute.",
   demoLabel: "AI Lead Booking Agent demo",
   videoUrl: "/demo-video.mp4",
