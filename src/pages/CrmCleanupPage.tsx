@@ -83,7 +83,7 @@ const faqs = [
   {
     question: "What happens after the 7 days?",
     answer:
-      "You own the system — it's yours, running in your CRM. If you want the full layer on top, the AI Lead Booking Agent ($1,950/month, month-to-month) takes over answering, qualifying, booking, and following up on every call. Your $950 cleanup fee is fully credited toward the first month if you upgrade within 30 days.",
+      "You own the system — it's yours, running in your CRM. From there you pick your lane: keep it running with us at $450/month (we maintain the CRM, tune the follow-up sequences, and send you a monthly lead report — cancel anytime), or go full system with the AI Lead Booking Agent ($1,950/month, month-to-month), which takes over answering, qualifying, booking, and following up on every call. Your $950 cleanup fee is fully credited toward the first month if you upgrade within 30 days.",
   },
   {
     question: "Is this the AI Lead Booking Agent?",
@@ -256,6 +256,45 @@ export function CrmCleanupPage() {
                 Upgrade to the AI Lead Booking Agent ($1,950/month,
                 month-to-month) within 30 days and the full $950 is credited
                 toward your first month.
+              </small>
+            </motion.div>
+          </section>
+
+          <section className="vertical-faq section-shell" id="cleanup-keep-running">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">After the 7 days</p>
+              <h2>Keep it running, hands off.</h2>
+              <p>
+                The cleanup gets your system working. If you&apos;d rather
+                never think about it again, we keep it running for you —
+                clean data, working follow-up, no babysitting.
+              </p>
+            </motion.div>
+            <motion.div className="vertical-pricing-card" {...reveal}>
+              <p className="vertical-eyebrow">Keep It Running</p>
+              <p className="vertical-price">
+                <strong>$450</strong>
+                <span>/month</span>
+              </p>
+              <p>
+                Ongoing CRM hygiene and dedupe, follow-up sequences managed
+                and tuned, missed-call text-back kept running, and a monthly
+                lead report showing what got worked. Month-to-month — cancel
+                anytime.
+              </p>
+              <a
+                className="button button-primary vertical-primary"
+                href={LINKS.booking}
+                onClick={() => trackBooking("keep_running")}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Book a Walkthrough<ArrowRight size={18} />
+              </a>
+              <small>
+                Prefer the full system? Upgrade to the AI Lead Booking Agent
+                ($1,950/month, month-to-month) within 30 days and the full
+                $950 cleanup fee is credited toward your first month.
               </small>
             </motion.div>
           </section>
