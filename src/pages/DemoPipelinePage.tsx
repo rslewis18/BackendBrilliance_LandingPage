@@ -116,16 +116,27 @@ export function DemoPipelinePage() {
   const [freshId, setFreshId] = useState<string | null>(null);
 
   const fetchCalls = useCallback(async (key: string) => {
-    const res = await fetch(
-      `https://api.vapi.ai/call?assistantId=${ASSISTANT_ID}&limit=${PAGE_SIZE}`,
-      { headers: { Authorization: `Bearer ${key}` } }
-    );
-    if (res.status === 401 || res.status === 403) {
-      throw new Error("That key was rejected by Vapi. Double-check it and try again.");
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
+    try {
+      const res = await fetch(
+        `https://api.vapi.ai/call?assistantId=${ASSISTANT_ID}&limit=${PAGE_SIZE}`,
+        { headers: { Authorization: `Bearer ${key}` }, signal: controller.signal }
+      );
+      if (res.status === 401 || res.status === 403) {
+        throw new Error("That key was rejected by Vapi. Double-check it and try again.");
+      }
+      if (!res.ok) throw new Error(`Vapi returned ${res.status}. Trying again…`);
+      const data = (await res.json()) as DemoCall[];
+      return Array.isArray(data) ? data : [];
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        throw new Error("The request to Vapi timed out. Check your connection and try again.");
+      }
+      throw err;
+    } finally {
+      clearTimeout(timeout);
     }
-    if (!res.ok) throw new Error(`Vapi returned ${res.status}. Trying again…`);
-    const data = (await res.json()) as DemoCall[];
-    return Array.isArray(data) ? data : [];
   }, []);
 
   const refresh = useCallback(
@@ -244,9 +255,11 @@ export function DemoPipelinePage() {
               <div className="demo-statusbar">
                 <span className="demo-statusbar-item">
                   <RefreshCcw size={15} className={loading ? "demo-spin" : ""} />
-                  {lastUpdated
-                    ? `Updated ${lastUpdated.toLocaleTimeString()}`
-                    : "Connecting…"}
+                  {error
+                    ? "Couldn't reach Vapi — see below"
+                    : lastUpdated
+                      ? `Updated ${lastUpdated.toLocaleTimeString()}`
+                      : "Connecting…"}
                 </span>
                 <span className="demo-statusbar-item demo-statusbar-muted">
                   Auto-refreshes every 5s
