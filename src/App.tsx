@@ -8,6 +8,7 @@ import { OnboardingSuccessPage } from "./pages/OnboardingSuccessPage";
 import { StartPage } from "./pages/StartPage";
 import { ThankYouPage } from "./pages/ThankYouPage";
 import { CrmCleanupPage } from "./pages/CrmCleanupPage";
+import { DemoPipelinePage } from "./pages/DemoPipelinePage";
 import { SiteFooter, VerticalLandingPage, verticalPages } from "./pages/VerticalLandingPage";
 import { trackEvent } from "./utils/tracking";
 import {
@@ -30,6 +31,7 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/landing-backup" element={<HomePage />} />
       <Route path="/lead-system-cleanup" element={<CrmCleanupPage />} />
+      <Route path="/demo-pipeline" element={<DemoPipelinePage />} />
       <Route
         path={verticalPages.homeServices.path}
         element={<VerticalLandingPage page={verticalPages.homeServices} />}
