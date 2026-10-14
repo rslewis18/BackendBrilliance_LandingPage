@@ -23,6 +23,14 @@ type StructuredData = {
   message_taken?: string;
 };
 
+type StructuredOutputEntry = {
+  structuredOutputId?: string;
+  output?: StructuredData;
+  result?: StructuredData;
+  data?: StructuredData;
+  [key: string]: unknown;
+};
+
 type DemoCall = {
   id: string;
   createdAt: string;
@@ -31,12 +39,33 @@ type DemoCall = {
   summary?: string;
   transcript?: string;
   analysis?: { structuredData?: StructuredData };
+  artifact?: { structuredOutputs?: StructuredOutputEntry[] };
 };
+
+const LEAD_OUTPUT_ID = "01ee4b95-e6af-442e-885b-610a2be5ec13";
 
 type Stage = "new" | "qualified" | "booked";
 
+function getStructured(call: DemoCall): StructuredData {
+  const entries = call.artifact?.structuredOutputs;
+  if (Array.isArray(entries) && entries.length > 0) {
+    const entry =
+      entries.find((e) => e.structuredOutputId === LEAD_OUTPUT_ID) ?? entries[0];
+    const nested =
+      (entry.output as StructuredData | undefined) ??
+      (entry.result as StructuredData | undefined) ??
+      (entry.data as StructuredData | undefined);
+    if (nested && typeof nested === "object") return nested;
+    const { structuredOutputId: _omit, ...rest } = entry;
+    if (rest && typeof rest === "object" && ("urgency" in rest || "caller_name" in rest)) {
+      return rest as StructuredData;
+    }
+  }
+  return call.analysis?.structuredData ?? {};
+}
+
 function stageOf(call: DemoCall): Stage {
-  const sd = call.analysis?.structuredData;
+  const sd = getStructured(call);
   if (sd?.booked_slot && sd.booked_slot.trim()) return "booked";
   if (sd && (sd.issue_summary || sd.urgency)) return "qualified";
   return "new";
@@ -59,7 +88,7 @@ const STAGES: { key: Stage; title: string; icon: typeof PhoneCall; hint: string 
 ];
 
 function LeadCard({ call, fresh }: { call: DemoCall; fresh: boolean }) {
-  const sd = call.analysis?.structuredData ?? {};
+  const sd = getStructured(call);
   const name = sd.caller_name?.trim() || "Unknown caller";
   const urgent = (sd.urgency || "").toLowerCase() === "emergency";
   const transcript = (call.transcript || "").replace(/\s+/g, " ").trim();
