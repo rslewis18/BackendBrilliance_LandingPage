@@ -10,10 +10,8 @@ import {
   UserCheck,
 } from "lucide-react";
 
-const ASSISTANT_ID = "b02dc46f-e6d9-4a2f-ba64-ef3d9887897b";
 const KEY_STORAGE = "bb_demo_pipeline_vapi_key";
 const POLL_MS = 5000;
-const PAGE_SIZE = 12;
 
 type StructuredData = {
   caller_name?: string;
@@ -119,19 +117,25 @@ export function DemoPipelinePage() {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000);
     try {
-      const res = await fetch(
-        `https://api.vapi.ai/call?assistantId=${ASSISTANT_ID}&limit=${PAGE_SIZE}`,
-        { headers: { Authorization: `Bearer ${key}` }, signal: controller.signal }
-      );
-      if (res.status === 401 || res.status === 403) {
-        throw new Error("That key was rejected by Vapi. Double-check it and try again.");
+      // Same-origin proxy: some phones/networks can't reach api.vapi.ai
+      // directly, so the edge function forwards the request to Vapi.
+      const res = await fetch("/api/demo-calls", {
+        headers: { "x-vapi-key": key },
+        signal: controller.signal,
+      });
+      const data = (await res.json()) as DemoCall[] | { error?: string };
+      if (!res.ok) {
+        const message =
+          typeof data === "object" && data !== null && "error" in data && typeof data.error === "string"
+            ? data.error
+            : `Request failed (${res.status}). Trying again…`;
+        throw new Error(message);
       }
-      if (!res.ok) throw new Error(`Vapi returned ${res.status}. Trying again…`);
-      const data = (await res.json()) as DemoCall[];
-      return Array.isArray(data) ? data : [];
+      const list = data as DemoCall[];
+      return Array.isArray(list) ? list : [];
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") {
-        throw new Error("The request to Vapi timed out. Check your connection and try again.");
+        throw new Error("The request timed out. Check your connection and try again.");
       }
       throw err;
     } finally {
