@@ -4665,3 +4665,117 @@ h1 {
   color: rgba(255, 255, 255, 0.72);
   font-size: 1rem;
 }
+
+/* ---- Conversion pass: hero video, proof strip, wedge ---- */
+
+.vertical-hero-video {
+  width: min(900px, 100%);
+  margin: 34px auto 0;
+}
+
+.vertical-hero-video .vertical-demo-panel {
+  width: 100%;
+}
+
+.vertical-wedge-strip {
+  margin: 14px auto 0;
+  color: rgba(245, 242, 235, 0.72);
+  font-size: 0.98rem;
+}
+
+.vertical-wedge-strip a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 4px;
+}
+
+.vertical-wedge-strip a:hover {
+  color: var(--accent);
+}
+
+.vertical-proof-strip {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.vertical-proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.vertical-proof-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+  border: 1px solid rgba(245, 242, 235, 0.14);
+  border-radius: 20px;
+  padding: 26px 18px;
+  background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(5, 5, 5, 0.95));
+}
+
+.vertical-proof-stat strong {
+  color: #fff;
+  font-size: clamp(2rem, 4.5vw, 2.9rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.vertical-proof-stat span {
+  color: rgba(245, 242, 235, 0.66);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.vertical-wedge-card {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid rgba(229, 57, 53, 0.5);
+  border-radius: 28px;
+  padding: clamp(32px, 5vw, 52px);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(229, 57, 53, 0.16), transparent 26rem),
+    linear-gradient(135deg, rgba(40, 10, 10, 0.6), rgba(7, 7, 7, 0.95));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 28px 80px rgba(0, 0, 0, 0.44);
+}
+
+.vertical-wedge-card h2 {
+  margin: 0 0 14px;
+  color: #f8f8f8;
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.vertical-wedge-card p {
+  width: min(680px, 100%);
+  margin: 0 auto 26px;
+  color: rgba(245, 242, 235, 0.78);
+  font-size: 1.06rem;
+  line-height: 1.65;
+}
+
+.vertical-wedge-card p strong {
+  color: #fff;
+}
+
+@media (max-width: 760px) {
+  .vertical-proof-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+}

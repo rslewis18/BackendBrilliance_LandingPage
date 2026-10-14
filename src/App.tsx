@@ -94,6 +94,11 @@ const homeFaqs = [
       "From $1,950/month, month-to-month. Any one-time setup and third-party messaging costs are confirmed with you before anything starts.",
   },
   {
+    question: "Is there a smaller way to start?",
+    answer:
+      "Yes. The Lead System Cleanup is a one-time, done-for-you overhaul — CRM audit and dedupe, pipeline stages, missed-call text-back, and 30-day follow-up sequences — live in 7 days for $950 flat. The $950 is fully credited toward the AI Lead Booking Agent if you upgrade within 30 days.",
+  },
+  {
     question: "How do we get started?",
     answer:
       "Book a 15-minute walkthrough. We'll show you the agent working on your phone, then connect it to your business line and calendar and configure it around how you work.",
@@ -247,16 +252,15 @@ function HomePage() {
         <main>
           <section className="vertical-hero section-shell" id="top">
             <motion.div className="vertical-hero-copy" {...reveal}>
-              <p className="vertical-eyebrow">AI Lead Booking Agent — for any business that takes calls</p>
-              <h1>Never miss a call.</h1>
+              <p className="vertical-eyebrow">AI Lead Booking Agent</p>
+              <h1>Every call answered. Every job booked.</h1>
               <p className="vertical-subheading">
-                Doesn&apos;t matter what industry you&apos;re in. If your
-                business runs on the phone, every call is an opportunity. Our
-                AI answers every call live — qualifies the lead with your
-                questions, books them straight onto your calendar, hands the
-                qualified lead to your team with the full details, and follows
-                up automatically — nights, weekends, and the middle of a job
-                included.
+                Roughly 62% of calls to small businesses go unanswered — and
+                the sale goes to whoever picks up first. Our AI answers every
+                call live, qualifies the lead with your questions, books them
+                straight onto your calendar, hands the qualified lead to your
+                team with the full details, and follows up automatically —
+                nights, weekends, and the middle of a job included.
               </p>
             </motion.div>
 
@@ -272,41 +276,63 @@ function HomePage() {
               </a>
               <a
                 className="button button-secondary vertical-secondary"
-                href="#demo"
-                onClick={() => trackEvent("secondary_cta_clicked", { vertical: "home", location: "hero" })}
+                href="tel:+13049317167"
+                onClick={() => trackEvent("demo_call_clicked", { vertical: "home", location: "hero" })}
               >
-                <ArrowRight size={20} />
-                See It In Action
+                <PhoneCall size={20} />
+                Call it live now
               </a>
             </motion.div>
             <motion.p className="vertical-microline" {...reveal}>
-              From $1,950/month · No new staff · Nothing to install
+              From $1,950/month · No new staff · Nothing to install · Month-to-month
             </motion.p>
-          </section>
+            <motion.p className="vertical-wedge-strip" {...reveal}>
+              Prefer to start smaller?{" "}
+              <Link
+                to="/lead-system-cleanup"
+                onClick={() => trackEvent("wedge_cta_clicked", { vertical: "home", location: "hero" })}
+              >
+                Lead System Cleanup — $950 one-time, done in 7 days
+                <ArrowRight size={16} />
+              </Link>
+            </motion.p>
 
-          <section className="vertical-demo-section section-shell" id="demo">
-            <motion.div className="vertical-section-heading centered" {...reveal}>
-              <p className="vertical-eyebrow">Watch it work</p>
-              <h2>Under a minute. One call. Qualified, booked, handed off.</h2>
-            </motion.div>
-            <motion.div {...reveal}>
+            <motion.div className="vertical-hero-video" {...reveal}>
               <div className="vertical-demo-panel is-video">
                 <video
                   controls
-                  onPlay={() => trackEvent("demo_video_clicked", { vertical: "home" })}
+                  onPlay={() => trackEvent("demo_video_clicked", { vertical: "home", location: "hero" })}
                   preload="metadata"
                   src="/demo-video.mp4"
                 >
                   <track kind="captions" />
                 </video>
               </div>
+              <p className="vertical-watch-line">
+                Under a minute. One call. Qualified, booked, handed off. A
+                dramatization of a real scenario — a homeowner calls, Olivia
+                answers live, qualifies the job, books the visit, hands the
+                qualified lead to your team with the full details, and follows
+                up automatically.
+              </p>
             </motion.div>
-            <motion.p className="vertical-watch-line" {...reveal}>
-              A dramatization of a real scenario — a homeowner calls, Olivia
-              answers live, qualifies the job, books the visit, hands the
-              qualified lead to your team with the full details, and follows
-              up automatically. Watch the demo. It runs in under a minute.
-            </motion.p>
+          </section>
+
+          <section className="vertical-proof-strip section-shell" aria-label="Why answering first wins">
+            <motion.div className="vertical-proof-grid" {...reveal}>
+              <div className="vertical-proof-stat">
+                <strong>62%</strong>
+                <span>of calls to small businesses go unanswered</span>
+              </div>
+              <div className="vertical-proof-stat">
+                <strong>78%</strong>
+                <span>of sales go to the business that responds first</span>
+              </div>
+              <div className="vertical-proof-stat">
+                <strong>24/7</strong>
+                <span>your agent answers — nights, weekends, holidays</span>
+              </div>
+            </motion.div>
           </section>
 
           <section
@@ -391,6 +417,28 @@ function HomePage() {
                 </motion.article>
               ))}
             </div>
+          </section>
+
+          <section className="vertical-wedge section-shell" id="home-start-smaller">
+            <motion.div className="vertical-wedge-card" {...reveal}>
+              <p className="vertical-eyebrow">Start smaller</p>
+              <h2>Not ready for the full agent? Start with a cleanup.</h2>
+              <p>
+                The <strong>Lead System Cleanup</strong> is a one-time,
+                done-for-you overhaul: CRM audit and dedupe, pipeline stages,
+                missed-call text-back, and 30-day follow-up sequences — live in
+                7 days for <strong>$950 flat</strong>. The system is yours to
+                keep, and the $950 is fully credited toward the AI agent if you
+                upgrade within 30 days.
+              </p>
+              <Link
+                className="button button-secondary vertical-secondary"
+                onClick={() => trackEvent("wedge_cta_clicked", { vertical: "home", location: "wedge_section" })}
+                to="/lead-system-cleanup"
+              >
+                See the Cleanup<ArrowRight size={18} />
+              </Link>
+            </motion.div>
           </section>
 
           <section className="vertical-pricing section-shell" id="home-pricing">
