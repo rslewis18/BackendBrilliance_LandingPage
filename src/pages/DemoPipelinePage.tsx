@@ -31,6 +31,14 @@ type StructuredOutputEntry = {
   [key: string]: unknown;
 };
 
+// Vapi returns artifact.structuredOutputs as an object keyed by schema ID:
+// { "<id>": { name: "Lead Capture", result: { ... } } }
+// Older shape was an array of entries; handle both.
+type StructuredOutputMap = Record<
+  string,
+  { name?: string; output?: StructuredData; result?: StructuredData; data?: StructuredData }
+>;
+
 type DemoCall = {
   id: string;
   createdAt: string;
@@ -39,7 +47,7 @@ type DemoCall = {
   summary?: string;
   transcript?: string;
   analysis?: { structuredData?: StructuredData };
-  artifact?: { structuredOutputs?: StructuredOutputEntry[] };
+  artifact?: { structuredOutputs?: StructuredOutputEntry[] | StructuredOutputMap };
 };
 
 const LEAD_OUTPUT_ID = "01ee4b95-e6af-442e-885b-610a2be5ec13";
@@ -47,18 +55,29 @@ const LEAD_OUTPUT_ID = "01ee4b95-e6af-442e-885b-610a2be5ec13";
 type Stage = "new" | "qualified" | "booked";
 
 function getStructured(call: DemoCall): StructuredData {
-  const entries = call.artifact?.structuredOutputs;
-  if (Array.isArray(entries) && entries.length > 0) {
-    const entry =
-      entries.find((e) => e.structuredOutputId === LEAD_OUTPUT_ID) ?? entries[0];
-    const nested =
-      (entry.output as StructuredData | undefined) ??
-      (entry.result as StructuredData | undefined) ??
-      (entry.data as StructuredData | undefined);
-    if (nested && typeof nested === "object") return nested;
-    const { structuredOutputId: _omit, ...rest } = entry;
-    if (rest && typeof rest === "object" && ("urgency" in rest || "caller_name" in rest)) {
-      return rest as StructuredData;
+  const raw = call.artifact?.structuredOutputs;
+  if (raw && typeof raw === "object") {
+    if (Array.isArray(raw)) {
+      const entries = raw as StructuredOutputEntry[];
+      if (entries.length > 0) {
+        const entry =
+          entries.find((e) => e.structuredOutputId === LEAD_OUTPUT_ID) ?? entries[0];
+        const nested =
+          (entry.output as StructuredData | undefined) ??
+          (entry.result as StructuredData | undefined) ??
+          (entry.data as StructuredData | undefined);
+        if (nested && typeof nested === "object") return nested;
+        const { structuredOutputId: _omit, ...rest } = entry;
+        if (rest && typeof rest === "object" && ("urgency" in rest || "caller_name" in rest)) {
+          return rest as StructuredData;
+        }
+      }
+    } else {
+      // Object keyed by structured-output ID (current Vapi shape)
+      const byId = raw as StructuredOutputMap;
+      const mine = byId[LEAD_OUTPUT_ID] ?? Object.values(byId)[0];
+      const nested = mine?.result ?? mine?.output ?? mine?.data;
+      if (nested && typeof nested === "object") return nested;
     }
   }
   return call.analysis?.structuredData ?? {};
