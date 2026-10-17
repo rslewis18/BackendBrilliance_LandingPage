@@ -59,8 +59,8 @@ const processSteps = [
   },
   {
     icon: Zap,
-    title: "You run on autopilot",
-    copy: "In 7 days you have a system that catches every lead and follows up on its own. No more leads dying in a spreadsheet.",
+    title: "We run it for you",
+    copy: "In 7 days the system is live — and it stays live because we run it: clean data, tuned follow-ups, every lead worked. You run your business.",
   },
 ];
 
@@ -83,7 +83,7 @@ const faqs = [
   {
     question: "What happens after the 7 days?",
     answer:
-      "You own the system — it's yours, running in your CRM. From there you pick your lane: keep it running with us at $450/month (we maintain the CRM, tune the follow-up sequences, and send you a monthly lead report — cancel anytime), or go full system with the AI Lead Booking Agent ($1,950/month, month-to-month), which takes over answering, qualifying, booking, and following up on every call. Your $950 cleanup fee is fully credited toward the first month if you upgrade within 30 days.",
+      "The $450/month management kicks in — it's part of the deal, not an add-on. We keep the CRM clean, tune the follow-up sequences, keep the missed-call text-back running, and send you a monthly lead report. Month-to-month, cancel anytime. Want the full system instead? Upgrade to the AI Lead Booking Agent ($1,950/month, month-to-month) — it replaces the $450/month tier, and your $950 setup fee is fully credited toward the first month if you upgrade within 30 days.",
   },
   {
     question: "Is this the AI Lead Booking Agent?",
@@ -111,7 +111,7 @@ export function CrmCleanupPage() {
   return (
     <>
       <PageMeta
-        description="CRM Cleanup + Automation for local service businesses. We audit your CRM, clean your database, and wire up missed-call text-back and 30-day follow-up automation — done in 7 days for $950 one-time."
+        description="Lead System Cleanup for local service businesses: we audit your CRM, clean your database, and wire up missed-call text-back and 30-day follow-up — $950 setup, then $450/mo managed. Done in 7 days."
         path={PATH}
         title="Lead System Cleanup | Backend Brilliance"
       />
@@ -147,7 +147,7 @@ export function CrmCleanupPage() {
             <motion.div className="vertical-hero-copy" {...reveal}>
               <p className="vertical-eyebrow">
                 <Sparkles size={14} style={{ display: "inline", verticalAlign: "-2px", marginRight: 6 }} />
-                Lead System Cleanup — one-time service
+                Lead System Cleanup — setup + managed monthly
               </p>
               <h1>CRM cleanup + automation, done for you.</h1>
               <p className="vertical-subheading">
@@ -171,7 +171,7 @@ export function CrmCleanupPage() {
               </a>
             </motion.div>
             <motion.p className="vertical-microline" {...reveal}>
-              $950 one-time · Done in 7 days · You own the system
+              $950 setup · $450/mo, we manage it · Done in 7 days
             </motion.p>
           </section>
 
@@ -230,18 +230,21 @@ export function CrmCleanupPage() {
           <section className="vertical-pricing section-shell" id="cleanup-pricing">
             <motion.div className="vertical-section-heading centered" {...reveal}>
               <p className="vertical-eyebrow">Pricing</p>
-              <h2>One price. Yours in a week.</h2>
+              <h2>One setup. Then we run it for you.</h2>
             </motion.div>
             <motion.div className="vertical-pricing-card" {...reveal}>
               <p className="vertical-eyebrow">Lead System Cleanup</p>
               <p className="vertical-price">
                 <strong>$950</strong>
-                <span>one-time</span>
+                <span>setup + $450/mo</span>
               </p>
               <p>
                 CRM audit, database cleanup and dedupe, pipeline stages,
                 missed-call text-back automation, and 30-day follow-up
-                sequences. Delivered in 7 days. You own the system.
+                sequences — delivered in 7 days. Then $450/month: we keep
+                the CRM clean, the follow-ups tuned, and the text-back
+                running, with a monthly lead report. Month-to-month, cancel
+                anytime.
               </p>
               <a
                 className="button button-primary vertical-primary"
@@ -262,12 +265,12 @@ export function CrmCleanupPage() {
 
           <section className="vertical-faq section-shell" id="cleanup-keep-running">
             <motion.div className="vertical-section-heading centered" {...reveal}>
-              <p className="vertical-eyebrow">After the 7 days</p>
-              <h2>Keep it running, hands off.</h2>
+              <p className="vertical-eyebrow">Every month</p>
+              <h2>We keep it running. You run your business.</h2>
               <p>
-                The cleanup gets your system working. If you&apos;d rather
-                never think about it again, we keep it running for you —
-                clean data, working follow-up, no babysitting.
+                The $450/month management is part of the deal — it&apos;s how
+                your lead system stays working after the 7-day setup: clean
+                data, tuned follow-up, no babysitting.
               </p>
             </motion.div>
             <motion.div className="vertical-pricing-card" {...reveal}>
