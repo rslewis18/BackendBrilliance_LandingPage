@@ -7,6 +7,7 @@ import { OnboardingPage } from "./pages/OnboardingPage";
 import { OnboardingSuccessPage } from "./pages/OnboardingSuccessPage";
 import { StartPage } from "./pages/StartPage";
 import { ThankYouPage } from "./pages/ThankYouPage";
+import { GetFoundPage } from "./pages/GetFoundPage";
 import { DemoPipelinePage } from "./pages/DemoPipelinePage";
 import { SiteFooter, VerticalLandingPage, verticalPages } from "./pages/VerticalLandingPage";
 import { trackEvent } from "./utils/tracking";
@@ -25,6 +26,7 @@ function App() {
       <Route path="/landing-backup" element={<HomePage />} />
       {/* Retired 2026-10-19: Lead System Cleanup offer archived — route redirects home. Page component kept in src/pages/CrmCleanupPage.tsx. */}
       <Route path="/lead-system-cleanup" element={<Navigate to="/" replace />} />
+      <Route path="/get-found" element={<GetFoundPage />} />
       <Route path="/demo-pipeline" element={<DemoPipelinePage />} />
       <Route
         path={verticalPages.homeServices.path}
