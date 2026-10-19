@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { PageMeta } from "./components/PageMeta";
 import { LINKS } from "./config/links";
 import { OFFER_CONFIG } from "./config/offers";
@@ -13,15 +13,9 @@ import { SiteFooter, VerticalLandingPage, verticalPages } from "./pages/Vertical
 import { trackEvent } from "./utils/tracking";
 import {
   ArrowRight,
-  Bell,
-  CalendarCheck,
-  ClipboardList,
-  Clock3,
+  MapPin,
   MessageCircle,
   PhoneCall,
-  RefreshCcw,
-  UserCheck,
-  UsersRound,
 } from "lucide-react";
 
 
@@ -55,149 +49,87 @@ function App() {
   );
 }
 
-const homeFaqs = [
+const services = [
   {
-    question: "Is this just an AI receptionist?",
-    answer:
-      "No. A receptionist answers phones. This is a conversion pipeline: every call becomes a qualified lead — captured, qualified, booked, handed off to your team with the full details, and followed up automatically. The AI is the first layer that makes sure an opportunity never disappears; your team takes over from there.",
+    icon: MapPin,
+    title: "Google Visibility & Local Presence",
+    intro:
+      "Help more local customers discover your business when they search online.",
+    bullets: [
+      "Optimize your Google Business Profile.",
+      "Improve your business information, services, and contact details.",
+      "Make it easier for customers to call, visit your website, or request an appointment.",
+      "Build a consistent process for requesting and managing customer reviews.",
+      "Monitor available performance data and identify opportunities for improvement.",
+    ],
   },
-  {
-    question: "Will my customers mind that it's AI?",
-    answer:
-      "They won't know, and they won't care. Nobody calls your business hoping for small talk — they call because something needs fixing, and they want it handled now. What they get is a fast, natural conversation that answers in seconds. Your clients don't want a human. They want their needs met.",
-  },
-  {
-    question: "How fast does it respond?",
-    answer:
-      "Within seconds of the call or new inquiry — 24 hours a day, 7 days a week, including nights, weekends, and holidays.",
-  },
-  {
-    question: "Does it replace my staff?",
-    answer:
-      "No. It handles the first response, qualification, and booking — then hands off to your team with the full conversation. Your people focus on the work, not the phone tag.",
-  },
-  {
-    question: "What happens when a human is needed?",
-    answer:
-      "The agent recognizes when a human should step in and hands over the complete conversation instantly — nothing gets lost.",
-  },
-  {
-    question: "Does it work for my industry?",
-    answer:
-      "If your business lives on the phone — calls, new inquiries, appointment booking — the agent fits. We have dedicated setups for home services, law firms, and med spas & dental practices.",
-  },
-  {
-    question: "Do I keep my business number?",
-    answer: "Yes. Your number stays yours. The agent works through your existing business line.",
-  },
-  {
-    question: "What does it cost?",
-    answer:
-      "From $1,950/month, month-to-month. Any one-time setup and third-party messaging costs are confirmed with you before anything starts.",
-  },
-  {
-    question: "Is there a smaller way to start?",
-    answer:
-      "Yes. The Lead System Cleanup is a one-time, done-for-you overhaul — CRM audit and dedupe, pipeline stages, missed-call text-back, and 30-day follow-up sequences — live in 7 days for $950 flat. The $950 is fully credited toward the AI Lead Booking Agent if you upgrade within 30 days.",
-  },
-  {
-    question: "How do we get started?",
-    answer:
-      "Book a 15-minute walkthrough. We'll show you the agent working on your phone, then connect it to your business line and calendar and configure it around how you work.",
-  },
-];
-
-const homeSteps = [
   {
     icon: PhoneCall,
-    title: "Never miss a call",
-    copy: "Every call gets answered — nights, weekends, holidays. No voicemail dead ends.",
-  },
-  {
-    icon: UserCheck,
-    title: "Qualify",
-    copy: "The agent asks your questions — service, location, urgency — and filters out the tire-kickers.",
-  },
-  {
-    icon: CalendarCheck,
-    title: "Book",
-    copy: "Qualified leads book straight onto your calendar, synced with your schedule.",
-  },
-  {
-    icon: UsersRound,
-    title: "Handoff",
-    copy: "Your team gets the qualified lead with the full conversation — not a \u201csomeone called\u201d notification.",
+    title: "AI Front Desk & Call Handling",
+    intro:
+      "Give your business a reliable first point of contact, even when your team is busy or unavailable.",
+    bullets: [
+      "Answer incoming calls using an AI-powered receptionist.",
+      "Respond to common questions using your approved business information.",
+      "Capture new customer inquiries and service requests.",
+      "Help customers schedule appointments or request callbacks.",
+      "Route urgent or complex inquiries to your team.",
+      "Send call summaries and notifications so important opportunities don't get overlooked.",
+    ],
+    note: "Features depend on your business requirements and compatible systems.",
   },
   {
     icon: MessageCircle,
-    title: "Follow up",
-    copy: "Automatic follow-up texts keep the lead warm until your team takes over.",
+    title: "Lead Follow-Up & Booking Automation",
+    intro:
+      "Help turn inquiries into real business opportunities with timely, organized follow-up.",
+    bullets: [
+      "Send follow-up messages where appropriate and authorized.",
+      "Notify your team when a new lead comes in.",
+      "Organize customer inquiries and appointment requests.",
+      "Reduce manual administrative work.",
+      "Track key activity to help identify where opportunities are being lost.",
+    ],
   },
 ];
 
-const homeCapabilities = [
+const plans = [
   {
-    icon: PhoneCall,
-    title: "Every call answered",
-    copy: "The AI answers every call — and when one slips through, it texts back within seconds, so the lead keeps talking to your business, not your voicemail.",
+    title: "Local Visibility Starter",
+    who: "For businesses that want to strengthen their Google presence and make it easier for customers to find them.",
+    includes:
+      "Includes Google Business Profile optimization, contact and booking-link improvements, and a practical review strategy.",
   },
   {
-    icon: Clock3,
-    title: "24/7 lead response",
-    copy: "Nights, weekends, holidays. New inquiries get an answer immediately, every time.",
+    title: "AI Front Desk",
+    who: "For businesses that miss calls, receive inquiries after hours, or struggle to respond while serving customers.",
+    includes:
+      "Includes AI call answering, inquiry capture, call summaries, and agreed-upon booking or call-transfer workflows.",
   },
   {
-    icon: UserCheck,
-    title: "Lead qualification",
-    copy: "The agent asks your questions and filters out the tire-kickers before they reach your calendar.",
-  },
-  {
-    icon: CalendarCheck,
-    title: "Appointment booking",
-    copy: "Qualified leads book straight onto your calendar, synced with your schedule.",
-  },
-  {
-    icon: Bell,
-    title: "Confirmations and reminders",
-    copy: "Automatic texts keep the calendar full and the no-shows down.",
-  },
-  {
-    icon: RefreshCcw,
-    title: "No-show recovery",
-    copy: "Missed appointments get followed up automatically — and rebooked.",
-  },
-  {
-    icon: ClipboardList,
-    title: "CRM and calendar updates",
-    copy: "Every conversation, lead, and booking is logged where your team can see it.",
-  },
-  {
-    icon: UsersRound,
-    title: "Qualified handoff to your team",
-    copy: "Your team receives the qualified lead with the full conversation — not a missed-call notification that says \u201csomeone called.\u201d",
-  },
-  {
-    icon: MessageCircle,
-    title: "Automated follow-up",
-    copy: "After every call, the lead gets a follow-up text automatically — so they know they\u2019re taken care of until your team steps in.",
+    title: "Complete Customer Growth System",
+    who: "For businesses that want to improve both visibility and lead handling.",
+    includes:
+      "Combines Google presence improvements, AI call answering, and lead follow-up workflows in one coordinated system.",
   },
 ];
 
-const nichePaths = [
+const approachSteps = [
   {
-    to: "/home-services",
-    title: "Home Services",
-    copy: "HVAC, plumbing, electrical, roofing, remodeling, tree service — never miss a call.",
+    title: "Understand your business.",
+    copy: "We identify how customers find you, contact you, and book your services.",
   },
   {
-    to: "/legal",
-    title: "Legal",
-    copy: "Personal injury, family law, criminal defense, and more — every inquiry becomes a scheduled consultation.",
+    title: "Identify opportunities.",
+    copy: "We look for practical improvements in visibility, call handling, and follow-up.",
   },
   {
-    to: "/medspa-dental",
-    title: "Med Spa & Dental",
-    copy: "Med spas, cosmetic dentistry, orthodontics, wellness — every inquiry becomes a booked consultation.",
+    title: "Build your system.",
+    copy: "We configure and test the agreed services around your business.",
+  },
+  {
+    title: "Monitor and improve.",
+    copy: "We review performance and recommend changes based on actual results.",
   },
 ];
 
@@ -220,9 +152,9 @@ function HomePage() {
   return (
     <>
       <PageMeta
-        description="When someone calls your business, they shouldn't have to reach a human to become a lead. Backend Brilliance's AI answers every call instantly — then qualifies, books, hands off to your team, and follows up. From $1,950/month."
+        description="Backend Brilliance helps local businesses improve their Google presence, respond to customer inquiries, and turn more opportunities into booked appointments and jobs."
         path="/"
-        title="Backend Brilliance | Never Miss a Call"
+        title="Backend Brilliance | Get Found. Answer Every Opportunity. Book More Customers."
       />
 
       <div className="vertical-page vertical-page--home">
@@ -235,10 +167,10 @@ function HomePage() {
             </span>
           </a>
           <nav aria-label="Homepage navigation">
-            <a href="#home-how-it-works">How It Works</a>
-            <a href="#home-who">Who It&apos;s For</a>
-            <a href="#home-pricing">Pricing</a>
-            <a href="#home-faq">FAQ</a>
+            <a href="#home-services">Services</a>
+            <a href="#home-plans">Plans</a>
+            <a href="#home-approach">Our Approach</a>
+            <a href="#home-why">Why Us</a>
           </nav>
           <a
             className="button button-primary vertical-header-cta"
@@ -247,19 +179,24 @@ function HomePage() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Book a Demo
+            Book a Conversation
           </a>
         </header>
 
         <main>
           <section className="vertical-hero section-shell" id="top">
             <motion.div className="vertical-hero-copy" {...reveal}>
-              <p className="vertical-eyebrow">AI Lead Booking Agent</p>
-              <h1>Every call answered. Every job booked.</h1>
+              <p className="vertical-eyebrow">Backend Brilliance</p>
+              <h1>Get Found. Answer Every Opportunity. Book More Customers.</h1>
               <p className="vertical-subheading">
-                Roughly 62% of calls to small businesses go unanswered — and
-                the sale goes to whoever picks up first. Our AI answers every
-                call, books the job, and hands it to your team.
+                You work hard to grow your business. We help make sure potential
+                customers can find you, reach you, and take the next step —
+                without every inquiry depending on you being available.
+              </p>
+              <p className="vertical-subheading">
+                Backend Brilliance helps local businesses improve their Google
+                presence, respond to customer inquiries, and turn more
+                opportunities into booked appointments and jobs.
               </p>
             </motion.div>
 
@@ -271,77 +208,66 @@ function HomePage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Book a Demo<ArrowRight size={20} />
+                Book a Conversation<ArrowRight size={20} />
               </a>
-            </motion.div>
-            <motion.p className="vertical-microline" {...reveal}>
-              From $1,950/month · No new staff · Nothing to install · Month-to-month
-            </motion.p>
-            <motion.p className="vertical-wedge-strip" {...reveal}>
-              Prefer to start smaller?{" "}
-              <Link
-                to="/lead-system-cleanup"
-                onClick={() => trackEvent("wedge_cta_clicked", { vertical: "home", location: "hero" })}
-              >
-                Lead System Cleanup — $950 one-time, done in 7 days
-                <ArrowRight size={16} />
-              </Link>
-            </motion.p>
-
-            <motion.div className="vertical-hero-video" {...reveal}>
-              <div className="vertical-demo-panel is-video">
-                <video
-                  controls
-                  onPlay={() => trackEvent("demo_video_clicked", { vertical: "home", location: "hero" })}
-                  preload="metadata"
-                  src="/demo-video.mp4"
-                >
-                  <track kind="captions" />
-                </video>
-              </div>
-              <p className="vertical-watch-line">
-                Under a minute. One call. Qualified, booked, handed off. A
-                dramatization of a real scenario — a homeowner calls, Olivia
-                answers live, qualifies the job, books the visit, hands the
-                qualified lead to your team with the full details, and follows
-                up automatically.
-              </p>
             </motion.div>
           </section>
 
-          <section className="vertical-proof-strip section-shell" aria-label="Why answering first wins">
-            <motion.div className="vertical-proof-grid" {...reveal}>
-              <div className="vertical-proof-stat">
-                <strong>62%</strong>
-                <span>of calls to small businesses go unanswered</span>
-              </div>
-              <div className="vertical-proof-stat">
-                <strong>78%</strong>
-                <span>of sales go to the business that responds first</span>
-              </div>
-              <div className="vertical-proof-stat">
-                <strong>24/7</strong>
-                <span>your agent answers — nights, weekends, holidays</span>
-              </div>
+          <section className="vertical-capabilities section-shell" id="home-services">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">What we do</p>
+              <h2>Our Services</h2>
             </motion.div>
+            <div className="vertical-capability-grid">
+              {services.map(({ icon: Icon, title, intro, bullets, note }) => (
+                <motion.article className="vertical-capability-card" key={title} {...reveal}>
+                  <span>
+                    <Icon size={28} />
+                  </span>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{intro}</p>
+                    <ul>
+                      {bullets.map((bullet) => (
+                        <li key={bullet}>{bullet}</li>
+                      ))}
+                    </ul>
+                    {note ? <p><em>{note}</em></p> : null}
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          </section>
+
+          <section className="vertical-pricing section-shell" id="home-plans">
+            <motion.div className="vertical-section-heading centered" {...reveal}>
+              <p className="vertical-eyebrow">Find your fit</p>
+              <h2>Choose the Support That Fits Your Business</h2>
+            </motion.div>
+            <div className="vertical-how-grid">
+              {plans.map(({ title, who, includes }) => (
+                <motion.article className="vertical-how-card" key={title} {...reveal}>
+                  <h3>{title}</h3>
+                  <p>{who}</p>
+                  <p>{includes}</p>
+                </motion.article>
+              ))}
+            </div>
           </section>
 
           <section
             className="vertical-how section-shell"
-            id="home-how-it-works"
-            aria-labelledby="home-how"
+            id="home-approach"
+            aria-labelledby="home-approach-heading"
           >
             <motion.div className="vertical-section-heading centered" {...reveal}>
-              <p className="vertical-eyebrow">How it works</p>
-              <h2 id="home-how">One pipeline. Every opportunity captured.</h2>
+              <p className="vertical-eyebrow">How we work</p>
+              <h2 id="home-approach-heading">Our Approach</h2>
             </motion.div>
             <div className="vertical-how-grid">
-              {homeSteps.map(({ icon: Icon, title, copy }, index) => (
+              {approachSteps.map(({ title, copy }, index) => (
                 <motion.article className="vertical-how-card" key={title} {...reveal}>
                   <span className="vertical-step-number">{index + 1}</span>
-                  <div className="vertical-how-icon">
-                    <Icon size={34} />
-                  </div>
                   <h3>{title}</h3>
                   <p>{copy}</p>
                 </motion.article>
@@ -349,138 +275,21 @@ function HomePage() {
             </div>
           </section>
 
-          <section className="vertical-nevermiss section-shell">
+          <section className="vertical-nevermiss section-shell" id="home-why">
             <motion.div className="vertical-section-heading centered" {...reveal}>
-              <h2>When someone calls, you never miss it.</h2>
+              <p className="vertical-eyebrow">Why us</p>
+              <h2>Why Backend Brilliance?</h2>
             </motion.div>
             <motion.p className="vertical-watch-line" {...reveal}>
-              The call goes unanswered. Seconds later, your agent is on it —
-              answering by voice or texting back instantly. Not a voicemail
-              asking them to wait — a real conversation that asks your
-              questions and books them in. While your competitor is still
-              checking voicemail, your calendar just filled.
+              We focus on practical systems that help local businesses operate
+              more efficiently and capture more of the opportunities already
+              coming their way.
             </motion.p>
-          </section>
-
-          <section className="vertical-capabilities section-shell" id="home-who">
-            <motion.div className="vertical-section-heading centered" {...reveal}>
-              <p className="vertical-eyebrow">Works anywhere the phone rings</p>
-              <h2>One agent. Any industry that lives on inbound calls.</h2>
-            </motion.div>
             <motion.p className="vertical-watch-line" {...reveal}>
-              Home services. Law firms. Med spas. Dental practices. If a missed
-              call costs you money, this is for you.
+              No unnecessary complexity. No empty promises about guaranteed
+              rankings or revenue. Just useful technology, thoughtful
+              implementation, and measurable improvements.
             </motion.p>
-            <div className="vertical-path-grid">
-              {nichePaths.map((path) => (
-                <motion.div key={path.to} {...reveal}>
-                  <Link
-                    className="vertical-path-card"
-                    onClick={() => trackEvent("niche_path_clicked", { vertical: "home", path: path.to })}
-                    to={path.to}
-                  >
-                    <h3>{path.title}</h3>
-                    <p>{path.copy}</p>
-                    <span>
-                      See how it works<ArrowRight size={18} />
-                    </span>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </section>
-
-          <section className="vertical-capabilities section-shell" id="home-capabilities">
-            <motion.div className="vertical-section-heading centered" {...reveal}>
-              <p className="vertical-eyebrow">What&apos;s included</p>
-              <h2>The machinery behind every booked job.</h2>
-            </motion.div>
-            <div className="vertical-capability-grid">
-              {homeCapabilities.map(({ icon: Icon, title, copy }) => (
-                <motion.article className="vertical-capability-card" key={title} {...reveal}>
-                  <span>
-                    <Icon size={28} />
-                  </span>
-                  <div>
-                    <h3>{title}</h3>
-                    <p>{copy}</p>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
-          </section>
-
-          <section className="vertical-wedge section-shell" id="home-start-smaller">
-            <motion.div className="vertical-wedge-card" {...reveal}>
-              <p className="vertical-eyebrow">Start smaller</p>
-              <h2>Not ready for the full agent? Start with a cleanup.</h2>
-              <p>
-                The <strong>Lead System Cleanup</strong> is a one-time,
-                done-for-you overhaul: CRM audit and dedupe, pipeline stages,
-                missed-call text-back, and 30-day follow-up sequences — live in
-                7 days for <strong>$950 flat</strong>. The system is yours to
-                keep, and the $950 is fully credited toward the AI agent if you
-                upgrade within 30 days.
-              </p>
-              <Link
-                className="button button-secondary vertical-secondary"
-                onClick={() => trackEvent("wedge_cta_clicked", { vertical: "home", location: "wedge_section" })}
-                to="/lead-system-cleanup"
-              >
-                See the Cleanup<ArrowRight size={18} />
-              </Link>
-            </motion.div>
-          </section>
-
-          <section className="vertical-pricing section-shell" id="home-pricing">
-            <motion.div className="vertical-section-heading centered" {...reveal}>
-              <p className="vertical-eyebrow">Pricing</p>
-              <h2>One plan. Every call covered.</h2>
-            </motion.div>
-            <motion.div className="vertical-pricing-card" {...reveal}>
-              <p className="vertical-eyebrow">AI Lead Booking Agent</p>
-              <p className="vertical-price">
-                <strong>From $1,950</strong>
-                <span>/month</span>
-              </p>
-              <p>
-                Every call answered, instant lead response, qualification,
-                calendar booking, qualified handoff to your team, automated
-                follow-up, confirmations and reminders, no-show recovery, and
-                CRM updates. Month-to-month. No long-term contract.
-              </p>
-              <a
-                className="button button-primary vertical-primary"
-                href={LINKS.booking}
-                onClick={() => trackBooking("pricing")}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Book a Demo<ArrowRight size={18} />
-              </a>
-              <small>
-                Any one-time setup and third-party messaging costs are confirmed
-                with you before anything starts. No surprises.
-              </small>
-            </motion.div>
-          </section>
-
-          <section className="vertical-faq section-shell" id="home-faq">
-            <motion.div className="vertical-section-heading centered" {...reveal}>
-              <p className="vertical-eyebrow">Questions</p>
-              <h2>Questions before you book?</h2>
-            </motion.div>
-            <div className="vertical-faq-list">
-              {homeFaqs.map((faq) => (
-                <motion.details className="vertical-faq-item" key={faq.question} {...reveal}>
-                  <summary>
-                    {faq.question}
-                    <span aria-hidden="true">+</span>
-                  </summary>
-                  <p>{faq.answer}</p>
-                </motion.details>
-              ))}
-            </div>
           </section>
 
           <section className="vertical-final-cta section-shell">
@@ -489,10 +298,14 @@ function HomePage() {
                 BB
               </div>
               <div>
-                <h2>Stop losing jobs to the businesses that answer first.</h2>
+                <h2>Let&apos;s Find Your Opportunities</h2>
                 <p>
-                  Book a 15-minute walkthrough and we&apos;ll show you the agent
-                  working — on your phone, with your business.
+                  Want to know where your business could be missing calls,
+                  losing inquiries, or missing opportunities on Google?
+                </p>
+                <p>
+                  Contact Backend Brilliance for a conversation about your
+                  business and a tailored recommendation.
                 </p>
               </div>
               <a
@@ -502,9 +315,13 @@ function HomePage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Book a Demo<ArrowRight size={18} />
+                Book a Conversation<ArrowRight size={18} />
               </a>
             </motion.div>
+            <motion.p className="vertical-watch-line" {...reveal}>
+              Backend Brilliance — Smarter Systems. Better Customer Experiences.
+              More Opportunities.
+            </motion.p>
           </section>
         </main>
 
