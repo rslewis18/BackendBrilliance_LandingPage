@@ -48,64 +48,47 @@ const services = [
   {
     icon: MapPin,
     title: "Google Visibility & Local Presence",
-    intro:
-      "Help more local customers discover your business when they search online.",
-    bullets: [
-      "Optimize your Google Business Profile.",
-      "Improve your business information, services, and contact details.",
-      "Make it easier for customers to call, visit your website, or request an appointment.",
-      "Build a consistent process for requesting and managing customer reviews.",
-      "Monitor available performance data and identify opportunities for improvement.",
-    ],
+    line: "Your entire Google presence built done-for-you — profile, photos, reviews, posts.",
   },
   {
     icon: PhoneCall,
     title: "AI Front Desk & Call Handling",
-    intro:
-      "Give your business a reliable first point of contact, even when your team is busy or unavailable.",
-    bullets: [
-      "Answer incoming calls using an AI-powered receptionist.",
-      "Respond to common questions using your approved business information.",
-      "Capture new customer inquiries and service requests.",
-      "Help customers schedule appointments or request callbacks.",
-      "Route urgent or complex inquiries to your team.",
-      "Send call summaries and notifications so important opportunities don't get overlooked.",
-    ],
-    note: "Features depend on your business requirements and compatible systems.",
+    line: "Every call answered and every inquiry captured, even when your team is busy.",
   },
   {
     icon: MessageCircle,
     title: "Lead Follow-Up & Booking Automation",
-    intro:
-      "Help turn inquiries into real business opportunities with timely, organized follow-up.",
-    bullets: [
-      "Send follow-up messages where appropriate and authorized.",
-      "Notify your team when a new lead comes in.",
-      "Organize customer inquiries and appointment requests.",
-      "Reduce manual administrative work.",
-      "Track key activity to help identify where opportunities are being lost.",
-    ],
+    line: "Timely follow-up that turns inquiries into booked jobs.",
   },
 ];
 
 const plans = [
   {
     title: "Local Visibility Starter",
-    who: "For businesses that want to strengthen their Google presence and make it easier for customers to find them.",
-    includes:
-      "Includes Google Business Profile optimization, contact and booking-link improvements, and a practical review strategy.",
+    who: "For businesses that want to be found on Google.",
+    includes: [
+      "Google Business Profile setup & optimization",
+      "Review generation and response management",
+      "Monthly visibility report",
+    ],
   },
   {
     title: "AI Front Desk",
-    who: "For businesses that miss calls, receive inquiries after hours, or struggle to respond while serving customers.",
-    includes:
-      "Includes AI call answering, inquiry capture, call summaries, and agreed-upon booking or call-transfer workflows.",
+    who: "For businesses that miss calls or can't answer after hours.",
+    includes: [
+      "AI answering for every incoming call",
+      "Inquiry capture and qualification",
+      "Call summaries and booking workflows",
+    ],
   },
   {
     title: "Complete Customer Growth System",
-    who: "For businesses that want to improve both visibility and lead handling.",
-    includes:
-      "Combines Google presence improvements, AI call answering, and lead follow-up workflows in one coordinated system.",
+    who: "Visibility and call handling, working as one system.",
+    includes: [
+      "Everything in both plans",
+      "Automated follow-up sequences",
+      "One unified monthly report",
+    ],
   },
 ];
 
@@ -147,7 +130,7 @@ function HomePage() {
   return (
     <>
       <PageMeta
-        description="Backend Brilliance helps local businesses improve their Google presence, respond to customer inquiries, and turn more opportunities into booked appointments and jobs."
+        description="We help local businesses get found on Google, answer every call, and turn more inquiries into booked jobs."
         path="/"
         title="Backend Brilliance | Get Found. Answer Every Opportunity. Book More Customers."
       />
@@ -184,14 +167,8 @@ function HomePage() {
               <p className="vertical-eyebrow">Backend Brilliance</p>
               <h1>Get Found. Answer Every Opportunity. Book More Customers.</h1>
               <p className="vertical-subheading">
-                You work hard to grow your business. We help make sure potential
-                customers can find you, reach you, and take the next step —
-                without every inquiry depending on you being available.
-              </p>
-              <p className="vertical-subheading">
-                Backend Brilliance helps local businesses improve their Google
-                presence, respond to customer inquiries, and turn more
-                opportunities into booked appointments and jobs.
+                We help local businesses get found on Google, answer every
+                call, and turn more inquiries into booked jobs.
               </p>
             </motion.div>
 
@@ -214,20 +191,14 @@ function HomePage() {
               <h2>Our Services</h2>
             </motion.div>
             <div className="vertical-capability-grid">
-              {services.map(({ icon: Icon, title, intro, bullets, note }) => (
+              {services.map(({ icon: Icon, title, line }) => (
                 <motion.article className="vertical-capability-card" key={title} {...reveal}>
                   <span>
                     <Icon size={28} />
                   </span>
                   <div>
                     <h3>{title}</h3>
-                    <p>{intro}</p>
-                    <ul>
-                      {bullets.map((bullet) => (
-                        <li key={bullet}>{bullet}</li>
-                      ))}
-                    </ul>
-                    {note ? <p><em>{note}</em></p> : null}
+                    <p>{line}</p>
                   </div>
                 </motion.article>
               ))}
@@ -244,7 +215,11 @@ function HomePage() {
                 <motion.article className="vertical-how-card" key={title} {...reveal}>
                   <h3>{title}</h3>
                   <p>{who}</p>
-                  <p>{includes}</p>
+                  <ul>
+                    {includes.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
                 </motion.article>
               ))}
             </div>
@@ -276,14 +251,9 @@ function HomePage() {
               <h2>Why Backend Brilliance?</h2>
             </motion.div>
             <motion.p className="vertical-watch-line" {...reveal}>
-              We focus on practical systems that help local businesses operate
-              more efficiently and capture more of the opportunities already
-              coming their way.
-            </motion.p>
-            <motion.p className="vertical-watch-line" {...reveal}>
-              No unnecessary complexity. No empty promises about guaranteed
-              rankings or revenue. Just useful technology, thoughtful
-              implementation, and measurable improvements.
+              Practical systems, honestly sold. No guaranteed rankings, no
+              unnecessary complexity — just useful technology that captures
+              more of the opportunities already coming your way.
             </motion.p>
           </section>
 
@@ -295,12 +265,8 @@ function HomePage() {
               <div>
                 <h2>Let&apos;s Find Your Opportunities</h2>
                 <p>
-                  Want to know where your business could be missing calls,
-                  losing inquiries, or missing opportunities on Google?
-                </p>
-                <p>
-                  Contact Backend Brilliance for a conversation about your
-                  business and a tailored recommendation.
+                  See exactly where your business is missing calls, losing
+                  inquiries, or invisible on Google.
                 </p>
               </div>
               <a

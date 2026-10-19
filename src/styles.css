@@ -4142,6 +4142,8 @@ h1 {
   display: grid;
   justify-items: center;
   text-align: center;
+}
+.vertical-how-card:has(.vertical-step-number) {
   padding-top: 44px;
 }
 
