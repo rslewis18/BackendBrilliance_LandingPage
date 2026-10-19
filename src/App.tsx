@@ -28,19 +28,12 @@ function App() {
       <Route path="/lead-system-cleanup" element={<Navigate to="/" replace />} />
       <Route path="/get-found" element={<GetFoundPage />} />
       <Route path="/demo-pipeline" element={<DemoPipelinePage />} />
-      <Route
-        path={verticalPages.homeServices.path}
-        element={<VerticalLandingPage page={verticalPages.homeServices} />}
-      />
-      <Route
-        path={verticalPages.legal.path}
-        element={<VerticalLandingPage page={verticalPages.legal} />}
-      />
-      <Route
-        path={verticalPages.medspaDental.path}
-        element={<VerticalLandingPage page={verticalPages.medspaDental} />}
-      />
-      <Route path={OFFER_CONFIG.routes.start} element={<StartPage />} />
+      {/* Retired 2026-10-19: vertical pages sold the retired $1,950/mo flagship — redirect home until they're rewritten for the new 3-tier pricing. Components kept in src/pages/VerticalLandingPage.tsx. */}
+      <Route path="/home-services" element={<Navigate to="/" replace />} />
+      <Route path="/legal" element={<Navigate to="/" replace />} />
+      <Route path="/medspa-dental" element={<Navigate to="/" replace />} />
+      {/* Retired 2026-10-19: /start sold the old offer — redirect home. Component kept in src/pages/StartPage.tsx. */}
+      <Route path={OFFER_CONFIG.routes.start} element={<Navigate to="/" replace />} />
       <Route path={OFFER_CONFIG.routes.thankYou} element={<ThankYouPage />} />
       <Route path={OFFER_CONFIG.routes.onboarding} element={<OnboardingPage />} />
       <Route
