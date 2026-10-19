@@ -211,13 +211,14 @@ export function GetFoundPage() {
             <motion.div className="vertical-pricing-card" {...reveal}>
               <p className="vertical-eyebrow">Keep-It-Fresh Care Plan</p>
               <p className="vertical-price">
-                <strong>$149</strong>
+                <strong>$249</strong>
                 <span>/month</span>
               </p>
               <p>
                 Google posts, review responses, photo updates, and visibility
-                monitoring — plus a plain-English monthly report. Optional,
-                month-to-month, cancel anytime.
+                monitoring — plus missed-call text-back, new-lead notifications,
+                and a plain-English monthly report. Optional, month-to-month,
+                cancel anytime.
               </p>
               <a
                 className="button button-primary vertical-primary"
