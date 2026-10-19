@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { PageMeta } from "./components/PageMeta";
 import { LINKS } from "./config/links";
 import { OFFER_CONFIG } from "./config/offers";
@@ -7,7 +7,6 @@ import { OnboardingPage } from "./pages/OnboardingPage";
 import { OnboardingSuccessPage } from "./pages/OnboardingSuccessPage";
 import { StartPage } from "./pages/StartPage";
 import { ThankYouPage } from "./pages/ThankYouPage";
-import { CrmCleanupPage } from "./pages/CrmCleanupPage";
 import { DemoPipelinePage } from "./pages/DemoPipelinePage";
 import { SiteFooter, VerticalLandingPage, verticalPages } from "./pages/VerticalLandingPage";
 import { trackEvent } from "./utils/tracking";
@@ -24,7 +23,8 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/landing-backup" element={<HomePage />} />
-      <Route path="/lead-system-cleanup" element={<CrmCleanupPage />} />
+      {/* Retired 2026-10-19: Lead System Cleanup offer archived — route redirects home. Page component kept in src/pages/CrmCleanupPage.tsx. */}
+      <Route path="/lead-system-cleanup" element={<Navigate to="/" replace />} />
       <Route path="/demo-pipeline" element={<DemoPipelinePage />} />
       <Route
         path={verticalPages.homeServices.path}
