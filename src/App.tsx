@@ -259,10 +259,7 @@ function HomePage() {
               <p className="vertical-subheading">
                 Roughly 62% of calls to small businesses go unanswered — and
                 the sale goes to whoever picks up first. Our AI answers every
-                call live, qualifies the lead with your questions, books them
-                straight onto your calendar, hands the qualified lead to your
-                team with the full details, and follows up automatically —
-                nights, weekends, and the middle of a job included.
+                call, books the job, and hands it to your team.
               </p>
             </motion.div>
 
@@ -275,14 +272,6 @@ function HomePage() {
                 rel="noopener noreferrer"
               >
                 Book a Demo<ArrowRight size={20} />
-              </a>
-              <a
-                className="button button-secondary vertical-secondary"
-                href="tel:+13049317167"
-                onClick={() => trackEvent("demo_call_clicked", { vertical: "home", location: "hero" })}
-              >
-                <PhoneCall size={20} />
-                Call it live now
               </a>
             </motion.div>
             <motion.p className="vertical-microline" {...reveal}>
