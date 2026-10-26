@@ -929,15 +929,9 @@ export function SiteFooter({ onBookingClick }: { onBookingClick?: () => void }) 
       <div className="vertical-footer-inner section-shell">
         <div className="vertical-footer-brand">
           <strong>Backend Brilliance</strong>
-          <p>The AI Lead Booking Agent for local service businesses.</p>
+          <p>Done-for-you Google visibility and customer growth systems for local service businesses.</p>
         </div>
         <nav aria-label="Footer">
-          <div className="vertical-footer-col">
-            <strong>Niches</strong>
-            <a href="/home-services">Home Services</a>
-            <a href="/legal">Legal</a>
-            <a href="/medspa-dental">Med Spa &amp; Dental</a>
-          </div>
           <div className="vertical-footer-col">
             <strong>Company</strong>
             <a
@@ -946,9 +940,9 @@ export function SiteFooter({ onBookingClick }: { onBookingClick?: () => void }) 
               target="_blank"
               rel="noopener noreferrer"
             >
-              Book a Demo
+              Book a Conversation
             </a>
-            <a href="mailto:backendbrilliance@gmail.com">Contact</a>
+            <a href={LINKS.supportEmail}>Contact</a>
           </div>
         </nav>
       </div>

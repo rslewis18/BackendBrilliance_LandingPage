@@ -7,20 +7,10 @@ import { OFFER_CONFIG } from "../config/offers";
 import { trackEvent } from "../utils/tracking";
 
 type ServiceOption =
-  | "AI Lead Booking Agent"
-  | "AI Receptionist"
-  | "AI Legal Intake System"
-  | "Lead Follow-Up Automation"
-  | "Website Conversion System"
-  | "Local Visibility / SEO"
-  | "Review Growth"
-  | "Customer Reactivation"
-  | "Lead Generation"
-  | "Content Creation System"
-  | "Paid Advertising"
-  | "Property Marketing"
-  | "Business Process Automation"
-  | "Other / Custom Solution";
+  | "Get Found \u2014 Google Visibility Build"
+  | "AI Front Desk"
+  | "Complete Customer Growth System"
+  | "Not sure yet / Other";
 
 type OnboardingData = {
   selectedService: ServiceOption | "";
@@ -116,20 +106,10 @@ type ArrayField = "primaryGoals" | "followUpChannels" | "systemsInvolved";
 type FieldErrors = Partial<Record<keyof OnboardingData | "form", string>>;
 
 const serviceOptions: ServiceOption[] = [
-  "AI Lead Booking Agent",
-  "AI Receptionist",
-  "AI Legal Intake System",
-  "Lead Follow-Up Automation",
-  "Website Conversion System",
-  "Local Visibility / SEO",
-  "Review Growth",
-  "Customer Reactivation",
-  "Lead Generation",
-  "Content Creation System",
-  "Paid Advertising",
-  "Property Marketing",
-  "Business Process Automation",
-  "Other / Custom Solution",
+  "Get Found \u2014 Google Visibility Build",
+  "AI Front Desk",
+  "Complete Customer Growth System",
+  "Not sure yet / Other",
 ];
 
 const goalOptions = [
@@ -282,71 +262,31 @@ function serviceFromParam(value: string | null): ServiceOption | "" {
     return "";
   }
 
-  if (normalized.includes("leadbooking") || normalized.includes("bookingagent")) {
-    return "AI Lead Booking Agent";
+  if (
+    normalized.includes("getfound") ||
+    normalized.includes("google") ||
+    normalized.includes("visibility") ||
+    normalized.includes("seo") ||
+    normalized.includes("website")
+  ) {
+    return "Get Found \u2014 Google Visibility Build";
   }
 
-  if (normalized.includes("ai") || normalized.includes("receptionist")) {
-    return "AI Receptionist";
-  }
-
-  if (normalized.includes("legal") || normalized.includes("law")) {
-    return "AI Legal Intake System";
+  if (normalized.includes("complete") || normalized.includes("growthsystem")) {
+    return "Complete Customer Growth System";
   }
 
   if (
-    normalized.includes("website") ||
-    normalized.includes("conversion") ||
-    normalized.includes("clientcapture")
+    normalized.includes("frontdesk") ||
+    normalized.includes("leadbooking") ||
+    normalized.includes("bookingagent") ||
+    normalized.includes("receptionist") ||
+    normalized.includes("ai")
   ) {
-    return "Website Conversion System";
+    return "AI Front Desk";
   }
 
-  if (normalized.includes("automation") || normalized.includes("followup")) {
-    return "Lead Follow-Up Automation";
-  }
-
-  if (
-    normalized.includes("reputation") ||
-    normalized.includes("review") ||
-    normalized.includes("google")
-  ) {
-    return "Review Growth";
-  }
-
-  if (normalized.includes("seo") || normalized.includes("visibility")) {
-    return "Local Visibility / SEO";
-  }
-
-  if (normalized.includes("reactivation")) {
-    return "Customer Reactivation";
-  }
-
-  if (normalized.includes("leadgeneration")) {
-    return "Lead Generation";
-  }
-
-  if (normalized.includes("content")) {
-    return "Content Creation System";
-  }
-
-  if (normalized.includes("advertising") || normalized.includes("paid")) {
-    return "Paid Advertising";
-  }
-
-  if (normalized.includes("property")) {
-    return "Property Marketing";
-  }
-
-  if (normalized.includes("process")) {
-    return "Business Process Automation";
-  }
-
-  if (normalized.includes("custom")) {
-    return "Other / Custom Solution";
-  }
-
-  return "Other / Custom Solution";
+  return "Not sure yet / Other";
 }
 
 function makeInitialData(searchParams: URLSearchParams): OnboardingData {
@@ -646,14 +586,16 @@ function ServiceSpecificFields({
   updateField: (field: StringField, value: string) => void;
   updateArrayField: (field: ArrayField, option: string, checked: boolean) => void;
 }) {
-  if (data.selectedService === "AI Receptionist" || data.selectedService === "AI Lead Booking Agent") {
-    const isLeadBookingAgent = data.selectedService === "AI Lead Booking Agent";
+  if (
+    data.selectedService === "AI Front Desk" ||
+    data.selectedService === "Complete Customer Growth System"
+  ) {
     return (
       <>
         <div className="form-guidance">
-          <h2>{isLeadBookingAgent ? "AI Lead Booking Agent Setup" : "AI Receptionist Setup"}</h2>
+          <h2>{data.selectedService} Setup</h2>
           <p>
-            Share the lead-handling details you know now. Phone-number porting is not required here.
+            Share the call- and lead-handling details you know now. Phone-number porting is not required here.
           </p>
         </div>
         <TextField label="Business hours" field="businessHours" value={data.businessHours} error={errors.businessHours} onChange={updateField} />
@@ -668,57 +610,23 @@ function ServiceSpecificFields({
         <TextAreaField label="Escalation or urgent-call instructions" field="urgentInstructions" value={data.urgentInstructions} error={errors.urgentInstructions} onChange={updateField} />
         <TextAreaField label="Notification preferences" field="notificationPreferences" value={data.notificationPreferences} error={errors.notificationPreferences} onChange={updateField} />
         <TextAreaField label="Any special call-handling instructions" field="specialCallInstructions" value={data.specialCallInstructions} error={errors.specialCallInstructions} onChange={updateField} />
-        {isLeadBookingAgent && (
-          <>
+        <>
             <TextAreaField label="Lead qualification rules" field="qualificationCriteria" value={data.qualificationCriteria} error={errors.qualificationCriteria} onChange={updateField} />
             <TextField label="Current CRM or customer-management system" field="currentCrm" value={data.currentCrm} error={errors.currentCrm} onChange={updateField} />
             <TextField label="Existing calendar / scheduling system" field="calendarSystem" value={data.calendarSystem} error={errors.calendarSystem} onChange={updateField} />
             <TextAreaField label="Current lead follow-up process" field="currentFollowUpProcess" value={data.currentFollowUpProcess} error={errors.currentFollowUpProcess} onChange={updateField} />
             <TextAreaField label="Reminder, no-show, nurture, and old-lead preferences" field="automationOutcome" value={data.automationOutcome} error={errors.automationOutcome} onChange={updateField} />
             <TextAreaField label="Anything the agent should never automate" field="neverAutomate" value={data.neverAutomate} error={errors.neverAutomate} onChange={updateField} />
-          </>
-        )}
+        </>
       </>
     );
   }
 
-  if (data.selectedService === "AI Legal Intake System") {
+  if (data.selectedService === "Get Found \u2014 Google Visibility Build") {
     return (
       <>
         <div className="form-guidance">
-          <h2>AI Legal Intake Setup</h2>
-          <p>
-            Share how the firm wants inquiries gathered, routed, scheduled, and
-            escalated. This does not replace attorney review or provide legal
-            advice.
-          </p>
-        </div>
-        <TextAreaField label="Practice areas" field="practiceAreas" value={data.practiceAreas} error={errors.practiceAreas} onChange={updateField} />
-        <TextField label="Geographic areas / jurisdictions served" field="jurisdictionsServed" value={data.jurisdictionsServed} error={errors.jurisdictionsServed} onChange={updateField} />
-        <TextField label="Business hours" field="businessHours" value={data.businessHours} error={errors.businessHours} onChange={updateField} />
-        <TextAreaField label="Consultation process" field="consultationProcess" value={data.consultationProcess} error={errors.consultationProcess} onChange={updateField} />
-        <TextField label="Consultation booking link" field="consultationBookingLink" value={data.consultationBookingLink} error={errors.consultationBookingLink} onChange={updateField} type="url" inputMode="url" />
-        <TextAreaField label="Intake questions" field="intakeQuestions" value={data.intakeQuestions} error={errors.intakeQuestions} onChange={updateField} />
-        <TextAreaField label="Firm-defined qualification criteria" field="qualificationCriteria" value={data.qualificationCriteria} error={errors.qualificationCriteria} onChange={updateField} helper="Use firm-defined routing rules only. Do not include instructions that require legal conclusions from the system." />
-        <TextAreaField label="Routing / disqualification rules" field="legalRoutingRules" value={data.legalRoutingRules} error={errors.legalRoutingRules} onChange={updateField} />
-        <TextAreaField label="Escalation rules" field="legalEscalationRules" value={data.legalEscalationRules} error={errors.legalEscalationRules} onChange={updateField} />
-        <TextField label="Existing phone system" field="existingPhoneSystem" value={data.existingPhoneSystem} error={errors.existingPhoneSystem} onChange={updateField} />
-        <TextField label="Existing CRM / case management platform" field="caseManagementPlatform" value={data.caseManagementPlatform} error={errors.caseManagementPlatform} onChange={updateField} />
-      </>
-    );
-  }
-
-  if (
-    data.selectedService === "Website Conversion System" ||
-    data.selectedService === "Local Visibility / SEO" ||
-    data.selectedService === "Lead Generation" ||
-    data.selectedService === "Paid Advertising" ||
-    data.selectedService === "Property Marketing"
-  ) {
-    return (
-      <>
-        <div className="form-guidance">
-          <h2>Website, Visibility &amp; Lead Generation Setup</h2>
+          <h2>Google Visibility Build Setup</h2>
           <p>
             Help us understand the market, offer, traffic path, and conversion
             goal you want to improve.
@@ -736,59 +644,6 @@ function ServiceSpecificFields({
         <TextAreaField label="Known website issues" field="knownWebsiteIssues" value={data.knownWebsiteIssues} error={errors.knownWebsiteIssues} onChange={updateField} />
         <TextAreaField label="Competitor/reference sites" field="referenceSites" value={data.referenceSites} error={errors.referenceSites} onChange={updateField} />
         <TextAreaField label="Any tracking/analytics already installed" field="trackingAnalytics" value={data.trackingAnalytics} error={errors.trackingAnalytics} onChange={updateField} />
-      </>
-    );
-  }
-
-  if (
-    data.selectedService === "Lead Follow-Up Automation" ||
-    data.selectedService === "Customer Reactivation" ||
-    data.selectedService === "Business Process Automation" ||
-    data.selectedService === "Content Creation System"
-  ) {
-    return (
-      <>
-        <div className="form-guidance">
-          <h2>Automation, Follow-Up &amp; Reactivation Setup</h2>
-          <p>
-            Tell us what process should become smoother and what should stay
-            human.
-          </p>
-        </div>
-        <TextField label="Current CRM or customer-management system" field="currentCrm" value={data.currentCrm} error={errors.currentCrm} onChange={updateField} />
-        <TextField label="Primary workflow to automate" field="workflowToAutomate" value={data.workflowToAutomate} error={errors.workflowToAutomate} onChange={updateField} />
-        <TextAreaField label="Current lead sources" field="leadSources" value={data.leadSources} error={errors.leadSources} onChange={updateField} />
-        <CheckboxGroup label="Desired follow-up channels" field="followUpChannels" values={data.followUpChannels} error={errors.followUpChannels} options={followUpChannelOptions} onChange={updateArrayField} />
-        <TextAreaField label="Current follow-up process" field="currentFollowUpProcess" value={data.currentFollowUpProcess} error={errors.currentFollowUpProcess} onChange={updateField} />
-        <TextField label="Desired trigger/event" field="automationTrigger" value={data.automationTrigger} error={errors.automationTrigger} onChange={updateField} />
-        <TextField label="Desired outcome" field="automationOutcome" value={data.automationOutcome} error={errors.automationOutcome} onChange={updateField} />
-        <TextField label="Existing calendar/scheduling system" field="calendarSystem" value={data.calendarSystem} error={errors.calendarSystem} onChange={updateField} />
-        <TextField label="Existing automation tools" field="automationTools" value={data.automationTools} error={errors.automationTools} onChange={updateField} />
-        <TextAreaField label="Team members involved" field="teamMembers" value={data.teamMembers} error={errors.teamMembers} onChange={updateField} />
-        <TextAreaField label="Anything that should never be automated" field="neverAutomate" value={data.neverAutomate} error={errors.neverAutomate} onChange={updateField} />
-      </>
-    );
-  }
-
-  if (data.selectedService === "Review Growth") {
-    return (
-      <>
-        <div className="form-guidance">
-          <h2>Reputation &amp; Review Setup</h2>
-          <p>
-            Share how reviews are currently requested and where customer feedback
-            should go.
-          </p>
-        </div>
-        <TextField label="Primary review platform(s)" field="reviewPlatforms" value={data.reviewPlatforms} error={errors.reviewPlatforms} onChange={updateField} />
-        <TextField label="Google Business Profile link, if available" field="googleBusinessProfileLink" value={data.googleBusinessProfileLink} error={errors.googleBusinessProfileLink} onChange={updateField} type="url" inputMode="url" />
-        <TextAreaField label="Current review-request process" field="reviewRequestProcess" value={data.reviewRequestProcess} error={errors.reviewRequestProcess} onChange={updateField} />
-        <TextField label="When should review requests be sent?" field="reviewTiming" value={data.reviewTiming} error={errors.reviewTiming} onChange={updateField} />
-        <SelectField label="Preferred communication channel" field="reviewChannel" value={data.reviewChannel} error={errors.reviewChannel} options={communicationOptions} onChange={updateField} />
-        <TextAreaField label="Customer list/CRM source" field="customerListSource" value={data.customerListSource} error={errors.customerListSource} onChange={updateField} />
-        <SelectField label="Should negative feedback be routed privately?" field="negativeFeedbackRouting" value={data.negativeFeedbackRouting} error={errors.negativeFeedbackRouting} options={yesNoOptions} onChange={updateField} />
-        <TextField label="Primary notification contact" field="reviewNotificationContact" value={data.reviewNotificationContact} error={errors.reviewNotificationContact} onChange={updateField} />
-        <TextField label="Existing reputation-management tools" field="reputationTools" value={data.reputationTools} error={errors.reputationTools} onChange={updateField} />
       </>
     );
   }
@@ -836,7 +691,7 @@ function StepContent({
           </p>
         </div>
         <SelectField label="Service / Solution Being Implemented" field="selectedService" value={data.selectedService} error={errors.selectedService} options={serviceOptions} onChange={updateField} required />
-        {data.selectedService === "Other / Custom Solution" && (
+        {data.selectedService === "Not sure yet / Other" && (
           <TextField label="What solution or next step did you discuss with us?" field="customService" value={data.customService} error={errors.customService} onChange={updateField} required />
         )}
         <TextField autoComplete="organization" label="Business Name" field="businessName" value={data.businessName} error={errors.businessName} onChange={updateField} required />
@@ -1039,7 +894,7 @@ export function OnboardingPage() {
       });
 
       if (
-        payload.selectedService === "Other / Custom Solution" &&
+        payload.selectedService === "Not sure yet / Other" &&
         !payload.customService.trim()
       ) {
         nextErrors.customService = "Tell us what solution or next step you discussed.";
