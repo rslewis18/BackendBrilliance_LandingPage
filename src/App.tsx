@@ -170,6 +170,10 @@ function HomePage() {
                 We help local businesses get found on Google, answer every
                 call, and turn more inquiries into booked jobs.
               </p>
+              <p className="vertical-hero-offer">
+                Start with the Google Visibility Build — $495 one-time, done
+                for you.
+              </p>
             </motion.div>
 
             <motion.div className="vertical-hero-actions" {...reveal}>
