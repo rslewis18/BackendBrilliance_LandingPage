@@ -32,22 +32,6 @@
       <a href="https://cal.com/backendbrilliance/15min">Click here if you are not redirected.</a>
     </p>
     <script>
-      // Count this arrival in Plausible before redirecting, so clicks from
-      // LinkedIn and other referrers to /book are measurable.
-      try {
-        var payload = JSON.stringify({
-          name: "booking_redirect",
-          url: "https://backendbrilliance.co/book",
-          domain: "backendbrilliance.co",
-          referrer: document.referrer || null,
-        });
-        if (navigator.sendBeacon) {
-          navigator.sendBeacon(
-            "https://plausible.io/api/event",
-            new Blob([payload], { type: "application/json" })
-          );
-        }
-      } catch (e) {}
       window.location.replace("https://cal.com/backendbrilliance/15min");
     </script>
   </body>
